@@ -10,7 +10,7 @@ const Header = ({
     totalCompareItems,
     toggleClick,
     totalWishlistItems,
-    superunivers_univers_categories
+    menuHeaderData
 }) => {
 
     const [isToggled, setToggled] = useState(false);
@@ -28,7 +28,7 @@ const Header = ({
     const handleToggle = () => setToggled(!isToggled);
 
     return (
-        superunivers_univers_categories&&superunivers_univers_categories.length>0&&
+        menuHeaderData&&menuHeaderData.length>0&&
         <>
             <header className="header-area header-style-1 header-height-2">
                 <div 
@@ -122,33 +122,35 @@ const Header = ({
                                     <nav>
                                         <ul>
                                         {
-                                         superunivers_univers_categories.map(superunivers_univers_categorie=>
+                                         menuHeaderData.map(superunivers_univers_categorie=>
+                                         superunivers_univers_categorie["attributes"]['CLE_LANG']=="0"&&
                                            (
-                                           <li className="position-static" key = {superunivers_univers_categorie["superunivers"]["id"]} >
-                                                <Link href={`/superunivers/${superunivers_univers_categorie["superunivers"]["attributes"]["slug"]}`}>
+                                           <li className="position-static" key = {superunivers_univers_categorie["id"]} >
+                                                <Link href={`/superunivers/${superunivers_univers_categorie["attributes"]["slug"]}`}>
                                                     <a>
-                                                        {superunivers_univers_categorie["superunivers"]["attributes"]["LIB"]}
+                                                        {superunivers_univers_categorie["attributes"]["LIB"]}
                                                         <i className="fi-rs-angle-down"></i>
                                                     </a>
                                                 </Link>
                                                 <ul className="mega-menu">
                                                 {
-                                                superunivers_univers_categorie["categories_univers"].map(categorie_univers=>(
+                                                superunivers_univers_categorie["attributes"]["rayondetails"]["data"].map(categorie_univers=>(
                                                     <li className="sub-mega-menu sub-mega-menu-width-22">
-                                                        <Link href={`/univers/${categorie_univers["univers"]["attributes"]["slug"]}`}>
-                                                            <a key = {categorie_univers["univers"]["id"]}
+                                                        <Link href={`/univers/${categorie_univers["attributes"]["slug"]}`}>
+                                                            <a key = {categorie_univers["id"]}
                                                                 className="menu-title"
                                                             >
-                                                                {categorie_univers["univers"]["attributes"]["LIB"]}
+                                                                {categorie_univers["attributes"]["LIB"]}
                                                             </a>
                                                         </Link>
                                                         <ul>
                                                         {
-                                                        categorie_univers["categories"].map(categorie=>(
-                                                            <li key ={categorie["id"]}>
-                                                                <Link href={`/univers/${categorie["attributes"]["slug"]}`}>
+                                                        categorie_univers["attributes"]["typeprods"]["data"].map(categorie=>(
+                                                            categorie["attributes"]['CLE_TYPE_PROD']==categorie["attributes"]['CLE_TYPE_PROD_CATEGORIE']&&
+                                                            <li key ={categorie}>
+                                                                <Link href={`/univers/${categorie}`}>
                                                                     <a>
-                                                                    {categorie["attributes"]["LIB_FR"]}
+                                                                    {categorie["attributes"]['CLE_TYPE_PROD_CATEGORIE']}
                                                                     </a>
                                                                 </Link>
                                                             </li>

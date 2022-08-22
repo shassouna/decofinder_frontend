@@ -9,15 +9,16 @@ import Deals1 from "./../components/elements/Deals1";
 import IntroPopup from "./../components/elements/IntroPopup";
 import Layout from "./../components/layout/Layout";
 import CategorySlider from "./../components/sliders/Category";
-import Intro1 from "./../components/sliders/Intro4";
+import Intro1 from "../components/sliders/Intro4";
 import Link from "next/link";
 
-export default function Home({superunivers_univers_categories}) {
+export default function Home({menuHeaderData}) {
+    
     return (
         <>
             <IntroPopup />
 
-            <Layout noBreadcrumb="d-none" superunivers_univers_categories={superunivers_univers_categories}>
+            <Layout noBreadcrumb="d-none" menuHeaderData={menuHeaderData}>
                 <section className="home-slider position-relative mb-30">
                     <div className="container">
                         <div className="home-slide-cover mt-30">

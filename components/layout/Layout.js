@@ -12,7 +12,7 @@ const Layout = ({
     subChild,
     noBreadcrumb,
     headerStyle,
-    superunivers_univers_categories
+    menuHeaderData
 }) => {
     const [isToggled, setToggled] = useState(false);
     const toggleClick = () => {
@@ -36,7 +36,7 @@ const Layout = ({
 
             {isToggled && <div className="body-overlay-1" onClick={toggleClick}></div>}
 
-            <Header headerStyle={headerStyle} isToggled={isToggled} toggleClick={toggleClick} superunivers_univers_categories={superunivers_univers_categories}/>
+            <Header headerStyle={headerStyle} isToggled={isToggled} toggleClick={toggleClick} menuHeaderData={menuHeaderData}/>
             <MobileMenu isToggled={isToggled} toggleClick={toggleClick} />
             <main className="main">
                 <Breadcrumb parent={parent} sub={sub} subChild={subChild} noBreadcrumb={noBreadcrumb} />
