@@ -18,7 +18,7 @@ const ProductId = ({produit}) => {
         const allProducts = await fetchByCatagory("/static/product.json")
         setRelated(allProducts)
     }
-    console.log(produit)
+
     return (
         related&&related.length>0&&
         <>
@@ -39,7 +39,7 @@ export async function getStaticPaths() {
 
 export async function getStaticProps (context) {
 
-    const produitRes = await axios.get(`http://decotest2.herokuapp.com/api/produits/15700?exposant,exposant.produits,lienrevendeurproduits,pay,couleur,materiau,motif,fabrication,style,ambiance`)
+    const produitRes = await axios.get(`http://decotest2.herokuapp.com/api/produits/15700?exposant,exposant.produits,typeprod,typeprod.produits,lienrevendeurproduits,pay,couleur,materiau,motif,fabrication,style,ambiance`)
 
     const produit = produitRes.data
 

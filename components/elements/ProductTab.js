@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 
 const ProductTab = ({produit}) => {
-    const [activeIndex, setActiveIndex] = useState(1);
+
+    const [activeIndex, setActiveIndex] = useState(1)
 
     const handleOnClick = (index) => {
-        setActiveIndex(index);
+        setActiveIndex(index)
     }
 
     return (

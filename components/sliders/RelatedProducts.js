@@ -7,7 +7,6 @@ import SingleProduct from "./../ecommerce/SingleProduct";
 SwiperCore.use([Navigation]);
 
 const RelatedSlider = ({produits}) => {
-    console.log(produits[0])
 
     return (
         <>

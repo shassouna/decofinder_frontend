@@ -43,7 +43,7 @@ const Search = () => {
                     onKeyDown={handleInput}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     type="text"
-                    placeholder="Search"
+                    placeholder="Recherchez dans plus de 502 024 produits, entreprises ..."
                 />
             </form>
         </>

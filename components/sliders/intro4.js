@@ -30,54 +30,13 @@ const Intro4 = () => {
                         className="single-hero-slider rectangle single-animation-wrap"
                         style={{
                             backgroundImage:
-                                "url(assets/imgs/slider/slider-5.png)",
-                        }}
-                    >
-                        <div className="slider-content">
-                            <h1 className="display-2 mb-40">
-                                Don’t miss
-                                <br />
-                                amazing deals
-                            </h1>
-                            <p className="mb-65">
-                                Sign up for the daily newsletter
-                            </p>
-                            <form className="form-subcriber d-flex">
-                                <input
-                                    type="email"
-                                    placeholder="Your emaill address"
-                                />
-                                <button className="btn" type="submit">
-                                    Subscribe
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </SwiperSlide>
-                <SwiperSlide>
-                    <div
-                        className="single-hero-slider rectangle single-animation-wrap"
-                        style={{
-                            backgroundImage:
                                 "url(assets/imgs/slider/slider-6.png)",
                         }}
                     >
                         <div className="slider-content">
-                            <h1 className="display-2 mb-40">
-                                Fresh Vegetables
-                                <br />
-                                Big discount
-                            </h1>
-                            <p className="mb-65">
-                                Save up to 50% off on your first order
-                            </p>
                             <form className="form-subcriber d-flex">
-                                <input
-                                    type="email"
-                                    placeholder="Your emaill address"
-                                />
                                 <button className="btn" type="submit">
-                                    Subscribe
+                                    La magie de l'été
                                 </button>
                             </form>
                         </div>

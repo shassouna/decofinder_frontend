@@ -12,13 +12,17 @@ export async function getStaticProps(context) {
     const fs = require('fs')
     const csv = require('csv-parser')
 
-    fs.createReadStream('C:/Users/Stanislas/Documents/SALIM_PROJECTS/strapi_decofinder_website/data/SUPERUNIVERS_DETAILS.csv')
+    fs.createReadStream('C:/Decofinder/SiteDecofinder/decofinder_website_backend/data/data/SUPERUNIVERS_DETAILS.csv')
     .pipe(csv())
     .on('data', (row) => {
         const obj = {
             data : row
         }
-        fetch ("http://decotest2.herokuapp.com/api/superuniversdetailss",{
+
+        row['id'] = row['CLE_SUPERUNIVERS']
+        row['slug'] = row['CLE_SUPERUNIVERS']
+        
+        fetch ("http://localhost:1337/api/superuniversdetailss",{
         method : "POST",
         headers : {
           "Content-Type": "application/json"

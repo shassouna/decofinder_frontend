@@ -14,13 +14,17 @@ export async function getStaticProps(context) {
     const csv = require('csv-parser')
 
 
-    fs.createReadStream('C:/Users/Stanislas/Documents/SALIM_PROJECTS/strapi_decofinder_website/data/RAYON_BASE.csv')
+    fs.createReadStream('C:/Decofinder/SiteDecofinder/decofinder_website_backend/data/data/RAYON_BASE.csv')
     .pipe(csv())
     .on('data', (row) => {
         const obj = {
             data : row
         }
-        fetch ("http://decotest2.herokuapp.com/api/rayonbases", {
+
+        row['id'] = row['CLE_RAYON']
+        row['slug'] = row['CLE_RAYON']
+
+        fetch ("http://localhost:1337/api/rayonbases", {
         method : "POST",
         headers : {
           "Content-Type": "application/json"

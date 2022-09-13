@@ -14,28 +14,26 @@ export async function getStaticProps(context) {
     const csv = require('csv-parser')
 
     // get rayonbases
-    const res = await axios.get("http://decotest2.herokuapp.com/api/rayonbases")
+    const res = await axios.get("http://localhost:1337/api/rayonbases")
     const univerbases = res.data.data
 
-    // get superunivers
-    const res2 = await axios.get("http://decotest2.herokuapp.com/api/superuniversdetailss")
-    const superuniversdetails = res2.data.data
-
-   fs.createReadStream('C:/Users/Stanislas/Documents/SALIM_PROJECTS/strapi_decofinder_website/data/RAYON_DETAILS.csv')
+   fs.createReadStream('C:/Decofinder/SiteDecofinder/decofinder_website_backend/data/data/RAYON_DETAILS.csv')
     .pipe(csv())
     .on('data', (row) => {
+        //console.log(row['CLE_RAYON'])
         const findUnivBase = univerbases.find(element=>element['attributes']['CLE_RAYON'] == row['CLE_RAYON'])
         if(findUnivBase){
-            const findSuperUnivers = superuniversdetails.filter(element=>element['attributes']['CLE_SUPERUNIVERS']==findUnivBase['attributes']['CLE_SUPERUNIVERS'])
-            for (let i =0; i<5 ; i++){
-                if (row['CLE_LANG']==i){
-                    row['superuniversdetail'] = parseInt(findSuperUnivers.find(element=>element['attributes']['CLE_LANG']==i)['id'])
-                }
-            }
+            row['CLE_SUPERUNIVERS'] = findUnivBase['attributes']['CLE_SUPERUNIVERS']
+            row['superuniversdetail'] = parseInt(findUnivBase['attributes']['CLE_SUPERUNIVERS'])
+            
             const obj = {
                 data : row
             }
-            fetch ("http://decotest2.herokuapp.com/api/rayondetails", {
+
+            row['id'] = row['CLE_RAYON']
+            row['slug'] = row['CLE_RAYON']
+
+            fetch ("http://localhost:1337/api/rayondetails", {
             method : "POST",
             headers : {
               "Content-Type": "application/json"
@@ -53,4 +51,21 @@ export async function getStaticProps(context) {
    }
 }
 
+            /*row['CLE_SUPERUNIVERS'] = findUnivBase['attributes']['CLE_SUPERUNIVERS']
+            row['superuniversdetail'] = parseInt(findUnivBase['attributes']['CLE_SUPERUNIVERS'])
+            
+            const obj = {
+                data : row
+            }
 
+            row['id'] = findUnivBase['CLE_RAYON']
+            row['slug'] = findUnivBase['CLE_RAYON']
+
+            fetch ("http://localhost:1337/api/rayondetails", {
+            method : "POST",
+            headers : {
+              "Content-Type": "application/json"
+            },
+            body : JSON.stringify(obj)
+            }
+            )*/

@@ -12,7 +12,7 @@ export async function getStaticProps(context) {
     const fs = require('fs')
     const csv = require('csv-parser')
 
-   fs.createReadStream('C:/Users/Stanislas/Documents/strapi_decofinder_website/data/AMBIANCE.csv')
+   fs.createReadStream('C:/Decofinder/SiteDecofinder/decofinder_website_backend/data/data/AMBIANCE.csv')
     .pipe(csv())
     .on('data', (row) => {
         for (let key in row){
@@ -22,7 +22,8 @@ export async function getStaticProps(context) {
         const obj = {
             data : row  
         }
-        fetch ("http://decotest2.herokuapp.com/api/ambiances", {
+
+        fetch ("http://localhost:1337/api/ambiances", {
         method : "POST",
         headers : {
             "Content-Type": "application/json"

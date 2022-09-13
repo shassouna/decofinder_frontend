@@ -1,24 +1,21 @@
 import CategoryTab from "../components/ecommerce/categoryTab";
-import FeatchDeals from "../components/ecommerce/fetchDeals";
-import FeatchTab from "../components/ecommerce/fetchTab";
 import FetchTabSlider from "../components/ecommerce/fetchTabSlider";
-import Bottom from "../components/elements/Bottom";
 import QuickView from "./../components/ecommerce/QuickView";
-import Banner5 from "./../components/elements/Banner5";
-import Deals1 from "./../components/elements/Deals1";
 import IntroPopup from "./../components/elements/IntroPopup";
 import Layout from "./../components/layout/Layout";
 import CategorySlider from "./../components/sliders/Category";
-import Intro1 from "../components/sliders/Intro4";
-import Link from "next/link";
+import Intro1 from "../components/sliders/intro4";
+import FourProducts from "./../components/elements/FourProducts";
+import Description from "../components/elements/Contact";
 
-export default function Home({menuHeaderData}) {
-    
+// My imports 
+import axios from 'axios'
+
+export default function Home({menuHeaderData, fourProducts, nouveautes, inspirations}) {
     return (
         <>
             <IntroPopup />
 
-            <Layout noBreadcrumb="d-none" menuHeaderData={menuHeaderData}>
                 <section className="home-slider position-relative mb-30">
                     <div className="container">
                         <div className="home-slide-cover mt-30">
@@ -27,86 +24,155 @@ export default function Home({menuHeaderData}) {
                     </div>
                 </section>
 
+                <section className="banners mb-25">
+                    <div className="container">
+                        <div className="row">
+                            <FourProducts fourProducts={fourProducts}/>
+                        </div>
+                    </div>
+                </section>
+
                 <section className="popular-categories section-padding">
                     <div className="container wow animate__fadeIn animate__animated">
                         <div className="section-title">
                             <div className="title">
-                                <h3>Featured Categories</h3>
-                                <ul className="list-inline nav nav-tabs links">
-                                    <li className="list-inline-item nav-item">
-                                        <Link href="/products">
-                                            <a className="nav-link">Cake & Milk</a>
-                                        </Link>
-                                    </li>
-                                    <li className="list-inline-item nav-item">
-                                        <Link href="/products">
-                                            <a className="nav-link">Coffes & Teas</a>
-                                        </Link>
-                                    </li>
-                                    <li className="list-inline-item nav-item">
-                                        <Link href="/products">
-                                            <a className="nav-link active">Pet Foods</a>
-                                        </Link>
-                                    </li>
-                                    <li className="list-inline-item nav-item">
-                                        <Link href="/products">
-                                            <a className="nav-link">Vegetables</a>
-                                        </Link>
-                                    </li>
-                                </ul>
+                                <h3>Tous les Mega Univers :</h3>
                             </div>
                         </div>
                         <div className="carausel-10-columns-cover position-relative">
                             <div className="carausel-10-columns" id="carausel-10-columns">
-                                <CategorySlider />
+                                <CategorySlider superuniversdetails={menuHeaderData}/>
                             </div>
                         </div>
                     </div>
                 </section>
 
-                <section className="banners mb-25">
-                    <div className="container">
-                        <div className="row">
-                            <Banner5 />
-                        </div>
-                    </div>
+                <section>
+                    <Description/>
                 </section>
 
                 <section className="product-tabs section-padding position-relative">
                     <div className="container">
                         <div className="col-lg-12">
-                            <CategoryTab />
+                            <CategoryTab title="Les Nouveautés" produits={nouveautes}/>
                         </div>
                     </div>
                 </section>
 
                 <section className="section-padding pb-5">
                     <div className="container">
-                        <FetchTabSlider />
+                        <FetchTabSlider typeprods={inspirations}/>
                     </div>
                 </section>
-
-                <section className="section-padding pb-5">
-                    <div className="container">
-                        <div className="section-title wow animate__animated animate__fadeIn" data-wow-delay="0">
-                            <h3 className="">Deals Of The Day</h3>
-                            <Link href="/products">
-                                <a className="show-all">
-                                    All Deals
-                                    <i className="fi-rs-angle-right"></i>
-                                </a>
-                            </Link>
-                        </div>
-                        <FeatchDeals />
-                    </div>
-                </section>
-
-                <Bottom />
 
                 <QuickView />
-            </Layout>
         </>
     );
 }
 
+export async function getStaticProps(context) {
 
+    // import qs
+    const qs =require('qs')
+
+    // --------------------------------------------Four Products Begin--------------------------------------------
+    const fourProducts = {}
+    // coupdecoeur 
+    const queryCoupdecoeur = qs.stringify({
+        filters: {
+            coupdecoeur : { $eq: "1" } 
+        },
+        pagination: {
+            page: 1,
+            pageSize: 1,
+          },
+          populate: ['typeprod'],
+      }, {
+        encodeValuesOnly: true, // prettify URL
+      })
+    const CoupdecoeurCall = await axios.get(`http://localhost:1337/api/produits?${queryCoupdecoeur}`) 
+    fourProducts.coupdecoeur = CoupdecoeurCall.data.data[0]
+
+    // selections 
+    const querySelections = qs.stringify(
+        {
+            filters: {
+                selection : { $eq: "1" } 
+            },
+            pagination: {
+                page: 1,
+                pageSize: 1,
+              },
+              populate: ['typeprod'],
+        }
+    )
+    const selectionsCall = await axios.get(`http://localhost:1337/api/produits?${querySelections}`)
+    fourProducts.selection = selectionsCall.data.data[0]
+
+    // a saisir 
+    const queryAsaisir = qs.stringify(
+        {
+            filters: {
+                asaisir : { $eq: "1" } 
+            },
+            pagination: {
+                page: 1,
+                pageSize: 1,
+            },
+            populate: ['typeprod'],
+        }
+    )
+    const asaisirCall = await axios.get(`http://localhost:1337/api/produits?${queryAsaisir}`)
+    fourProducts.asaisir = asaisirCall.data.data[0]
+    // achat en ligne 
+    const queryAchatEnLigne = qs.stringify(
+        {
+            filters: {
+                achatenligne : { $eq: "1" } 
+            },
+            pagination: {
+                page: 1,
+                pageSize: 1,
+            },
+            populate: ['typeprod'],
+        }
+    )
+    const achatenligneCall = await axios.get(`http://localhost:1337/api/produits?${queryAchatEnLigne}`)
+    fourProducts.achatenligne = achatenligneCall.data.data[0]
+
+    // nouveautes 
+    const queryNouveautes = qs.stringify({
+        filters: {
+            NOUVEAUTE : { $eq: "1" } 
+        },
+        pagination: {
+            page: 1,
+            pageSize: 25,
+          },
+          populate: ['typeprod', 'exposant'],
+      }, {
+        encodeValuesOnly: true, // prettify URL
+      });
+    const NouveautesCall = await axios.get(`http://localhost:1337/api/produits?${queryNouveautes}`) 
+
+    // types produits 
+    const queryTypeprods = qs.stringify({
+        pagination: {
+            page: 1,
+            pageSize: 5,
+          },
+          populate: ['category'],
+      }, {
+        encodeValuesOnly: true, // prettify URL
+      });
+    const TypeprodsCall = await axios.get(`http://localhost:1337/api/typeprods?${queryTypeprods}`) 
+
+    // --------------------------------------------Four Products End--------------------------------------------   
+    return {
+        props: {
+            fourProducts : fourProducts,
+            nouveautes : NouveautesCall.data.data,
+            inspirations : TypeprodsCall.data.data
+        }, 
+      }
+}

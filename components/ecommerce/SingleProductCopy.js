@@ -1,8 +1,7 @@
 import Link from "next/link";
 
 const SingleProduct = ({
-    item,
-    typeprod
+    item
 }) => {
 
     return (
@@ -11,8 +10,8 @@ const SingleProduct = ({
                 <div className="product-img-action-wrap">
                     <div className="product-img product-img-zoom">
                         <Link
-                            href="#"
-                            as={`#"`}
+                            href="/products/[slug]"
+                            as={`/products/sfsd`}
                         >
                             <a>
                                 <img
@@ -32,26 +31,29 @@ const SingleProduct = ({
                 <div className="product-content-wrap">
                     <h2>
                         <Link
-                            href="#"
-                            as={`#`}
+                            href="/products/[slug]"
+                            as={`/products/dfsdfsf`}
                         >
-                            <a>{item['attributes']['exposant']['data']['attributes']['NOM']}</a>
+                            <a>{item['attributes']['LIB_FR']}</a>
                         </Link>
                     </h2>
                     {
-                        typeprod &&
-                        <div className="product-category">
-                            <Link href="#">
-                                <a>{typeprod['attributes']['LIB_FR']}</a>
-                            </Link>
+                    item['attributes']['typeprods']&&
+                    item['attributes']['typeprods']['data'].map(val=>(
+                        <div className="product-rate-cover">
+                            {val['attributes']['LIB_FR']}
                         </div>
+                    ))
                     }
-
+                    <br/>
                     <div className="product-card-bottom">
-                        <div className="product-price">
-                            <span>
-                                {item['attributes']['TARIF_PUB']?item['attributes']['TARIF_PUB']+" €":'Prix sur demande'} 
-                            </span>
+                        <div className="add-cart">
+                            <a
+                                className="add"
+                                onClick={(e) => handleCart(product)}
+                            >
+                             Tous les produits
+                            </a>
                         </div>
                     </div>
                 </div>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Head from "next/head";
 import Breadcrumb from "./Breadcrumb";
 import Footer from "./Footer";
-import Header from "./Header";
+import Header from "./Header2";
 import MobileMenu from "./MobileMenu";
 
 const Layout = ({
@@ -37,7 +37,7 @@ const Layout = ({
             {isToggled && <div className="body-overlay-1" onClick={toggleClick}></div>}
 
             <Header headerStyle={headerStyle} isToggled={isToggled} toggleClick={toggleClick} menuHeaderData={menuHeaderData}/>
-            <MobileMenu isToggled={isToggled} toggleClick={toggleClick} />
+            <MobileMenu isToggled={isToggled} toggleClick={toggleClick} menuHeaderData={menuHeaderData}/>
             <main className="main">
                 <Breadcrumb parent={parent} sub={sub} subChild={subChild} noBreadcrumb={noBreadcrumb} />
                 {children}

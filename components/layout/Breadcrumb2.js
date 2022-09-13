@@ -1,12 +1,13 @@
-import React from "react";
-import { useRouter } from 'next/router'
-import Link from "next/link"
-import Tags from "../ecommerce/Filter/Tags";
+import { useState } from "react";
 
-const Breadcrumb2 = ({parent, sub, subChild, noBreadcrumb}) => {
-    const router = useRouter()
+const Breadcrumb2 = ({title, elements, description, description2}) => {
 
-    const titlex = router.query.cat
+    const [showdDescription, setShowDescription] = useState (false)
+
+    const handleShowDescription = () => {
+        setShowDescription(!showdDescription)
+    }
+
     return (
         <>
             <div className="page-header mt-30 mb-50">
@@ -14,16 +15,24 @@ const Breadcrumb2 = ({parent, sub, subChild, noBreadcrumb}) => {
                 <div className="archive-header">
                     <div className="row align-items-center">
                         <div className="col-xl-3">
-                            <h1 className="mb-15 text-capitalize">{titlex ? titlex : "Category"}</h1>
+                            <h1 className="mb-15 text-capitalize">{title}</h1>
                             <div className="breadcrumb">
-                                <Link href="/"><a rel="nofollow"><i className="fi-rs-home mr-5"></i>Home</a></Link>
-                                <span></span> Shop <span></span> {titlex}
+                                {elements.map((val,index)=>(
+                                    index==elements.length-1?
+                                    <>{val}</>:
+                                    <>{val}<span></span></>
+                                ))} 
                             </div>
                         </div>
-                        <div className="col-xl-9 text-end d-none d-xl-block">
-                            <Tags/>                            
-                        </div>
+                        {!showdDescription&&<p dangerouslySetInnerHTML={{__html: description}} className="mt-25"></p>}      
+                        {showdDescription&&<p dangerouslySetInnerHTML={{__html: description2}} className="mt-25"></p>}                 
                     </div>
+                    {
+                        description2&&!showdDescription?
+                        <button className="mt-25" onClick={handleShowDescription}>Lire la suite ...</button>
+                        :description2&&
+                        <button className="mt-25" onClick={handleShowDescription}>Réduire</button>                        
+                    }
                 </div>
             </div>
         </div>

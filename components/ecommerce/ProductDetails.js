@@ -9,6 +9,8 @@ import { addToWishlist } from "../../redux/action/wishlistAction";
 import ProductTab from "../elements/ProductTab";
 import RelatedSlider from "../sliders/RelatedProducts";
 import ThumbSlider from "../sliders/Thumb";
+import CategorySlider from "../sliders/CategoryProducts";
+import Link from 'next/link'
 
 // My imports 
 import Image from "next/image"
@@ -21,7 +23,6 @@ const ProductDetails = ({
     quickView,
     produit
 }) => { 
-    console.log(produit)
 
     const handleCart = (product) => {
         addToCart(product);
@@ -161,24 +162,70 @@ const ProductDetails = ({
                                         </div>
                                     </div>
                                 </div>
-                                {quickView ? null : (
                                     <>
-                                        <ProductTab produit={produit}/>
-                                        <div className="row mt-60">
-                                            <div className="col-12" style={{display:"flex", justifyContent:"center"}}>
-                                                <h3 className="section-title style-1 mb-30">{produit['data']['attributes']['exposant']['data']['attributes']['NOM']}</h3>
-                                            </div>
-                                            <div className="col-12">
-                                                <div className="row related-products position-relative">
-                                                    <RelatedSlider 
-                                                    produits={produit['data']['attributes']['exposant']['data']['attributes']['produits']['data']}
-                                                    //exposant={exposant}
-                                                    />
+                                        <ProductTab produit={produit}/>       
+                                            {
+                                                produit['data']['attributes']['exposant']&&produit['data']['attributes']['exposant']['data']['attributes']['produits']&&
+                                                    <div className="row mt-60">
+                                                        <div className="col-12" style={{display:"flex", justifyContent:"center"}}>
+                                                            <h3 className="section-title style-1 mb-30">Autres produits de {produit['data']['attributes']['exposant']['data']['attributes']['NOM']}</h3>
+                                                        </div>
+                                                        <div className="col-12">
+                                                            <div className="row related-products position-relative">
+                                                                <RelatedSlider 
+                                                                produits={produit['data']['attributes']['exposant']['data']['attributes']['produits']['data']}
+                                                                //exposant={exposant}
+                                                                />
+                                                            </div>
+                                                        </div>   
+                                                    </div>
+                                            }
+                                            {
+                                                produit['data']['attributes']['exposant']&&produit['data']['attributes']['exposant']['data']['attributes']['produits']&&
+                                                    <div className="row mt-60">
+                                                        <div className="col-12" style={{display:"flex", justifyContent:"center"}}>
+                                                            <h3 className="section-title style-1 mb-30">Vous aimerez aussi</h3>
+                                                        </div>
+                                                        <div className="col-12">
+                                                            <div className="row related-products position-relative">
+                                                                <RelatedSlider 
+                                                                produits={produit['data']['attributes']['typeprod']['data']['attributes']['produits']['data']}
+                                                                //exposant={exposant}
+                                                                />
+                                                            </div>
+                                                        </div>   
+                                                    </div>
+                                            }
+                                            {
+                                                produit['data']['attributes']['typeprod']&&produit['data']['attributes']['typeprod']['data']['attributes']['produits']&&
+                                                <div className="container wow animate__fadeIn animate__animated">
+                                                    <div className="col-12" style={{display:"flex", justifyContent:"center"}}>
+                                                            <h3 className="section-title style-1 mb-30">Toute la collection de {produit['data']['attributes']['exposant']['data']['attributes']['NOM']}</h3>
+                                                    </div>
+                                                    <div className="carausel-10-columns-cover position-relative">
+                                                        <div className="carausel-10-columns" id="carausel-10-columns">
+                                                            <CategorySlider />
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>
+                                            }
+                                            {
+                                                produit['data']['attributes']['exposant']&&produit['data']['attributes']['exposant']['data']['attributes']['produits']&&
+                                                    <div className="row mt-60">
+                                                        <div className="col-12" style={{display:"flex", justifyContent:"center"}}>
+                                                            <h3 className="section-title style-1 mb-30">Toute la collection de {produit['data']['attributes']['exposant']['data']['attributes']['NOM']}</h3>
+                                                        </div>
+                                                        <div className="col-12">
+                                                            <div className="row related-products position-relative">
+                                                                <RelatedSlider 
+                                                                produits={produit['data']['attributes']['typeprod']['data']['attributes']['produits']['data']}
+                                                                //exposant={exposant}
+                                                                />
+                                                            </div>
+                                                        </div>   
+                                                    </div>
+                                            }
                                     </>
-                                )}
                             </div>
                         </div>
                     </div>
