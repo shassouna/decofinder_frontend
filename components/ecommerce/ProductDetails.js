@@ -1,45 +1,18 @@
-import { connect } from "react-redux";
-import {
-    addToCart,
-    decreaseQuantity,
-    increaseQuantity
-} from "../../redux/action/cart";
-import { addToCompare } from "../../redux/action/compareAction";
-import { addToWishlist } from "../../redux/action/wishlistAction";
-import ProductTab from "../elements/ProductTab";
-import RelatedSlider from "../sliders/RelatedProducts";
-import ThumbSlider from "../sliders/Thumb";
-import CategorySlider from "../sliders/CategoryProducts";
-import Link from 'next/link'
 
+import ThumbSlider from "../sliders/Thumb";
+import ProductTab from "../elements/ProductTab";
 // My imports 
 import Image from "next/image"
 
-const ProductDetails = ({
-    product,
-    addToCompare,
-    addToCart,
-    addToWishlist,
-    quickView,
-    produit
-}) => { 
+const ProductDetails = ({product, produit, setOpenClass}) => { 
 
-    const handleCart = (product) => {
-        addToCart(product);
-        toast("Product added to Cart !");
-    };
-
-    const handleCompare = (product) => {
-        addToCompare(product);
-        toast("Added to Compare list !");
-    };
-
-    const handleWishlist = (product) => {
-        addToWishlist(product);
-        toast("Added to Wishlist !");
+    const handleShowPointsDeVentes = (event) => {
+        event.preventDefault()
+        setOpenClass(0)
     }
-
+   
     return (
+
         produit&&
         <>
             <section className="mt-50 mb-50">
@@ -55,7 +28,7 @@ const ProductDetails = ({
                                             </span>
 
                                             <div className="product-image-slider">
-                                                <ThumbSlider product={product} />
+                                                <ThumbSlider product={product} produit={produit} />
                                             </div>
                                         </div>
                                     </div>
@@ -71,9 +44,9 @@ const ProductDetails = ({
                                                 <button className="detail-info-header-button">Suivre</button>
                                             </div>
                                             <h2 className="title-detail">
-                                                {produit['data']['attributes'].typeprod&&
-                                                produit['data']['attributes'].typeprod['data']['attributes']['LIB_FR'].split("-").join(" ")} 
-                                                {produit['data']['attributes']['TITRE_FR']&& " - " + produit['data']['attributes']['TITRE_FR']}
+                                                {produit['attributes'].typeprod&&
+                                                produit['attributes'].typeprod['data']['attributes']['LIB_FR'].split("-").join(" ")} 
+                                                {produit['attributes']['TITRE_FR']&& " - " + produit['attributes']['TITRE_FR']}
                                             </h2>
 
                                             <div className="clearfix product-price-cover">
@@ -86,17 +59,46 @@ const ProductDetails = ({
                                             </div>
                                             <div className="bt-1 border-color-1 mt-30 mb-30"></div>
                                             <div className="produitButtonsContainer">
-                                                <a target="_blank" href={"#"}>
-                                                <button style={{width:'100%'}} className="produitButtonsContainerButton"><i className="fi-rs-shopping-cart mr-5"></i>SITE WEB</button>
+                                                <a href={`${produit['attributes']['URL_PAGE']}`} target="_blank">
+                                                    <button style={{width:'100%'}} className="produitButtonsContainerButton">
+                                                    <Image
+                                                        src="/assets/imgs/theme/globe.svg"
+                                                        alt=""
+                                                        width={18}
+                                                        height={18}
+                                                    />&nbsp;&nbsp;&nbsp;SITE WEB
+                                                    </button>
                                                 </a>
                                                 <a href={"#"}>
-                                                <button style={{width:'100%'}} className="produitButtonsContainerButton"><i className="fi-rs-shopping-cart mr-5"></i>QUESTION / DEVIS</button>
+                                                    <button style={{width:'100%'}} className="produitButtonsContainerButton">
+                                                    <Image
+                                                        src="/assets/imgs/theme/help-circle.svg"
+                                                        alt=""
+                                                        width={18}
+                                                        height={18}
+                                                    />&nbsp;&nbsp;&nbsp;QUESTION / DEVIS
+                                                    </button>
                                                 </a>
                                                 <a href={"#"}>
-                                                <button style={{width:'100%'}} className="produitButtonsContainerButton"><i className="fi-rs-shopping-cart mr-5"></i>POINTS DE VENTE</button>
+                                                    <button style={{width:'100%'}} className="produitButtonsContainerButton"
+                                                        onClick={handleShowPointsDeVentes}>
+                                                    <Image
+                                                        src="/assets/imgs/theme/map-pin.svg"
+                                                        alt=""
+                                                        width={18}
+                                                        height={18}
+                                                    />&nbsp;&nbsp;&nbsp;POINTS DE VENTE
+                                                    </button>
                                                 </a>
                                                 <a href={"#"}>
-                                                <button style={{width:'100%'}} className="produitButtonsContainerButton"><i className="fi-rs-shopping-cart mr-5"></i>METTRE EN FAVORIS</button>
+                                                    <button style={{width:'100%'}} className="produitButtonsContainerButton">
+                                                    <Image
+                                                        src="/assets/imgs/theme/heart.svg"
+                                                        alt=""
+                                                        width={18}
+                                                        height={18}
+                                                    />&nbsp;&nbsp;&nbsp;METTRE EN FAVORIS
+                                                    </button>
                                                 </a>
                                             </div>
                                             <div className="mobile-social-icon">
@@ -147,14 +149,18 @@ const ProductDetails = ({
                                             <div className="bt-1 border-color-1 mt-30 mb-30"></div>
                                             <div style={{display:'flex', flexDirection:'column', justifyContent:'center', marginRight:"10px", marginLeft:"10px"}}>
                                             {
-                                            produit['data']['attributes'].lienrevendeurproduits['data'].map(val=>{
+                                            produit['attributes'].lienrevendeurproduits['data'].map(val=>{
                                                 return (
-                                                    <a target="_blank" href={val["URL_PAGE"]}>
-                                                        <button style={{width:"100%"}} className="button button-add-to-cart">
-                                                        <p>{val['attributes']['nom_exposant']}</p>
-                                                        <div><i className="fi-rs-shopping-cart mr-5"></i></div>
+                                                    <a href={"#"}>
+                                                        <button style={{width:'100%'}} className="produitButtonsContainerButton">
+                                                        <Image
+                                                            src="/assets/imgs/theme/icons/icon-cart.svg"
+                                                            alt=""
+                                                            width={18}
+                                                            height={18}
+                                                        />&nbsp;&nbsp;&nbsp;{val['attributes'].exposant['data']['attributes']['NOM']}
                                                         </button>
-                                                    </a> 
+                                                    </a>
                                                 )
                                             })
                                             }
@@ -162,72 +168,9 @@ const ProductDetails = ({
                                         </div>
                                     </div>
                                 </div>
-                                    <>
-                                        <ProductTab produit={produit}/>       
-                                            {
-                                                produit['data']['attributes']['exposant']&&produit['data']['attributes']['exposant']['data']['attributes']['produits']&&
-                                                    <div className="row mt-60">
-                                                        <div className="col-12" style={{display:"flex", justifyContent:"center"}}>
-                                                            <h3 className="section-title style-1 mb-30">Autres produits de {produit['data']['attributes']['exposant']['data']['attributes']['NOM']}</h3>
-                                                        </div>
-                                                        <div className="col-12">
-                                                            <div className="row related-products position-relative">
-                                                                <RelatedSlider 
-                                                                produits={produit['data']['attributes']['exposant']['data']['attributes']['produits']['data']}
-                                                                //exposant={exposant}
-                                                                />
-                                                            </div>
-                                                        </div>   
-                                                    </div>
-                                            }
-                                            {
-                                                produit['data']['attributes']['exposant']&&produit['data']['attributes']['exposant']['data']['attributes']['produits']&&
-                                                    <div className="row mt-60">
-                                                        <div className="col-12" style={{display:"flex", justifyContent:"center"}}>
-                                                            <h3 className="section-title style-1 mb-30">Vous aimerez aussi</h3>
-                                                        </div>
-                                                        <div className="col-12">
-                                                            <div className="row related-products position-relative">
-                                                                <RelatedSlider 
-                                                                produits={produit['data']['attributes']['typeprod']['data']['attributes']['produits']['data']}
-                                                                //exposant={exposant}
-                                                                />
-                                                            </div>
-                                                        </div>   
-                                                    </div>
-                                            }
-                                            {
-                                                produit['data']['attributes']['typeprod']&&produit['data']['attributes']['typeprod']['data']['attributes']['produits']&&
-                                                <div className="container wow animate__fadeIn animate__animated">
-                                                    <div className="col-12" style={{display:"flex", justifyContent:"center"}}>
-                                                            <h3 className="section-title style-1 mb-30">Toute la collection de {produit['data']['attributes']['exposant']['data']['attributes']['NOM']}</h3>
-                                                    </div>
-                                                    <div className="carausel-10-columns-cover position-relative">
-                                                        <div className="carausel-10-columns" id="carausel-10-columns">
-                                                            <CategorySlider />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            }
-                                            {
-                                                produit['data']['attributes']['exposant']&&produit['data']['attributes']['exposant']['data']['attributes']['produits']&&
-                                                    <div className="row mt-60">
-                                                        <div className="col-12" style={{display:"flex", justifyContent:"center"}}>
-                                                            <h3 className="section-title style-1 mb-30">Toute la collection de {produit['data']['attributes']['exposant']['data']['attributes']['NOM']}</h3>
-                                                        </div>
-                                                        <div className="col-12">
-                                                            <div className="row related-products position-relative">
-                                                                <RelatedSlider 
-                                                                produits={produit['data']['attributes']['typeprod']['data']['attributes']['produits']['data']}
-                                                                //exposant={exposant}
-                                                                />
-                                                            </div>
-                                                        </div>   
-                                                    </div>
-                                            }
-                                    </>
                             </div>
                         </div>
+                        <ProductTab produit={produit}/>
                     </div>
                 </div>
             </section>
@@ -235,16 +178,5 @@ const ProductDetails = ({
     );
 };
 
-const mapStateToProps = (state) => ({
-    cartItems: state.cart,
-});
 
-const mapDispatchToProps = {
-    addToCompare,
-    addToWishlist,
-    addToCart,
-    increaseQuantity,
-    decreaseQuantity,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ProductDetails);
+export default ProductDetails

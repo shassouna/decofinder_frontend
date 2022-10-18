@@ -1,9 +1,12 @@
-import CategoryProduct from "../../components/ecommerce/Filter/CategoryProduct";
-import Breadcrumb2 from "../../components/layout/Breadcrumb2";
-import SingleProduct from "../../components/ecommerce/SingleProductCopy";
+import CategoryProduct from "../../../components/ecommerce/Filter/CategoryProduct";
+import Breadcrumb2 from "../../../components/layout/Breadcrumb2";
+import SingleTypeProduct from "../../../components/ecommerce/SingleProductCopy";
+import SingleProduct from "../../../components/ecommerce/SingleProduct";
+
 // My imports
-import { useState, useEffect } from "react"
-import Layout from "../../components/layout/Layout";
+import { useRouter } from "next/router";
+import { useState } from "react"
+import Layout from "../../../components/layout/Layout";
 import axios from "axios"
 
 const countElements = (arr, prop) => {
@@ -20,8 +23,10 @@ const countElements = (arr, prop) => {
     return(res) 
 }
 
-const ProductId = ({ typeprods, produit_Props, typeprods_Props, categorie, univers, univers_categories_Props }) => {
+const ProductId = ({ typeprods, produit_Props, typeprods_Props, categorie, univers, univers_categories_Props, produits_categorie }) => {
 
+    const router = useRouter()
+    
     const [showUnivers, setShowUnivers] = useState(true)
     const [showCategories, setShowCategories] = useState(true)
     const [showMarques, setShowMarques] = useState(true)
@@ -32,14 +37,34 @@ const ProductId = ({ typeprods, produit_Props, typeprods_Props, categorie, unive
     const [showMotifs, setShowMotifs] = useState(false)
     const [showMateriaux, setShowMateriaux] = useState(false)
 
+    const handleFilter = (filterKey, value, idCategorie) => {
+
+        if(filterKey=="categorie"){
+            router.push({
+                pathname: `/categories/${idCategorie}`,
+                query: null
+            })            
+        }
+        else {
+        const obj ={...router.query}
+        obj[filterKey]=value
+        delete obj.slug
+        router.push({
+            pathname: `/categories/${router.query.slug}`,
+            query: {...obj}
+        })
+        }
+        
+    }
+
     return (
         produit_Props &&
         <>
             <Layout noBreadcrumb="d-none">
                 <Breadcrumb2 
-                    title='Catégorie' 
+                    title={'Catégorie ' + categorie['attributes']['LIB_FR'] + '-' + univers['attributes']['LIB']}
                     elements={[univers['attributes']['LIB'], categorie['attributes']['LIB_FR']]} 
-                    description = {"Choisissez un type-produit dans la catégorie " + categorie['attributes']['LIB_FR']}
+                    description = {categorie['attributes']['TEXTE_FR'].split(`\n`)[0]+categorie['attributes']['TEXTE_FR'].split(`\n`)[1]}   
                 />
                 <section className="mt-50 mb-50">
                     <div className="container">
@@ -57,7 +82,12 @@ const ProductId = ({ typeprods, produit_Props, typeprods_Props, categorie, unive
                                             {showUnivers&&<img style={{width:'25px', height:'25px'}} src="/assets/imgs/theme/icons/up-arrow-svgrepo-com.svg"
                                             onClick={()=>setShowUnivers(!showUnivers)}/>}
                                         </div>
-                                        {showUnivers&&<CategoryProduct items={univers_categories_Props} prop='LIB_FR'/>}
+                                        {showUnivers&&
+                                        <CategoryProduct 
+                                        items={univers_categories_Props} 
+                                        prop='LIB_FR'
+                                        filterKey='categorie'
+                                        handleFilter = {handleFilter}/>}
                                     </div>
                                 }
                                 {
@@ -72,7 +102,12 @@ const ProductId = ({ typeprods, produit_Props, typeprods_Props, categorie, unive
                                             {showCategories&&<img style={{width:'25px', height:'25px'}} src="/assets/imgs/theme/icons/up-arrow-svgrepo-com.svg"
                                             onClick={()=>setShowCategories(!showCategories)}/>}
                                         </div>
-                                        {showCategories&&<CategoryProduct items={typeprods_Props} prop='LIB_FR'/>}
+                                        {showCategories&&
+                                        <CategoryProduct 
+                                        items={typeprods_Props} 
+                                        prop='LIB_FR'
+                                        filterKey='typeprod'
+                                        handleFilter = {handleFilter}/>}
                                     </div>
                                 }
                                 {
@@ -87,7 +122,14 @@ const ProductId = ({ typeprods, produit_Props, typeprods_Props, categorie, unive
                                             {showMarques&&<img style={{width:'25px', height:'25px'}} src="/assets/imgs/theme/icons/up-arrow-svgrepo-com.svg"
                                             onClick={()=>setShowMarques(!showMarques)}/>}
                                         </div>
-                                        {showMarques&&<CategoryProduct items={produit_Props.marques} prop='MARQUE'/>}
+                                        {showMarques&&
+                                        <CategoryProduct 
+                                        items={produit_Props.marques} 
+                                        prop='MARQUE'
+                                        filterKey='marque'
+                                        handleFilter = {handleFilter}
+                                        />
+                                        }
                                     </div>
                                 }
                                 {
@@ -102,7 +144,13 @@ const ProductId = ({ typeprods, produit_Props, typeprods_Props, categorie, unive
                                             {showPrix&&<img style={{width:'25px', height:'25px'}} src="/assets/imgs/theme/icons/up-arrow-svgrepo-com.svg"
                                             onClick={()=>setShowPrix(!showPrix)}/>}
                                         </div>
-                                        {showPrix&&<CategoryProduct items={produit_Props.prix} prop='TARIF_PUB'/>}
+                                        {showPrix&&
+                                        <CategoryProduct 
+                                        items={produit_Props.prix} 
+                                        prop='TARIF_PUB'
+                                        filterKey='prix'
+                                        handleFilter = {handleFilter}
+                                        />}
                                     </div>  
                                 }
                                 {
@@ -117,7 +165,13 @@ const ProductId = ({ typeprods, produit_Props, typeprods_Props, categorie, unive
                                             {showDesigners&&<img style={{width:'25px', height:'25px'}} src="/assets/imgs/theme/icons/up-arrow-svgrepo-com.svg"
                                             onClick={()=>setShowDesigners(!showDesigners)}/>}
                                         </div>
-                                        {showDesigners&&<CategoryProduct items={produit_Props.designers} prop='DESIGNER'/>}
+                                        {showDesigners&&
+                                        <CategoryProduct 
+                                        items={produit_Props.designers} 
+                                        prop='DESIGNER'
+                                        filterKey='designer'
+                                        handleFilter = {handleFilter}
+                                        />}
                                     </div>  
                                 }
                                 {
@@ -132,7 +186,13 @@ const ProductId = ({ typeprods, produit_Props, typeprods_Props, categorie, unive
                                             {showStyles&&<img style={{width:'25px', height:'25px'}} src="/assets/imgs/theme/icons/up-arrow-svgrepo-com.svg"
                                             onClick={()=>setShowStyles(!showStyles)}/>}
                                         </div>
-                                        {showStyles&&<CategoryProduct items={produit_Props.styles} prop='LIB_FR'/>}
+                                        {showStyles&&
+                                        <CategoryProduct 
+                                        items={produit_Props.styles} 
+                                        prop='LIB_FR'
+                                        filterKey='style'
+                                        handleFilter = {handleFilter}
+                                        />}
                                     </div>
                                 }
                                 {
@@ -147,7 +207,13 @@ const ProductId = ({ typeprods, produit_Props, typeprods_Props, categorie, unive
                                             {showCouleurs&&<img style={{width:'25px', height:'25px'}} src="/assets/imgs/theme/icons/up-arrow-svgrepo-com.svg"
                                             onClick={()=>setShowCouleurs(!showCouleurs)}/>}
                                         </div>
-                                        {showCouleurs&&<CategoryProduct items={produit_Props.couleurs} prop='LIB_FR'/>}
+                                        {showCouleurs&&
+                                        <CategoryProduct 
+                                        items={produit_Props.couleurs} 
+                                        prop='LIB_FR'
+                                        filterKey='couleur'
+                                        handleFilter = {handleFilter}
+                                        />}
                                     </div>
                                 }
                                 {
@@ -162,7 +228,13 @@ const ProductId = ({ typeprods, produit_Props, typeprods_Props, categorie, unive
                                             {showMotifs&&<img style={{width:'25px', height:'25px'}} src="/assets/imgs/theme/icons/up-arrow-svgrepo-com.svg"
                                             onClick={()=>setShowMotifs(!showMotifs)}/>}
                                         </div>
-                                        {showMotifs&&<CategoryProduct items={produit_Props.motifs} prop='LIB_FR'/>}
+                                        {showMotifs&&
+                                        <CategoryProduct 
+                                        items={produit_Props.motifs} 
+                                        prop='LIB_FR'
+                                        filterKey='motif'
+                                        handleFilter = {handleFilter}
+                                        />}
                                     </div>
                                 }
                                 {
@@ -177,23 +249,53 @@ const ProductId = ({ typeprods, produit_Props, typeprods_Props, categorie, unive
                                             {showMateriaux&&<img style={{width:'25px', height:'25px'}} src="/assets/imgs/theme/icons/up-arrow-svgrepo-com.svg"
                                             onClick={()=>setShowMateriaux(!showMateriaux)}/>}
                                         </div>
-                                        {showMateriaux&&<CategoryProduct items={produit_Props.materiaux} prop='LIB_FR'/>}
+                                        {showMateriaux&&
+                                        <CategoryProduct 
+                                        items={produit_Props.materiaux} 
+                                        prop='LIB_FR'
+                                        filterKey='materiau'
+                                        handleFilter = {handleFilter}
+                                        />}
                                     </div>   
                                 }
                             </div>
 
                             <div className="col-lg-4-5">
+                                <h2 style={{textAlign:'center'}}>Choisissez un type-produit dans la catégorie {categorie['attributes']['LIB_FR']}</h2>
+                                <br/>
                                 <div className="row product-grid-3">
-                                    {typeprods.map((item, i) => (
+                                    {typeprods.map((item) => (
                                         <div
+                                            key={item["id"]}
                                             className="col-lg-1-5 col-md-4 col-12 col-sm-6"
-                                            key={i}
                                         >
-                                            <SingleProduct item={item} />
+                                            <SingleTypeProduct key={item["id"]} item={item} baseUrl='typeprods'/>
                                         </div>
                                     ))}
                                 </div>
-                            </div>                                                  
+                                <div className="col-lg-4-5">
+                                    <br/><br/>
+                                    {
+                                    produits_categorie.length > 0 &&
+                                    <h2 style={{textAlign:'center'}}>Découvrez tous les produits de la catégorie {categorie['attributes']['LIB_FR']}</h2>
+                                    }
+                                    {
+                                    produits_categorie.length == 0 &&
+                                    <h2 style={{textAlign:'center'}}>Aucun produit trouvé</h2>
+                                    }
+                                    <br/>
+                                    <div className="row product-grid-3">
+                                        {produits_categorie.map((item) => (
+                                            <div
+                                                key={item["id"]}
+                                                className="col-lg-1-5 col-md-4 col-12 col-sm-6"
+                                            >
+                                                <SingleProduct key={item["id"]} item={item} baseUrl='produits'/>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div> 
+                            </div>                                                   
                         </div>
                     </div>
                 </section>
@@ -202,71 +304,47 @@ const ProductId = ({ typeprods, produit_Props, typeprods_Props, categorie, unive
     )
 }
 
-export async function getStaticPaths() {
+export async function getServerSideProps (context) {
 
-    const paths = []
-
-    return {
-        paths:paths,
-        fallback : true
-    }
-}
-
-export async function getStaticProps (context) {
-
+    // import qs
     const qs = require('qs')
 
+    // get filters
+    let obj =  {...context.query}
+    delete obj.slug
+    const filters = {...obj}
+
+    // variables
+    const produit_Props = {marques:[], prix:[], designers:[], styles:[], couleurs:[], motifs:[], materiaux:[]}
+    let typeprods_Props = []
+    let produits_categorie = []
+    let univers_categories_Props = []
+    let typeprods_filtered = []
+    let produits_categorie_filtered = []
+    let produits_categorie_filtered_ids = []
+
+    // query categories begin 
     const query = qs.stringify({
 
         populate: [
             'rayondetail.categories.typeprods.produits',
-            'typeprods',
+            'typeprods.produits.exposant',
             'typeprods.produits.style',
             'typeprods.produits.ambiance',
             'typeprods.produits.couleur',
             'typeprods.produits.motif',
             'typeprods.produits.pay',
             'typeprods.produits.materiau',    
-            'typeprods.produits.fabrication',
+            'typeprods.produits.fabrication'
         ]
       }, {
         encodeValuesOnly: true, // prettify URL
       })
 
-    const categorieRes = await axios.get(`http://localhost:1337/api/categories/6664?${query}`)
+    const categorieRes = await axios.get(`http://localhost:1337/api/categories/${context.params.slug}?${query}`)
+    // query categories end
 
-    const produit_Props = {marques:[], prix:[], designers:[], styles:[], couleurs:[], motifs:[], materiaux:[]}
-
-    categorieRes.data.data.attributes.typeprods.data.forEach(typeprod => {
-        typeprod.attributes.produits.data.forEach(produit => {
-            produit_Props.marques.push(produit)
-            produit_Props.prix.push(produit)
-            produit_Props.designers.push(produit)
-            produit.attributes['style']&&produit_Props.styles.push(produit.attributes['style'].data)
-            produit.attributes['couleur']&&produit_Props.couleurs.push(produit.attributes['couleur'].data)
-            produit.attributes['motif']&&produit_Props.motifs.push(produit.attributes['motif'].data)
-            produit.attributes['materiau']&&produit_Props.materiaux.push(produit.attributes['materiau'].data)              
-        })
-    })
-
-    produit_Props.marques=countElements(produit_Props.marques,'MARQUE')
-    produit_Props.prix=countElements(produit_Props.prix,'TARIF_PUB')
-    produit_Props.designers=countElements(produit_Props.designers,'DESIGNER')
-    produit_Props.styles=countElements(produit_Props.styles,'LIB_FR')
-    produit_Props.couleurs=countElements(produit_Props.couleurs,'LIB_FR')              
-    produit_Props.motifs=countElements(produit_Props.motifs,'LIB_FR')
-    produit_Props.materiaux=countElements(produit_Props.materiaux,'LIB_FR')
-
-    let typeprods_Props = []
-    categorieRes.data.data.attributes.typeprods.data.forEach(typeprod => {
-        let count = 0
-        typeprod.attributes.produits.data.forEach(produit => {
-            count+=1
-        })
-        typeprods_Props.push({item : typeprod , count : count})
-    })
-
-    let univers_categories_Props = []
+    // count number of products for each category of univers begin 
     categorieRes.data.data.attributes.rayondetail.data.attributes.categories.data.forEach(categorie => {
         let count = 0
            categorie.attributes.typeprods.data.forEach(typeprod => {
@@ -276,18 +354,94 @@ export async function getStaticProps (context) {
            })
         univers_categories_Props.push({item : categorie , count : count})
     })
+    // count number of products for each category of univers end
 
+    // side filters begin
+    categorieRes.data.data.attributes.typeprods.data.forEach(typeprod => {
+        let count = 0
+        typeprod.attributes.produits.data.forEach(produit => {
+            produit_Props.marques.push(produit)
+            produit_Props.prix.push(produit)
+            produit_Props.designers.push(produit)
+            produit.attributes['style']&&produit_Props.styles.push(produit.attributes['style'].data)
+            produit.attributes['couleur']&&produit_Props.couleurs.push(produit.attributes['couleur'].data)
+            produit.attributes['motif']&&produit_Props.motifs.push(produit.attributes['motif'].data)
+            produit.attributes['materiau']&&produit_Props.materiaux.push(produit.attributes['materiau'].data)  
+
+            // count number of products of each category begin
+            count+=1
+            // count number of products of each category end
+
+            // get all products of category begin
+            produits_categorie.push(produit)
+            // get all products of category end
+
+        })
+
+        // count number of products for each typeprod of category begin 
+        typeprods_Props.push({item : typeprod , count : count}) 
+                // count number of products for each typeprod of category end      
+    })
+
+    // count number of products for each filter characteristic begin 
+    produit_Props.marques=countElements(produit_Props.marques,'MARQUE')
+    produit_Props.prix=countElements(produit_Props.prix,'TARIF_PUB')
+    produit_Props.designers=countElements(produit_Props.designers,'DESIGNER')
+    produit_Props.styles=countElements(produit_Props.styles,'LIB_FR')
+    produit_Props.couleurs=countElements(produit_Props.couleurs,'LIB_FR')              
+    produit_Props.motifs=countElements(produit_Props.motifs,'LIB_FR')
+    produit_Props.materiaux=countElements(produit_Props.materiaux,'LIB_FR')
+    // count number of products for each filter characteristic end 
+    // side filter end
+
+    // filter products of category begin
+    produits_categorie_filtered = [...produits_categorie]
+    
+    for (let filterKey in filters){
+        if (filterKey == "couleur" || filterKey == "materiau" || filterKey == "style" || filterKey == "motif") {
+            produits_categorie_filtered = [...produits_categorie_filtered].filter(produit=>produit.attributes[filterKey].data.attributes["LIB_FR"] == filters[filterKey])
+        }
+        else if (filterKey == "marque") {
+            produits_categorie_filtered = [...produits_categorie_filtered].filter(produit=>produit.attributes["MARQUE"] == filters[filterKey])
+        }
+        else if (filterKey == "designer") {
+            produits_categorie_filtered = [...produits_categorie_filtered].filter(produit=>produit.attributes["DESIGNER"] == filters[filterKey])
+        }
+        else if (filterKey == "prix") {
+            produits_categorie_filtered = [...produits_categorie_filtered].filter(produit=>produit.attributes["TARIF_PUB"] == filters[filterKey])
+        }
+        else if (filterKey == "typeprod") {
+            let typeprod = categorieRes.data.data.attributes.typeprods.data.find(typeprod => typeprod["attributes"]["LIB_FR"] = filters[filterKey])
+            produits_categorie_filtered = typeprod.attributes.produits.data
+        }
+    }
+    // filter products of category end
+
+    // filter typeprods of category begin
+    produits_categorie_filtered_ids = produits_categorie_filtered.map(produit=>produit.id)
+
+    typeprods_filtered = [...categorieRes.data.data.attributes.typeprods.data]
+
+    typeprods_filtered.forEach(typeprod => {
+        if(typeprod.attributes.produits.data.find(produit=>produits_categorie_filtered_ids.includes(produit["id"]))){
+            if(!typeprods_filtered.find(element=>element.id==typeprod.id)){
+                typeprods_filtered.push(typeprod)
+            }
+        }
+    })
+    // filter typeprods of category end
 
     return {
         props: {
             produit_Props : produit_Props,
-            typeprods : categorieRes.data.data.attributes.typeprods.data,   
+            typeprods : typeprods_filtered,  
             typeprods_Props : typeprods_Props,
             categorie : categorieRes.data.data,
             univers : categorieRes.data.data.attributes.rayondetail.data,
-            univers_categories_Props : univers_categories_Props
+            univers_categories_Props : univers_categories_Props,
+            produits_categorie : produits_categorie_filtered
         }
-      }
+    }
 }
 
 

@@ -1,10 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { server } from "../../config/index";
-
-import SingleProduct from "../ecommerce/SingleProduct";
+import Inspiration from "../ecommerce/Inspiration";
 
 function CategoryTab({title, produits}) {
-    const [active, setActive] = useState("1");
 
     return (
         <>
@@ -12,17 +8,11 @@ function CategoryTab({title, produits}) {
                 <h3>{title}</h3>
             </div>
             <div className="tab-content wow fadeIn animated">
-                <div
-                    className={
-                        active === "1"
-                            ? "tab-pane fade show active"
-                            : "tab-pane fade"
-                    }
-                >
+                <div className="tab-pane fade show active">
                     <div className="product-grid-4 row">
-                        {produits.map((item, i) => (
-                            <div className="col-lg-1-5 col-md-4 col-12 col-sm-6" key={i}>
-                                <SingleProduct item={item} />
+                        {produits.map((item) => (
+                            <div className="col-lg-1-5 col-md-4 col-12 col-sm-6" key={item['id']}>
+                                <Inspiration item={item} baseUrl='produits'/>
                             </div>
                         ))}
                     </div>

@@ -1,21 +1,9 @@
-import { useRouter } from "next/router";
-import { connect } from "react-redux";
-import { updateProductCategory } from "../../../redux/action/productFiltersAction";
 
-const CategoryProduct = ({ updateProductCategory, items, prop }) => {
+const CategoryProduct = ({ items, prop, filterKey, handleFilter }) => {
 
-    const router = useRouter()
-
-    const selectCategory = (e, category) => {
-        e.preventDefault()
-        // removeSearchTerm();
-        updateProductCategory(category)
-        router.push({
-            pathname: "/products",
-            query: {
-                cat: category
-            }
-        })
+    const handleClickItem = (event, value, id) => {
+        event.preventDefault()
+        handleFilter(filterKey, value, id)
     }
 
     return (
@@ -23,9 +11,9 @@ const CategoryProduct = ({ updateProductCategory, items, prop }) => {
             {
             items.map(val=>(
                 val['item']['attributes'][prop]&&
-                <li onClick={(e) => selectCategory(e, "")}>
-                    <a>{val['item']['attributes'][prop]}</a>
-                    <span className="count">{val['count']}</span>
+                <li key={Math.random(1000).toString()} onClick={(event) => handleClickItem(event, val['item']['attributes'][prop], val['item']['id'])}>
+                    <a key={Math.random(1000).toString()}>{val['item']['attributes'][prop]}</a>
+                    <span key={Math.random(1000).toString()} className="count">{val['count']}</span>
                 </li>
             ))
             }
@@ -33,4 +21,4 @@ const CategoryProduct = ({ updateProductCategory, items, prop }) => {
     )
 }
 
-export default connect(null, { updateProductCategory })(CategoryProduct);
+export default CategoryProduct;

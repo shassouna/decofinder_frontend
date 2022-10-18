@@ -76,6 +76,7 @@ const MobileMenu = ({ isToggled, toggleClick, menuHeaderData }) => {
                                 <ul className="mobile-menu" ref={domNode}>
                                 {menuHeaderData.map(superunivers=>(
                                     <li
+                                    key={superunivers["id"]}
                                     className={
                                         isActive.key == 3
                                             ? "menu-item-has-children active"

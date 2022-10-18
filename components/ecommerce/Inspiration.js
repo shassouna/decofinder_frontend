@@ -1,6 +1,6 @@
 import Link from "next/link"
 
-const SingleProduct = ({
+const Inspiration = ({
     item,
     typeprod,
     baseUrl
@@ -64,4 +64,4 @@ const SingleProduct = ({
     );
 };
 
-export default SingleProduct;
+export default Inspiration;

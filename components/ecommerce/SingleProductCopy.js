@@ -1,7 +1,8 @@
 import Link from "next/link";
 
 const SingleProduct = ({
-    item
+    item,
+    baseUrl
 }) => {
 
     return (
@@ -10,8 +11,8 @@ const SingleProduct = ({
                 <div className="product-img-action-wrap">
                     <div className="product-img product-img-zoom">
                         <Link
-                            href="/products/[slug]"
-                            as={`/products/sfsd`}
+                            href={`/${baseUrl}/${item['id']}`}
+                            as={`/${baseUrl}/${item['id']}`}
                         >
                             <a>
                                 <img
@@ -31,8 +32,8 @@ const SingleProduct = ({
                 <div className="product-content-wrap">
                     <h2>
                         <Link
-                            href="/products/[slug]"
-                            as={`/products/dfsdfsf`}
+                            href={`/${baseUrl}/${item['id']}`}
+                            as={`/${baseUrl}/${item['id']}`}
                         >
                             <a>{item['attributes']['LIB_FR']}</a>
                         </Link>
@@ -40,7 +41,7 @@ const SingleProduct = ({
                     {
                     item['attributes']['typeprods']&&
                     item['attributes']['typeprods']['data'].map(val=>(
-                        <div className="product-rate-cover">
+                        <div className="product-rate-cover" key={val["id"]}>
                             {val['attributes']['LIB_FR']}
                         </div>
                     ))

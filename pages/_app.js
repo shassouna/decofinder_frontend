@@ -25,7 +25,7 @@ function MyApp({ Component, pageProps, menuHeaderData }) {
         <Provider store={store}>
             <Layout noBreadcrumb="d-none" menuHeaderData={menuHeaderData}>
                 <StorageWrapper>                      
-                        <Component {...pageProps}/>
+                        <Component {...pageProps} menuHeaderData={menuHeaderData}/>
                         <ToastContainer />
                 </StorageWrapper>
             </Layout>
@@ -35,11 +35,19 @@ function MyApp({ Component, pageProps, menuHeaderData }) {
 
 export default MyApp;
 
-MyApp.getInitialProps = async (params) => {
+MyApp.getInitialProps = async () => {
+
+    // import qs
+    const qs =require('qs')
     
     // get data for the header menu 
+    const query = qs.stringify({
+          populate: ['rayondetails.categories','rayondetails'],
+      }, {
+        encodeValuesOnly: true, // prettify URL
+      });
 
-    const res = await axios.get(`http://localhost:1337/api/superuniversdetailss?rayondetails,rayondetails.categories`)
+    const res = await axios.get(`http://localhost:1337/api/superuniversdetailss?${query}`)
 
     return { menuHeaderData : res.data.data}
 }

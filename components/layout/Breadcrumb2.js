@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useState } from "react"
 
-const Breadcrumb2 = ({title, elements, description, description2}) => {
+const Breadcrumb2 = ({title, elements, description, handleShowAllDescription}) => {
 
     const [showdDescription, setShowDescription] = useState (false)
 
-    const handleShowDescription = () => {
-        setShowDescription(!showdDescription)
+    const handleShowDescription = (e) => {
+        e.preventDefault()
+        handleShowAllDescription(!showdDescription)
     }
 
     return (
@@ -14,25 +15,19 @@ const Breadcrumb2 = ({title, elements, description, description2}) => {
             <div className="container">
                 <div className="archive-header">
                     <div className="row align-items-center">
-                        <div className="col-xl-3">
-                            <h1 className="mb-15 text-capitalize">{title}</h1>
+                        <div>
+                            <h1 className="h1 mb-15">{title}</h1>
                             <div className="breadcrumb">
-                                {elements.map((val,index)=>(
+                                {elements&&elements.map((val,index)=>(
                                     index==elements.length-1?
-                                    <>{val}</>:
-                                    <>{val}<span></span></>
+                                    <div key={index}>{val}</div>:
+                                    <div key={index}>{val}<span></span></div>
                                 ))} 
                             </div>
                         </div>
-                        {!showdDescription&&<p dangerouslySetInnerHTML={{__html: description}} className="mt-25"></p>}      
-                        {showdDescription&&<p dangerouslySetInnerHTML={{__html: description2}} className="mt-25"></p>}                 
+                        {description&&<p dangerouslySetInnerHTML={{__html: description}} className="mt-25"></p>}               
                     </div>
-                    {
-                        description2&&!showdDescription?
-                        <button className="mt-25" onClick={handleShowDescription}>Lire la suite ...</button>
-                        :description2&&
-                        <button className="mt-25" onClick={handleShowDescription}>Réduire</button>                        
-                    }
+                    {description&&<button className="mt-25" onClick={handleShowDescription}>Lire la suite ...</button>}                 
                 </div>
             </div>
         </div>

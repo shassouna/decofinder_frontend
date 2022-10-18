@@ -1,15 +1,9 @@
-import Link from "next/link";
-import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
-import CategoryProduct2 from "../ecommerce/Filter/CategoryProduct2";
-import CategoryProduct3 from "../ecommerce/Filter/CategoryProduct3";
-import Search from "../ecommerce/Search";
+import Link from "next/link"
+import React, { useEffect, useState } from "react"
+import Search from "../ecommerce/Search"
 
 const Header = ({
-    totalCartItems,
-    totalCompareItems,
     toggleClick,
-    totalWishlistItems,
     menuHeaderData
 }) => {
 
@@ -20,12 +14,11 @@ const Header = ({
         document.addEventListener("scroll", () => {
             const scrollCheck = window.scrollY >= 100;
             if (scrollCheck !== scroll) {
-                setScroll(scrollCheck);
+                setScroll(scrollCheck)
             }
-        });
-    });
+        })
+    })
 
-    const handleToggle = () => setToggled(!isToggled);
 
     return (
         menuHeaderData&&menuHeaderData.length>0&&
@@ -125,7 +118,7 @@ const Header = ({
                                          menuHeaderData.map(superunivers_univers_categorie=>
                                          superunivers_univers_categorie["attributes"]['CLE_LANG']=="0"&&
                                            (
-                                           <li className="position-static" key = {superunivers_univers_categorie["id"]} >
+                                           <li key={superunivers_univers_categorie["id"]} className="position-static">
                                                 <Link href={`/superunivers/${superunivers_univers_categorie["attributes"]["slug"]}`}>
                                                     <a>
                                                         {superunivers_univers_categorie["attributes"]["LIB"]}
@@ -135,7 +128,7 @@ const Header = ({
                                                 <ul className="mega-menu">
                                                 {
                                                 superunivers_univers_categorie["attributes"]["rayondetails"]["data"].map(categorie_univers=>(
-                                                    <li className="sub-mega-menu sub-mega-menu-width-22">
+                                                    <li key={categorie_univers["id"]} className="sub-mega-menu sub-mega-menu-width-22" >
                                                         <Link href={`/univers/${categorie_univers["attributes"]["slug"]}`}>
                                                             <a key = {categorie_univers["id"]}
                                                                 className="menu-title"
@@ -147,7 +140,7 @@ const Header = ({
                                                         {
                                                         categorie_univers["attributes"]["typeprods"]["data"].map(categorie=>(
                                                             categorie["attributes"]['CLE_TYPE_PROD']==categorie["attributes"]['CLE_TYPE_PROD_CATEGORIE']&&
-                                                            <li key ={categorie}>
+                                                            <li key ={categorie["id"]}>
                                                                 <Link href={`/univers/${categorie}`}>
                                                                     <a>
                                                                     {categorie["attributes"]['CLE_TYPE_PROD_CATEGORIE']}
@@ -189,13 +182,7 @@ const Header = ({
                 </div>
             </header>
         </>
-    );
-};
+    )
+}
 
-const mapStateToProps = (state) => ({
-    totalCartItems: state.cart.length,
-    totalCompareItems: state.compare.items.length,
-    totalWishlistItems: state.wishlist.items.length,
-});
-
-export default connect(mapStateToProps, null)(Header);
+export default Header

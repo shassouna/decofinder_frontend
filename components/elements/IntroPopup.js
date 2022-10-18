@@ -1,14 +1,15 @@
-import Link from "next/link";
-import { useState } from "react";
-import Timer from "./Timer";
+import Link from "next/link"
+import { useState } from "react"
+import Timer from "./Timer"
 
 const IntroPopup = () => {
-    const [openClass, setOpenClass] = useState(0);
+
+    const [openClass, setOpenClass] = useState(0)
 
     const handleRemove = () => {
-        setOpenClass(!openClass);
-    };
-    const fixDate = new Date();
+        setOpenClass(!openClass)
+    }
+    const fixDate = new Date()
     return (
         <>
             <div

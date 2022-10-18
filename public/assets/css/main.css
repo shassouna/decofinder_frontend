@@ -11739,8 +11739,11 @@ footer .hotline img {
   margin-bottom: 18px;
   border: 1px solid #343A40;
   border-radius:2px;
-  background-color:#FBFBFB;
+  background-color:#FBFCFB;
   color:#343A40;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .produitButtonsContainerButton:hover {
   background-color:#343A40;
@@ -11819,4 +11822,8 @@ footer .hotline img {
   background-color: white;
   display: none;
   overflow: hidden;
+}
+
+.h1 {
+  font-size: 38px;
 }

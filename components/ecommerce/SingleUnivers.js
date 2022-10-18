@@ -2,7 +2,6 @@ import Link from "next/link"
 
 const SingleProduct = ({
     item,
-    typeprod,
     baseUrl
 }) => {
 
@@ -36,28 +35,9 @@ const SingleProduct = ({
                             href={`/${baseUrl}/${item['id']}`}
                             as={`/${baseUrl}/${item['id']}`}
                         >
-                            <a>{item['attributes']['exposant']['data']['attributes']['NOM']}</a>
+                            <a>{item['attributes']['LIB']}</a>
                         </Link>
-                    </h2>
-                    {
-                        typeprod &&
-                        <div className="product-category">
-                            <Link 
-                                href={`/${baseUrl}/${item['id']}`} 
-                                as={`/${baseUrl}/${item['id']}`}
-                            >
-                                <a>{typeprod['attributes']['LIB_FR']}</a>
-                            </Link>
-                        </div>
-                    }
-
-                    <div className="product-card-bottom">
-                        <div className="product-price">
-                            <span>
-                                {item['attributes']['TARIF_PUB']?item['attributes']['TARIF_PUB']+" €":'Prix sur demande'} 
-                            </span>
-                        </div>
-                    </div>
+                    </h2>             
                 </div>
             </div>
         </>

@@ -1,8 +1,6 @@
 import CategoryTab from "../components/ecommerce/categoryTab";
 import FetchTabSlider from "../components/ecommerce/fetchTabSlider";
 import QuickView from "./../components/ecommerce/QuickView";
-import IntroPopup from "./../components/elements/IntroPopup";
-import Layout from "./../components/layout/Layout";
 import CategorySlider from "./../components/sliders/Category";
 import Intro1 from "../components/sliders/intro4";
 import FourProducts from "./../components/elements/FourProducts";
@@ -12,60 +10,59 @@ import Description from "../components/elements/Contact";
 import axios from 'axios'
 
 export default function Home({menuHeaderData, fourProducts, nouveautes, inspirations}) {
+
     return (
         <>
-            <IntroPopup />
+            <section className="home-slider position-relative mb-30">
+                <div className="container">
+                    <div className="home-slide-cover mt-30">
+                        <Intro1 />
+                    </div>
+                </div>
+            </section>
 
-                <section className="home-slider position-relative mb-30">
-                    <div className="container">
-                        <div className="home-slide-cover mt-30">
-                            <Intro1 />
+            <section className="banners mb-25">
+                <div className="container">
+                    <div className="row">
+                        <FourProducts fourProducts={fourProducts}/>
+                    </div>
+                </div>
+            </section>
+
+            <section className="popular-categories section-padding">
+                <div className="container wow animate__fadeIn animate__animated">
+                    <div className="section-title">
+                        <div className="title">
+                            <h3>Tous les Mega Univers :</h3>
                         </div>
                     </div>
-                </section>
-
-                <section className="banners mb-25">
-                    <div className="container">
-                        <div className="row">
-                            <FourProducts fourProducts={fourProducts}/>
+                    <div className="carausel-10-columns-cover position-relative">
+                        <div className="carausel-10-columns" id="carausel-10-columns">
+                            <CategorySlider superunivers={menuHeaderData}/>
                         </div>
                     </div>
-                </section>
+                </div>
+            </section>
 
-                <section className="popular-categories section-padding">
-                    <div className="container wow animate__fadeIn animate__animated">
-                        <div className="section-title">
-                            <div className="title">
-                                <h3>Tous les Mega Univers :</h3>
-                            </div>
-                        </div>
-                        <div className="carausel-10-columns-cover position-relative">
-                            <div className="carausel-10-columns" id="carausel-10-columns">
-                                <CategorySlider superuniversdetails={menuHeaderData}/>
-                            </div>
-                        </div>
+            <section>
+                <Description/>
+            </section>
+
+            <section className="product-tabs section-padding position-relative">
+                <div className="container">
+                    <div className="col-lg-12">
+                        <CategoryTab title="Les Nouveautés" produits={nouveautes}/>
                     </div>
-                </section>
+                </div>
+            </section>
 
-                <section>
-                    <Description/>
-                </section>
+            <section className="section-padding pb-5">
+                <div className="container">
+                    <FetchTabSlider typeprods={inspirations}/>
+                </div>
+            </section>
 
-                <section className="product-tabs section-padding position-relative">
-                    <div className="container">
-                        <div className="col-lg-12">
-                            <CategoryTab title="Les Nouveautés" produits={nouveautes}/>
-                        </div>
-                    </div>
-                </section>
-
-                <section className="section-padding pb-5">
-                    <div className="container">
-                        <FetchTabSlider typeprods={inspirations}/>
-                    </div>
-                </section>
-
-                <QuickView />
+            <QuickView />
         </>
     );
 }
@@ -77,6 +74,7 @@ export async function getStaticProps(context) {
 
     // --------------------------------------------Four Products Begin--------------------------------------------
     const fourProducts = {}
+
     // coupdecoeur 
     const queryCoupdecoeur = qs.stringify({
         filters: {
@@ -86,7 +84,7 @@ export async function getStaticProps(context) {
             page: 1,
             pageSize: 1,
           },
-          populate: ['typeprod'],
+          populate: ['typeprod', 'exposant']
       }, {
         encodeValuesOnly: true, // prettify URL
       })
@@ -103,7 +101,7 @@ export async function getStaticProps(context) {
                 page: 1,
                 pageSize: 1,
               },
-              populate: ['typeprod'],
+              populate: ['typeprod', 'exposant']
         }
     )
     const selectionsCall = await axios.get(`http://localhost:1337/api/produits?${querySelections}`)
@@ -119,11 +117,12 @@ export async function getStaticProps(context) {
                 page: 1,
                 pageSize: 1,
             },
-            populate: ['typeprod'],
+            populate: ['typeprod', 'exposant']
         }
     )
     const asaisirCall = await axios.get(`http://localhost:1337/api/produits?${queryAsaisir}`)
     fourProducts.asaisir = asaisirCall.data.data[0]
+
     // achat en ligne 
     const queryAchatEnLigne = qs.stringify(
         {
@@ -134,7 +133,7 @@ export async function getStaticProps(context) {
                 page: 1,
                 pageSize: 1,
             },
-            populate: ['typeprod'],
+            populate: ['typeprod', 'exposant']
         }
     )
     const achatenligneCall = await axios.get(`http://localhost:1337/api/produits?${queryAchatEnLigne}`)
@@ -149,7 +148,7 @@ export async function getStaticProps(context) {
             page: 1,
             pageSize: 25,
           },
-          populate: ['typeprod', 'exposant'],
+          populate: ['typeprod', 'exposant']
       }, {
         encodeValuesOnly: true, // prettify URL
       });
@@ -168,6 +167,7 @@ export async function getStaticProps(context) {
     const TypeprodsCall = await axios.get(`http://localhost:1337/api/typeprods?${queryTypeprods}`) 
 
     // --------------------------------------------Four Products End--------------------------------------------   
+
     return {
         props: {
             fourProducts : fourProducts,
