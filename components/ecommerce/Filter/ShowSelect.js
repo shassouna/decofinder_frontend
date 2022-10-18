@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-function SelectOp({ selectChange, showLimit }) {
+function SelectOp({ selectChange, showLimit, limitValue }) {
 
     const [limits, setLimits] = useState([])
 
@@ -22,7 +22,7 @@ function SelectOp({ selectChange, showLimit }) {
                     </span>
                 </div>
                 <div className="sort-by-dropdown-wrap custom-select">
-                    <select onChange={selectChange}>
+                    <select onChange={selectChange} value={limitValue}>
                         <option value={showLimit}>Tout</option>
                         {limits.map(limit=>(
                             <option value={limit}>{limit}</option>

@@ -57,8 +57,6 @@ const ProductId = ({ produit_Props, nouveautes }) => {
     },[limit])
 
     useEffect(()=>{
-        // Annuler les filtres de pagination et de limit de nouveautées affichés 
-        setLimit(nouveautes.length)
 
         // Initialiser les nouveautées à filtrer
         const nouveautesFiltered = [...nouveautes]
@@ -87,6 +85,9 @@ const ProductId = ({ produit_Props, nouveautes }) => {
             nouveautesFiltered=nouveautesFiltered.filter(nouveaute=>filterMarque.includes(nouveaute['id']))
         }       
         setNouveautesState([...nouveautesFiltered])
+
+        // Annuler les filtres de pagination et de limit de nouveautées affichés 
+        setLimit(nouveautesFiltered.length)     
 
     },[filterPrix, filterCouleur, filterMotif, filterStyle, filterDesigner, filterMarque])
 
@@ -246,6 +247,7 @@ const ProductId = ({ produit_Props, nouveautes }) => {
                                             <ShowSelect
                                                 selectChange={selectChange}
                                                 showLimit={nouveautesState.length}
+                                                limitValue={limit}
                                             />
                                         </div>
                                     </div>
@@ -254,8 +256,7 @@ const ProductId = ({ produit_Props, nouveautes }) => {
                                 {
                                 nouveautesState
                                 .slice(currentPage*limit-limit, currentPage*limit)
-                                .filter(x=>                                 nouveautesState
-                                    .slice(currentPage*limit-limit, currentPage*limit).indexOf(x) < limit).map((item, i) => (
+                                .filter(x=>nouveautesState.slice(currentPage*limit-limit, currentPage*limit).indexOf(x) < limit).map((item, i) => (
                                     <div
                                         className="col-lg-1-5 col-md-4 col-12 col-sm-6"
                                         key={item['id']}
