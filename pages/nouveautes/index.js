@@ -1,16 +1,16 @@
-import CategoryProduct from "../../components/ecommerce/Filter/CategoryProduct"
 import Breadcrumb2 from "../../components/layout/Breadcrumb2"
+import Layout from "../../components/layout/Layout"
 import Nouveaute from "../../components/ecommerce/Nouveaute"
 import Pagination from "../../components/ecommerce/Pagination"
 import ShowSelect from "../../components/ecommerce/Filter/ShowSelect"
-import PriceRangeSlider from "../../components/ecommerce/Filter/PriceRangeSlider"
-import VendorFilter from "../../components/ecommerce/Filter/VendorFilter"
+import SideFilter from "../../components/ecommerce/Filter/SideFilter"
+import SideFilterPrice from "../../components/ecommerce/Filter/SideFilterPrice.js"
 // My imports
 import { useEffect, useState } from "react"
-import Layout from "../../components/layout/Layout"
+
 import axios from "axios"
 
-const countElements = (arr, prop) => {
+const handleCountProductsOfEachFilter = (arr, prop) => {
     const res = []
     for (const element of arr) {
         if(element&&element['attributes']&&element['attributes'][prop]){
@@ -24,9 +24,23 @@ const countElements = (arr, prop) => {
     return(res) 
 }
 
+const handleCountProductsOfEachPrice = (arr, prop, prices) => {
+
+    const res = []
+    for (let i=0; i<prices.length-1; i++){
+        res.push({
+            id : prices[i],
+            item : [prices[i], prices[i+1]], 
+            count : (arr.filter(element=>element['attributes']&&element['attributes'][prop]&&element['attributes'][prop]>prices[i]&&element['attributes'][prop]<prices[i+1])).length
+        })
+    }
+    return(res) 
+}
+
 const ProductId = ({ produit_Props, nouveautes }) => {
-
-
+   /* console.log(nouveautes.map(o=>o['attributes']['exposant'].data.id))
+    //console.log(nouveautes.sort((a,b) => a['attributes']['CLIENT_ABONNEMENT_PAYANT']>b['attributes']['CLIENT_ABONNEMENT_PAYANT']).map(o=>o['attributes']['exposant'].data.id))
+    console.log(nouveautes.sort((a,b) => (a['attributes'].typeprod['data']['attributes']['LIB_FR']> b['attributes'].typeprod['data']['attributes']['LIB_FR']) ? 1 : ((b['attributes'].typeprod['data']['attributes']['LIB_FR'] > a['attributes'].typeprod['data']['attributes']['LIB_FR']) ? -1 : 0)).map(o=>o['attributes']['exposant'].data.id))*/
 
     const [nouveautesState, setNouveautesState] = useState(nouveautes)
     const [limit, setLimit] = useState(nouveautes.length)
@@ -40,6 +54,8 @@ const ProductId = ({ produit_Props, nouveautes }) => {
     const [styles, setStyles] = useState(produit_Props.styles)    
     const [designers, setDesigners] = useState(produit_Props.designers)
     const [marques, setMarques] = useState(produit_Props.marques)
+    const [materiaux, setMateriaux] = useState(produit_Props.materiaux)
+    const [prices, setPrices] = useState(produit_Props.prix)
 
     const [filterPrix, setFilterPrix] =useState([])
     const [filterCouleur, setFilterCouleur] =useState([])
@@ -47,6 +63,8 @@ const ProductId = ({ produit_Props, nouveautes }) => {
     const [filterStyle, setFilterStyle] = useState([])    
     const [filterDesigner, setFilterDesigner] = useState([])
     const [filterMarque, setFilterMarque] = useState([])
+    const [filterMateriau, setFilterMateriau] = useState([])
+    const [filterPrice, setFilterPrice] = useState([])
 
     useEffect(()=>{   
         const tab = []
@@ -62,12 +80,16 @@ const ProductId = ({ produit_Props, nouveautes }) => {
         const nouveautesFiltered = [...nouveautes]
 
         // Filtrage des nouveautées 
-        if(filterPrix.length>0){
+        /*if(filterPrix.length>0){
             if(minPrix==filterPrix[0] && maxPrix==filterPrix[1]){
                 nouveautesFiltered = [...nouveautes]
             } else {
                 nouveautesFiltered=nouveautesFiltered.filter(nouveaute => parseFloat(nouveaute['attributes']['TARIF_PUB'])>=filterPrix[0] && parseFloat(nouveaute['attributes']['TARIF_PUB'])<=filterPrix[1])
             }
+        }*/
+        if(filterPrice.length>0){
+            console.log(filterPrice)
+            nouveautesFiltered=nouveautesFiltered.filter(nouveaute => parseFloat(nouveaute['attributes']['TARIF_PUB'])>=filterPrice[0] && parseFloat(nouveaute['attributes']['TARIF_PUB'])<=filterPrice[1])
         }
         if(filterCouleur.length>0){
             nouveautesFiltered=nouveautesFiltered.filter(nouveaute=>nouveaute['attributes']['couleur']['data']&&filterCouleur.includes(nouveaute['attributes']['couleur']['data']['id']))
@@ -78,6 +100,9 @@ const ProductId = ({ produit_Props, nouveautes }) => {
         if(filterStyle.length>0){
             nouveautesFiltered=nouveautesFiltered.filter(nouveaute=>nouveaute['attributes']['style']['data']&&filterStyle.includes(nouveaute['attributes']['style']['data']['id']))
         }
+        if(filterMateriau.length>0){
+            nouveautesFiltered=nouveautesFiltered.filter(nouveaute=>nouveaute['attributes']['materiau']['data']&&filterMateriau.includes(nouveaute['attributes']['materiau']['data']['id']))
+        }
         if(filterDesigner.length>0){
             nouveautesFiltered=nouveautesFiltered.filter(nouveaute=>filterDesigner.includes(nouveaute['id']))
         }  
@@ -87,15 +112,17 @@ const ProductId = ({ produit_Props, nouveautes }) => {
         setNouveautesState([...nouveautesFiltered])
 
         // Annuler les filtres de pagination et de limit de nouveautées affichés 
-        setLimit(nouveautesFiltered.length)     
+        setLimit(nouveautesFiltered.length)    
+        
+        console.log(nouveautesFiltered)
 
-    },[filterPrix, filterCouleur, filterMotif, filterStyle, filterDesigner, filterMarque])
+    },[filterPrix, filterCouleur, filterMotif, filterStyle, filterDesigner, filterMarque, filterMateriau, filterPrice])
 
     const handleFilter = (filterKey, value) => {
-        if(filterKey=="prix"){
+        /*if(filterKey=="prix"){
             setFilterPrix(value)
-        }
-        else if(filterKey=="couleur"){
+        }*/
+        if(filterKey=="couleur"){
             setFilterCouleur(value)
         }
         else if(filterKey=="motif"){
@@ -109,6 +136,12 @@ const ProductId = ({ produit_Props, nouveautes }) => {
         }
         else if(filterKey=="marque"){
             setFilterMarque(value)
+        }
+        else if(filterKey=="materiau"){
+            setFilterMateriau(value)
+        }
+        else if(filterKey=="prix"){
+            setFilterPrice(value)
         }
     }
 
@@ -139,7 +172,6 @@ const ProductId = ({ produit_Props, nouveautes }) => {
     return (
         produit_Props &&
         <>
-            <Layout noBreadcrumb="d-none">
             <Breadcrumb2 
                 title='Toutes les nouveautés'             
                 />
@@ -147,8 +179,8 @@ const ProductId = ({ produit_Props, nouveautes }) => {
                     <div className="container">
                         <div className="row flex-row">
                             <div className="col-lg-1-5 primary-sidebar sticky-sidebar">
-                            {   
-                                produit_Props.maxprix &&
+                            {  /* 
+                                maxPrix>0&&
                                 <div className="list-group">
                                     <div className="list-group-item mb-10 mt-10">
                                         <label className="fw-900">Prix</label>
@@ -164,26 +196,39 @@ const ProductId = ({ produit_Props, nouveautes }) => {
                                     </div>
                                     </div>
                                 </div> 
-                            }   
+                          */}   
                             {
-                                produit_Props.marques.length>0&&
+                                marques.length>0&&
                                 <div className="list-group">
                                     <div className="list-group-item mb-10 mt-10">
                                         <label className="fw-900">Marques</label>
-                                        <VendorFilter 
+                                        <SideFilter 
                                         elements={marques}
                                         filterKey='marque'
                                         handleFilter={handleFilter}
                                         prop='MARQUE'/>
                                     </div>
                                 </div> 
-                            }   
+                            }  
                             {
-                                produit_Props.designers.length>0&&
+                                prices.length>0&&
+                                <div className="list-group">
+                                    <div className="list-group-item mb-10 mt-10">
+                                        <label className="fw-900">Prix</label>
+                                        <SideFilterPrice 
+                                        elements={prices}
+                                        filterKey='prix'
+                                        handleFilter={handleFilter}
+                                        prop='TARIF_PUB'/>
+                                    </div>
+                                </div> 
+                            }    
+                            {
+                                designers.length>0&&
                                 <div className="list-group">
                                     <div className="list-group-item mb-10 mt-10">
                                         <label className="fw-900">Designers</label>
-                                        <VendorFilter 
+                                        <SideFilter 
                                         elements={designers}
                                         filterKey='designer'
                                         handleFilter={handleFilter}
@@ -192,11 +237,11 @@ const ProductId = ({ produit_Props, nouveautes }) => {
                                 </div> 
                             }      
                             {
-                                produit_Props.styles.length>0&&
+                                styles.length>0&&
                                 <div className="list-group">
                                     <div className="list-group-item mb-10 mt-10">
                                         <label className="fw-900">Styles</label>
-                                        <VendorFilter 
+                                        <SideFilter 
                                         elements={styles}
                                         filterKey='style'
                                         handleFilter={handleFilter}
@@ -205,11 +250,11 @@ const ProductId = ({ produit_Props, nouveautes }) => {
                                 </div> 
                             }  
                             {
-                                produit_Props.couleurs.length>0&&
+                                couleurs.length>0&&
                                 <div className="list-group">
                                     <div className="list-group-item mb-10 mt-10">
                                         <label className="fw-900">Couleurs</label>
-                                        <VendorFilter 
+                                        <SideFilter 
                                         elements={couleurs}
                                         filterKey='couleur'
                                         handleFilter={handleFilter}
@@ -218,11 +263,11 @@ const ProductId = ({ produit_Props, nouveautes }) => {
                                 </div> 
                             }  
                             {
-                                produit_Props.motifs.length>0&&
+                                motifs.length>0&&
                                 <div className="list-group">
                                     <div className="list-group-item mb-10 mt-10">
                                         <label className="fw-900">Motifs</label>
-                                        <VendorFilter 
+                                        <SideFilter 
                                         elements={motifs}
                                         filterKey='motif'
                                         handleFilter={handleFilter}
@@ -230,6 +275,19 @@ const ProductId = ({ produit_Props, nouveautes }) => {
                                     </div>
                                 </div> 
                             }  
+                            {
+                                materiaux.length>0&&
+                                <div className="list-group">
+                                    <div className="list-group-item mb-10 mt-10">
+                                        <label className="fw-900">Materiaux</label>
+                                        <SideFilter 
+                                        elements={materiaux}
+                                        filterKey='materiau'
+                                        handleFilter={handleFilter}
+                                        prop='LIB_FR'/>
+                                    </div>
+                                </div> 
+                            }
                             </div>
 
                             <div className="col-lg-4-5">
@@ -281,7 +339,6 @@ const ProductId = ({ produit_Props, nouveautes }) => {
                         </div>                                         
                     </div>
                 </section>
-            </Layout>
         </>
     )
 }
@@ -293,19 +350,20 @@ export async function getStaticProps (context) {
     const qs = require('qs')
 
     // variables 
-    const produit_Props = {marques:[], minprix:0, maxprix:0, designers:[], styles:[], couleurs:[], motifs:[], materiaux:[]}
+    const produit_Props = {marques:[], prix:[], minprix:0, maxprix:0, designers:[], styles:[], couleurs:[], motifs:[], materiaux:[]}
 
     const query = qs.stringify({
 
         populate: [
             'exposant',
+            'typeprod',
             'style',
             'ambiance',
             'couleur',
             'motif',
             'pay',
             'materiau',    
-            'fabrication',
+            'fabrication'
         ],
         filters: {
             NOUVEAUTE : { $eq: "1" } 
@@ -322,6 +380,7 @@ export async function getStaticProps (context) {
     NouveauteRes.data.data.forEach(produit => {
         produit_Props.marques.push(produit)
         produit_Props.designers.push(produit)
+        produit_Props.prix.push(produit)
         produit.attributes['style']&&produit_Props.styles.push(produit.attributes['style'].data)
         produit.attributes['couleur']&&produit_Props.couleurs.push(produit.attributes['couleur'].data)
         produit.attributes['motif']&&produit_Props.motifs.push(produit.attributes['motif'].data)
@@ -329,18 +388,21 @@ export async function getStaticProps (context) {
     })
 
     // count number of products for each filter characteristic begin 
-    produit_Props.marques=countElements(produit_Props.marques,'MARQUE')
-    produit_Props.designers=countElements(produit_Props.designers,'DESIGNER')
-    produit_Props.styles=countElements(produit_Props.styles,'LIB_FR')
-    produit_Props.couleurs=countElements(produit_Props.couleurs,'LIB_FR')              
-    produit_Props.motifs=countElements(produit_Props.motifs,'LIB_FR')
-    produit_Props.materiaux=countElements(produit_Props.materiaux,'LIB_FR')
+    produit_Props.marques=handleCountProductsOfEachFilter(produit_Props.marques,'MARQUE')
+    produit_Props.designers=handleCountProductsOfEachFilter(produit_Props.designers,'DESIGNER')
+    produit_Props.prix=handleCountProductsOfEachPrice(produit_Props.prix, 'TARIF_PUB', [0,150,350,500,750,1000,2000,1000000])
+    produit_Props.styles=handleCountProductsOfEachFilter(produit_Props.styles,'LIB_FR')
+    produit_Props.couleurs=handleCountProductsOfEachFilter(produit_Props.couleurs,'LIB_FR')              
+    produit_Props.motifs=handleCountProductsOfEachFilter(produit_Props.motifs,'LIB_FR')
+    produit_Props.materiaux=handleCountProductsOfEachFilter(produit_Props.materiaux,'LIB_FR')
     // count number of products for each filter characteristic end 
     // side filter end
     
     // get max and min price
     produit_Props.maxprix = Math.max(...NouveauteRes.data.data.map(o => o.attributes.TARIF_PUB))
     produit_Props.minprix = Math.min(...NouveauteRes.data.data.map(o => o.attributes.TARIF_PUB))
+
+    // sort nouveautes    
 
     return {
         props: {
