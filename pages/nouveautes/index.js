@@ -1,13 +1,20 @@
+// import from components/layout
 import Breadcrumb2 from "../../components/layout/Breadcrumb2"
-import Layout from "../../components/layout/Layout"
+
+// import from ecommerce/layout
 import Nouveaute from "../../components/ecommerce/Nouveaute"
 import Pagination from "../../components/ecommerce/Pagination"
 import ShowSelect from "../../components/ecommerce/Filter/ShowSelect"
 import SideFilter from "../../components/ecommerce/Filter/SideFilter"
-import SideFilterPrice from "../../components/ecommerce/Filter/SideFilterPrice.js"
-// My imports
+import SideFilterPrice from "../../components/ecommerce/Filter/SideFilterPrice"
+
+// import from next
+import { useRouter } from "next/router"
+
+// import from react
 import { useEffect, useState } from "react"
 
+// import libraries
 import axios from "axios"
 
 const handleCountProductsOfEachFilter = (arr, prop) => {
@@ -37,18 +44,18 @@ const handleCountProductsOfEachPrice = (arr, prop, prices) => {
     return(res) 
 }
 
-const ProductId = ({ produit_Props, nouveautes }) => {
+const ProductId = ({ produit_Props, nouveautes, filtersInitail }) => {
    /* console.log(nouveautes.map(o=>o['attributes']['exposant'].data.id))
     //console.log(nouveautes.sort((a,b) => a['attributes']['CLIENT_ABONNEMENT_PAYANT']>b['attributes']['CLIENT_ABONNEMENT_PAYANT']).map(o=>o['attributes']['exposant'].data.id))
     console.log(nouveautes.sort((a,b) => (a['attributes'].typeprod['data']['attributes']['LIB_FR']> b['attributes'].typeprod['data']['attributes']['LIB_FR']) ? 1 : ((b['attributes'].typeprod['data']['attributes']['LIB_FR'] > a['attributes'].typeprod['data']['attributes']['LIB_FR']) ? -1 : 0)).map(o=>o['attributes']['exposant'].data.id))*/
 
+    const router = useRouter()
+    
     const [nouveautesState, setNouveautesState] = useState(nouveautes)
     const [limit, setLimit] = useState(nouveautes.length)
     const [pages, setPages]  = useState([])
     const [currentPage, setCurrentPage] = useState(1)
 
-    const [minPrix, setMinPrix] =useState(produit_Props.minprix)
-    const [maxPrix, setMaxPrix] =useState(produit_Props.maxprix)
     const [couleurs, setCouleurs] =useState(produit_Props.couleurs)
     const [motifs, setMotifs] = useState(produit_Props.motifs)
     const [styles, setStyles] = useState(produit_Props.styles)    
@@ -57,14 +64,24 @@ const ProductId = ({ produit_Props, nouveautes }) => {
     const [materiaux, setMateriaux] = useState(produit_Props.materiaux)
     const [prices, setPrices] = useState(produit_Props.prix)
 
-    const [filterPrix, setFilterPrix] =useState([])
+    const [filterPrice, setFilterPrice] = useState([])
     const [filterCouleur, setFilterCouleur] =useState([])
     const [filterMotif, setFilterMotif] = useState([])
-    const [filterStyle, setFilterStyle] = useState([])    
+    const [filterStyle, setFilterStyle] = useState([]) 
+    const [filterMateriau, setFilterMateriau] = useState([])   
     const [filterDesigner, setFilterDesigner] = useState([])
     const [filterMarque, setFilterMarque] = useState([])
-    const [filterMateriau, setFilterMateriau] = useState([])
-    const [filterPrice, setFilterPrice] = useState([])
+
+    useEffect(()=>{
+        console.log(filtersInitail.marque)
+        setFilterCouleur(filtersInitail.couleur)
+        setFilterMotif(filtersInitail.motif)
+        setFilterStyle(filtersInitail.style)
+        setFilterDesigner(filtersInitail.designer)
+        setFilterMarque(filtersInitail.marque)
+        setFilterMateriau(filtersInitail.materiau)
+        setFilterPrice(filtersInitail.prix)
+    },[])
 
     useEffect(()=>{   
         const tab = []
@@ -80,15 +97,7 @@ const ProductId = ({ produit_Props, nouveautes }) => {
         const nouveautesFiltered = [...nouveautes]
 
         // Filtrage des nouveautées 
-        /*if(filterPrix.length>0){
-            if(minPrix==filterPrix[0] && maxPrix==filterPrix[1]){
-                nouveautesFiltered = [...nouveautes]
-            } else {
-                nouveautesFiltered=nouveautesFiltered.filter(nouveaute => parseFloat(nouveaute['attributes']['TARIF_PUB'])>=filterPrix[0] && parseFloat(nouveaute['attributes']['TARIF_PUB'])<=filterPrix[1])
-            }
-        }*/
         if(filterPrice.length>0){
-            console.log(filterPrice)
             nouveautesFiltered=nouveautesFiltered.filter(nouveaute => parseFloat(nouveaute['attributes']['TARIF_PUB'])>=filterPrice[0] && parseFloat(nouveaute['attributes']['TARIF_PUB'])<=filterPrice[1])
         }
         if(filterCouleur.length>0){
@@ -113,15 +122,31 @@ const ProductId = ({ produit_Props, nouveautes }) => {
 
         // Annuler les filtres de pagination et de limit de nouveautées affichés 
         setLimit(nouveautesFiltered.length)    
-        
-        console.log(nouveautesFiltered)
 
-    },[filterPrix, filterCouleur, filterMotif, filterStyle, filterDesigner, filterMarque, filterMateriau, filterPrice])
+        // Gestion du routeur 
+        if(nouveautesFiltered.length != nouveautes.length){
+
+            const obj ={...router.query}
+            
+            obj['prix']=filterPrice
+            obj['couleur']=filterCouleur
+            obj['motif']=filterMotif
+            obj['style']=filterStyle
+            obj['materiau']=filterMateriau
+            obj['designer']=filterDesigner
+            obj['marque']=filterMarque
+
+            router.push(
+                 'nouveautes',
+                {query: {...obj}},
+                {shallow : true}
+            )
+        }
+
+    },[filterCouleur, filterMotif, filterStyle, filterDesigner, filterMarque, filterMateriau, filterPrice])
 
     const handleFilter = (filterKey, value) => {
-        /*if(filterKey=="prix"){
-            setFilterPrix(value)
-        }*/
+
         if(filterKey=="couleur"){
             setFilterCouleur(value)
         }
@@ -146,25 +171,18 @@ const ProductId = ({ produit_Props, nouveautes }) => {
     }
 
     const next = () => {
-        /*let nouveautesLocal = [...nouveautesState]
-        setNouveautesState(nouveautesLocal.slice((currentPage + 1)*limit-limit, (currentPage + 1)*limit))*/
         setCurrentPage((currentPage )=>currentPage + 1)
     }
 
     const prev = () => {
-        /*let nouveautesLocal = [...nouveautesState]
-        setNouveautesState(nouveautesLocal.slice((currentPage - 1)*limit-limit, (currentPage - 1)*limit))*/
         setCurrentPage((currentPage)=>currentPage - 1)
     }
 
     const handleActive = (item) => {
-        /*let nouveautesLocal = [...nouveautesState]
-        setNouveautesState(nouveautesLocal.slice(item*limit-limit, item*limit))*/
         setCurrentPage(item)
     }
 
     const selectChange = (e) => {
-        //setNouveautesState([...nouveautes])
         setLimit(Number(e.target.value))
         setCurrentPage(1)
     }
@@ -173,184 +191,167 @@ const ProductId = ({ produit_Props, nouveautes }) => {
         produit_Props &&
         <>
             <Breadcrumb2 
-                title='Toutes les nouveautés'             
-                />
-                <section className="mt-50 mb-50">
-                    <div className="container">
-                        <div className="row flex-row">
-                            <div className="col-lg-1-5 primary-sidebar sticky-sidebar">
-                            {  /* 
-                                maxPrix>0&&
-                                <div className="list-group">
-                                    <div className="list-group-item mb-10 mt-10">
-                                        <label className="fw-900">Prix</label>
-                                        <div className="price-filter">
-                                        <div className="price-filter-inner">
-                                            <PriceRangeSlider 
-                                            min={minPrix} 
-                                            max={maxPrix}
-                                            filterKey='prix'
-                                            handleFilter={handleFilter}
-                                            />
-                                        </div>
-                                    </div>
-                                    </div>
-                                </div> 
-                          */}   
-                            {
-                                marques.length>0&&
-                                <div className="list-group">
-                                    <div className="list-group-item mb-10 mt-10">
-                                        <label className="fw-900">Marques</label>
-                                        <SideFilter 
-                                        elements={marques}
-                                        filterKey='marque'
-                                        handleFilter={handleFilter}
-                                        prop='MARQUE'/>
-                                    </div>
-                                </div> 
-                            }  
-                            {
-                                prices.length>0&&
-                                <div className="list-group">
-                                    <div className="list-group-item mb-10 mt-10">
-                                        <label className="fw-900">Prix</label>
-                                        <SideFilterPrice 
-                                        elements={prices}
-                                        filterKey='prix'
-                                        handleFilter={handleFilter}
-                                        prop='TARIF_PUB'/>
-                                    </div>
-                                </div> 
-                            }    
-                            {
-                                designers.length>0&&
-                                <div className="list-group">
-                                    <div className="list-group-item mb-10 mt-10">
-                                        <label className="fw-900">Designers</label>
-                                        <SideFilter 
-                                        elements={designers}
-                                        filterKey='designer'
-                                        handleFilter={handleFilter}
-                                        prop='DESIGNER'/>
-                                    </div>
-                                </div> 
-                            }      
-                            {
-                                styles.length>0&&
-                                <div className="list-group">
-                                    <div className="list-group-item mb-10 mt-10">
-                                        <label className="fw-900">Styles</label>
-                                        <SideFilter 
-                                        elements={styles}
-                                        filterKey='style'
-                                        handleFilter={handleFilter}
-                                        prop='LIB_FR'/>
-                                    </div>
-                                </div> 
-                            }  
-                            {
-                                couleurs.length>0&&
-                                <div className="list-group">
-                                    <div className="list-group-item mb-10 mt-10">
-                                        <label className="fw-900">Couleurs</label>
-                                        <SideFilter 
-                                        elements={couleurs}
-                                        filterKey='couleur'
-                                        handleFilter={handleFilter}
-                                        prop='LIB_FR'/>
-                                    </div>
-                                </div> 
-                            }  
-                            {
-                                motifs.length>0&&
-                                <div className="list-group">
-                                    <div className="list-group-item mb-10 mt-10">
-                                        <label className="fw-900">Motifs</label>
-                                        <SideFilter 
-                                        elements={motifs}
-                                        filterKey='motif'
-                                        handleFilter={handleFilter}
-                                        prop='LIB_FR'/>
-                                    </div>
-                                </div> 
-                            }  
-                            {
-                                materiaux.length>0&&
-                                <div className="list-group">
-                                    <div className="list-group-item mb-10 mt-10">
-                                        <label className="fw-900">Materiaux</label>
-                                        <SideFilter 
-                                        elements={materiaux}
-                                        filterKey='materiau'
-                                        handleFilter={handleFilter}
-                                        prop='LIB_FR'/>
-                                    </div>
-                                </div> 
-                            }
-                            </div>
-
-                            <div className="col-lg-4-5">
-                                <div className="shop-product-fillter">
-                                    <div className="totall-product">
-                                        <p>
-                                            <strong className="text-brand">
-                                                {nouveautesState.filter(x=> nouveautesState.indexOf(x) < limit).length}
-                                            </strong>
-                                            Nouveautés trouvés
-                                        </p>
-                                    </div>
-                                    <div className="sort-by-product-area">
-                                        <div className="sort-by-cover mr-10">
-                                            <ShowSelect
-                                                selectChange={selectChange}
-                                                showLimit={nouveautesState.length}
-                                                limitValue={limit}
-                                            />
-                                        </div>
-                                    </div>
+            title='Toutes les nouveautés'             
+            />
+            <section className="mt-50 mb-50">
+                <div className="container">
+                    <div className="row flex-row">
+                        <div className="col-lg-1-5 primary-sidebar sticky-sidebar">  
+                        {
+                            marques.length>0&&
+                            <div className="list-group">
+                                <div className="list-group-item mb-10 mt-10">
+                                    <label className="fw-900">Marques</label>
+                                    <SideFilter 
+                                    elements={marques}
+                                    filterKey='marque'
+                                    handleFilter={handleFilter}
+                                    prop='MARQUE'/>
                                 </div>
-                                <div className="row product-grid-3">
-                                {
-                                nouveautesState
-                                .slice(currentPage*limit-limit, currentPage*limit)
-                                .filter(x=>nouveautesState.slice(currentPage*limit-limit, currentPage*limit).indexOf(x) < limit).map((item, i) => (
-                                    <div
-                                        className="col-lg-1-5 col-md-4 col-12 col-sm-6"
-                                        key={item['id']}
-                                    >
-                                        <Nouveaute item={item} key={item['id']}/>
-                                    </div>
-                                ))}
-                                </div>
-                                <div className="pagination-area mt-15 mb-sm-5 mb-lg-0">
-                                <nav aria-label="Page navigation example">
-                                    <Pagination
-                                        getPaginationGroup={pages}
-                                        currentPage={currentPage}
-                                        pages={pages}
-                                        next={next}
-                                        prev={prev}
-                                        handleActive={handleActive}
-                                    />
-                                </nav>
-                            </div>
                             </div> 
-                        </div>                                         
-                    </div>
-                </section>
+                        }  
+                        {
+                            prices.length>0&&
+                            <div className="list-group">
+                                <div className="list-group-item mb-10 mt-10">
+                                    <label className="fw-900">Prix</label>
+                                    <SideFilterPrice 
+                                    elements={prices}
+                                    filterKey='prix'
+                                    handleFilter={handleFilter}
+                                    prop='TARIF_PUB'/>
+                                </div>
+                            </div> 
+                        }    
+                        {
+                            designers.length>0&&
+                            <div className="list-group">
+                                <div className="list-group-item mb-10 mt-10">
+                                    <label className="fw-900">Designers</label>
+                                    <SideFilter 
+                                    elements={designers}
+                                    filterKey='designer'
+                                    handleFilter={handleFilter}
+                                    prop='DESIGNER'/>
+                                </div>
+                            </div> 
+                        }      
+                        {
+                            styles.length>0&&
+                            <div className="list-group">
+                                <div className="list-group-item mb-10 mt-10">
+                                    <label className="fw-900">Styles</label>
+                                    <SideFilter 
+                                    elements={styles}
+                                    filterKey='style'
+                                    handleFilter={handleFilter}
+                                    prop='LIB_FR'/>
+                                </div>
+                            </div> 
+                        }  
+                        {
+                            couleurs.length>0&&
+                            <div className="list-group">
+                                <div className="list-group-item mb-10 mt-10">
+                                    <label className="fw-900">Couleurs</label>
+                                    <SideFilter 
+                                    elements={couleurs}
+                                    filterKey='couleur'
+                                    handleFilter={handleFilter}
+                                    prop='LIB_FR'/>
+                                </div>
+                            </div> 
+                        }  
+                        {
+                            motifs.length>0&&
+                            <div className="list-group">
+                                <div className="list-group-item mb-10 mt-10">
+                                    <label className="fw-900">Motifs</label>
+                                    <SideFilter 
+                                    elements={motifs}
+                                    filterKey='motif'
+                                    handleFilter={handleFilter}
+                                    prop='LIB_FR'/>
+                                </div>
+                            </div> 
+                        }  
+                        {
+                            materiaux.length>0&&
+                            <div className="list-group">
+                                <div className="list-group-item mb-10 mt-10">
+                                    <label className="fw-900">Materiaux</label>
+                                    <SideFilter 
+                                    elements={materiaux}
+                                    filterKey='materiau'
+                                    handleFilter={handleFilter}
+                                    prop='LIB_FR'/>
+                                </div>
+                            </div> 
+                        }
+                        </div>
+
+                        <div className="col-lg-4-5">
+                            <div className="shop-product-fillter">
+                                <div className="totall-product">
+                                    <p>
+                                        <strong className="text-brand">
+                                            {nouveautesState.filter(x=> nouveautesState.indexOf(x) < limit).length}
+                                        </strong>
+                                        Nouveautés trouvés
+                                    </p>
+                                </div>
+                                <div className="sort-by-product-area">
+                                    <div className="sort-by-cover mr-10">
+                                        <ShowSelect
+                                            selectChange={selectChange}
+                                            showLimit={nouveautesState.length}
+                                            limitValue={limit}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="row product-grid-3">
+                            {
+                            nouveautesState
+                            .slice(currentPage*limit-limit, currentPage*limit)
+                            .filter(x=>nouveautesState.slice(currentPage*limit-limit, currentPage*limit).indexOf(x) < limit).map((item, i) => (
+                                <div
+                                    className="col-lg-1-5 col-md-4 col-12 col-sm-6"
+                                    key={item['id']}
+                                >
+                                    <Nouveaute item={item} key={item['id']}/>
+                                </div>
+                            ))}
+                            </div>
+                            <div className="pagination-area mt-15 mb-sm-5 mb-lg-0">
+                            <nav aria-label="Page navigation example">
+                                <Pagination
+                                    getPaginationGroup={pages}
+                                    currentPage={currentPage}
+                                    pages={pages}
+                                    next={next}
+                                    prev={prev}
+                                    handleActive={handleActive}
+                                />
+                            </nav>
+                        </div>
+                        </div> 
+                    </div>                                         
+                </div>
+            </section>
         </>
     )
 }
 
 
-export async function getStaticProps (context) {
+export async function getServerSideProps (context) {
     
     // import qs
     const qs = require('qs')
 
     // variables 
-    const produit_Props = {marques:[], prix:[], minprix:0, maxprix:0, designers:[], styles:[], couleurs:[], motifs:[], materiaux:[]}
+    const produit_Props = {marques:[], prix:[], designers:[], styles:[], couleurs:[], motifs:[], materiaux:[]}
+    let filters = {marque:[], prix:[], designer:[], style:[], couleur:[], motif:[], materiau:[]}
 
     const query = qs.stringify({
 
@@ -397,17 +398,37 @@ export async function getStaticProps (context) {
     produit_Props.materiaux=handleCountProductsOfEachFilter(produit_Props.materiaux,'LIB_FR')
     // count number of products for each filter characteristic end 
     // side filter end
-    
-    // get max and min price
-    produit_Props.maxprix = Math.max(...NouveauteRes.data.data.map(o => o.attributes.TARIF_PUB))
-    produit_Props.minprix = Math.min(...NouveauteRes.data.data.map(o => o.attributes.TARIF_PUB))
 
-    // sort nouveautes    
+    // filter nouveautes    
 
+    // get filters
+
+    if(context.query.marque){
+        filters.marque = typeof context.query.marque == 'string' ? [parseInt(context.query.marque)] : context.query.marque.map(element=>parseInt(element))
+    }
+    if(context.query.designer){
+        filters.designer = typeof context.query.designer == 'string' ? [parseInt(context.query.designer)] : context.query.designer.map(element=>parseInt(element))
+    }
+    if(context.query.prix){
+        filters.prix = typeof context.query.prix == 'string' ? [parseInt(context.query.prix)] : context.query.prix.map(element=>parseInt(element))
+    }
+    if(context.query.style){
+        filters.style = typeof context.query.style == 'string' ? [parseInt(context.query.style)] : context.query.style.map(element=>parseInt(element))
+    }
+    if(context.query.couleur){
+        filters.couleur = typeof context.query.couleur == 'string' ? [parseInt(context.query.couleur)] : context.query.couleur.map(element=>parseInt(element))
+    }
+    if(context.query.motif){
+        filters.motif = typeof context.query.motif == 'string' ? [parseInt(context.query.motif)] : context.query.motif.map(element=>parseInt(element))
+    }
+    if(context.query.materiau){
+        filters.materiau = typeof context.query.materiau == 'string' ? [parseInt(context.query.materiau)] : context.query.materiau.map(element=>parseInt(element))
+    }
     return {
         props: {
             nouveautes : NouveauteRes.data.data,
-            produit_Props : produit_Props
+            produit_Props : produit_Props,
+            filtersInitail : filters
         }
     }
 }

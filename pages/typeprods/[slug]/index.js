@@ -51,13 +51,11 @@ const ProductId = ({ typeprod, categorie, produits, univers, categorie_typeprods
         else {
         const obj ={...router.query}
         obj[filterKey]=value
-        delete obj.slug
         router.push({
             pathname: `/typeprods/${router.query.slug}`,
             query: {...obj}
         })
         }
-
     }
 
     return (
