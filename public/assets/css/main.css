@@ -11827,3 +11827,12 @@ footer .hotline img {
 .h1 {
   font-size: 38px;
 }
+.checkbox-container {
+  display: flex;
+}
+.checkbox-label{
+  width : 90%
+}
+.checkbox-input {
+  width : 10%  
+}

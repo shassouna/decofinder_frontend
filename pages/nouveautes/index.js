@@ -17,6 +17,7 @@ import { useEffect, useState } from "react"
 // import libraries
 import axios from "axios"
 
+// compter le nombre de produits pour un filtre x 
 const handleCountProductsOfEachFilter = (arr, prop) => {
     const res = []
     for (const element of arr) {
@@ -31,9 +32,10 @@ const handleCountProductsOfEachFilter = (arr, prop) => {
     return(res) 
 }
 
+// compter le nombre de produits pour le filtre prix
 const handleCountProductsOfEachPrice = (arr, prop, prices) => {
 
-    const res = []
+    let res = []
     for (let i=0; i<prices.length-1; i++){
         res.push({
             id : prices[i],
@@ -41,29 +43,54 @@ const handleCountProductsOfEachPrice = (arr, prop, prices) => {
             count : (arr.filter(element=>element['attributes']&&element['attributes'][prop]&&element['attributes'][prop]>prices[i]&&element['attributes'][prop]<prices[i+1])).length
         })
     }
+    res = res.filter(e=>e.count>0)
     return(res) 
 }
 
-const ProductId = ({ produit_Props, nouveautes, filtersInitail }) => {
-   /* console.log(nouveautes.map(o=>o['attributes']['exposant'].data.id))
-    //console.log(nouveautes.sort((a,b) => a['attributes']['CLIENT_ABONNEMENT_PAYANT']>b['attributes']['CLIENT_ABONNEMENT_PAYANT']).map(o=>o['attributes']['exposant'].data.id))
-    console.log(nouveautes.sort((a,b) => (a['attributes'].typeprod['data']['attributes']['LIB_FR']> b['attributes'].typeprod['data']['attributes']['LIB_FR']) ? 1 : ((b['attributes'].typeprod['data']['attributes']['LIB_FR'] > a['attributes'].typeprod['data']['attributes']['LIB_FR']) ? -1 : 0)).map(o=>o['attributes']['exposant'].data.id))*/
+// trier un tableau de produits par ordre alphabétique selon une propriété  
+const handleSortByAlphabet = (tab, lib1, lib2) => {
+    tab.sort(function(a, b){
+        if(a['attributes'][lib1]['data']['attributes'][lib2]< b['attributes'][lib1]['data']['attributes'][lib2]) { return -1; }
+        if(a['attributes'][lib1]['data']['attributes'][lib2]> b['attributes'][lib1]['data']['attributes'][lib2]) { return 1; }
+        return 0;
+    })
+    return tab
+}
 
+// trier un tableau de produis selon s'il est client ou pas client
+const handleSortByClientOrNotClient = (tab, lib1, lib2) => {
+    return tab.sort((a,b) => (a['attributes'][lib1]['data']['attributes'][lib2] > b['attributes'][lib1]['data']['attributes'][lib2]) ? -1 : ((b['attributes'][lib1]['data']['attributes'][lib2] > a['attributes'][lib1]['data']['attributes'][lib2]) ? 1 : 0))
+}
+
+const Nouveautes = ({ produit_Props, nouveautes, filtersInitail }) => {
+
+    // ----------------------------------------------------Routers Début----------------------------------------------------
     const router = useRouter()
+    // ----------------------------------------------------Routers Fin----------------------------------------------------
     
-    const [nouveautesState, setNouveautesState] = useState(nouveautes)
+    // ----------------------------------------------------States Begin----------------------------------------------------
+    // Liste des nouveautés 
+    const [nouveautesState, setNouveautesState] = useState([])
+
+    // Nombre Maximum des nouveautés à afficher
     const [limit, setLimit] = useState(nouveautes.length)
+
+    // Nombre de page de pagination 
     const [pages, setPages]  = useState([])
+
+    // La page actuelle sur laquelle on se trouve
     const [currentPage, setCurrentPage] = useState(1)
 
-    const [couleurs, setCouleurs] =useState(produit_Props.couleurs)
-    const [motifs, setMotifs] = useState(produit_Props.motifs)
-    const [styles, setStyles] = useState(produit_Props.styles)    
-    const [designers, setDesigners] = useState(produit_Props.designers)
-    const [marques, setMarques] = useState(produit_Props.marques)
-    const [materiaux, setMateriaux] = useState(produit_Props.materiaux)
-    const [prices, setPrices] = useState(produit_Props.prix)
+    // Liste des filtres proposés à la gauche de la page 
+    const [couleurs, setCouleurs] =useState([])
+    const [motifs, setMotifs] = useState([])
+    const [styles, setStyles] = useState([])    
+    const [designers, setDesigners] = useState([])
+    const [marques, setMarques] = useState([])
+    const [materiaux, setMateriaux] = useState([])
+    const [prices, setPrices] = useState([])
 
+    // Les filtres actuelles choisi par l'utilisateur 
     const [filterPrice, setFilterPrice] = useState([])
     const [filterCouleur, setFilterCouleur] =useState([])
     const [filterMotif, setFilterMotif] = useState([])
@@ -71,9 +98,41 @@ const ProductId = ({ produit_Props, nouveautes, filtersInitail }) => {
     const [filterMateriau, setFilterMateriau] = useState([])   
     const [filterDesigner, setFilterDesigner] = useState([])
     const [filterMarque, setFilterMarque] = useState([])
+    // ----------------------------------------------------States Fin----------------------------------------------------
 
+    // ----------------------------------------------------Effectes Début----------------------------------------------------
     useEffect(()=>{
-        console.log(filtersInitail.marque)
+
+        // Mettre à jour l'apparence des filtres à gauche 
+        let couleursLocal = [...produit_Props.couleurs]
+        couleursLocal.filter(couleur=>filtersInitail.couleur.includes(couleur['item']['id'])?couleur['checked'] = true && couleur:null) 
+        setCouleurs([...couleursLocal])
+
+        let motifsLocal = [...produit_Props.motifs]
+        motifsLocal.filter(motif=>filtersInitail.motif.includes(motif['item']['id'])?motif['checked'] = true && motif:null)
+        setMotifs([...motifsLocal])
+        
+        let stylesLocal = [...produit_Props.styles]
+        stylesLocal.filter(style=>filtersInitail.style.includes(style['item']['id'])?style['checked'] = true && style:null)
+        setStyles([...stylesLocal])
+        
+        let designersLocal = [...produit_Props.designers]
+        designersLocal.filter(designer=>filtersInitail.designer.includes(designer['item']['id'])?designer['checked'] = true && designer:null)
+        setDesigners([...designersLocal])
+       
+        let materiauxLocal = [...produit_Props.materiaux]
+        materiauxLocal.filter(materiau=>filtersInitail.materiau.includes(materiau['item']['id'])?materiau['checked'] = true && materiau:null)
+        setMateriaux([...materiauxLocal])        
+       
+        let marquesLocal = [...produit_Props.marques]
+        marquesLocal.filter(marque=>filtersInitail.marque.includes(marque['item']['id'])?marque['checked'] = true && marque:null)
+        setMarques([...marquesLocal])
+        
+        let pricesLocal = [...produit_Props.prix]
+        pricesLocal.filter(price=>filtersInitail.prix[0]==price.item[0] && filtersInitail.prix[1]==price.item[1] ? price['checked'] = true && price:null)
+        setPrices([...pricesLocal])
+
+        // Initialiser les filtres 
         setFilterCouleur(filtersInitail.couleur)
         setFilterMotif(filtersInitail.motif)
         setFilterStyle(filtersInitail.style)
@@ -81,6 +140,7 @@ const ProductId = ({ produit_Props, nouveautes, filtersInitail }) => {
         setFilterMarque(filtersInitail.marque)
         setFilterMateriau(filtersInitail.materiau)
         setFilterPrice(filtersInitail.prix)
+
     },[])
 
     useEffect(()=>{   
@@ -96,7 +156,7 @@ const ProductId = ({ produit_Props, nouveautes, filtersInitail }) => {
         // Initialiser les nouveautées à filtrer
         const nouveautesFiltered = [...nouveautes]
 
-        // Filtrage des nouveautées 
+        // Filtrage des nouveautés 
         if(filterPrice.length>0){
             nouveautesFiltered=nouveautesFiltered.filter(nouveaute => parseFloat(nouveaute['attributes']['TARIF_PUB'])>=filterPrice[0] && parseFloat(nouveaute['attributes']['TARIF_PUB'])<=filterPrice[1])
         }
@@ -117,10 +177,12 @@ const ProductId = ({ produit_Props, nouveautes, filtersInitail }) => {
         }  
         if(filterMarque.length>0){
             nouveautesFiltered=nouveautesFiltered.filter(nouveaute=>filterMarque.includes(nouveaute['id']))
-        }       
+        }     
+
+        // Mettre à jour de la liste des nouveautés à afficher
         setNouveautesState([...nouveautesFiltered])
 
-        // Annuler les filtres de pagination et de limit de nouveautées affichés 
+        // Mettre à jour le nombre des nouveautés maximum
         setLimit(nouveautesFiltered.length)    
 
         // Gestion du routeur 
@@ -144,7 +206,10 @@ const ProductId = ({ produit_Props, nouveautes, filtersInitail }) => {
         }
 
     },[filterCouleur, filterMotif, filterStyle, filterDesigner, filterMarque, filterMateriau, filterPrice])
+    // ----------------------------------------------------Effectes Fin----------------------------------------------------
 
+    // ----------------------------------------------------Functions Début----------------------------------------------------
+    // Mise à jour des filtres en prenant en compte ceux que l'utilisateur a choisi 
     const handleFilter = (filterKey, value) => {
 
         if(filterKey=="couleur"){
@@ -170,25 +235,29 @@ const ProductId = ({ produit_Props, nouveautes, filtersInitail }) => {
         }
     }
 
+    // Affichage de la page suivante (Gestion pagination)
     const next = () => {
         setCurrentPage((currentPage )=>currentPage + 1)
     }
 
+    // Affichage de la page précédente (Gestion pagination)
     const prev = () => {
         setCurrentPage((currentPage)=>currentPage - 1)
     }
 
+    // Affichage de la page choisi (Gestion pagination)
     const handleActive = (item) => {
         setCurrentPage(item)
     }
 
+    // Mise à jour du nombre des produits affichés par page
     const selectChange = (e) => {
         setLimit(Number(e.target.value))
         setCurrentPage(1)
     }
+    // ----------------------------------------------------Functions Fin----------------------------------------------------
 
     return (
-        produit_Props &&
         <>
             <Breadcrumb2 
             title='Toutes les nouveautés'             
@@ -320,21 +389,22 @@ const ProductId = ({ produit_Props, nouveautes, filtersInitail }) => {
                                     key={item['id']}
                                 >
                                     <Nouveaute item={item} key={item['id']}/>
+                                    <p>{item.attributes['typeprod']['data']['attributes']['LIB_FR']}</p>
                                 </div>
                             ))}
                             </div>
                             <div className="pagination-area mt-15 mb-sm-5 mb-lg-0">
-                            <nav aria-label="Page navigation example">
-                                <Pagination
-                                    getPaginationGroup={pages}
-                                    currentPage={currentPage}
-                                    pages={pages}
-                                    next={next}
-                                    prev={prev}
-                                    handleActive={handleActive}
-                                />
-                            </nav>
-                        </div>
+                                <nav aria-label="Page navigation example">
+                                    <Pagination
+                                        getPaginationGroup={pages}
+                                        currentPage={currentPage}
+                                        pages={pages}
+                                        next={next}
+                                        prev={prev}
+                                        handleActive={handleActive}
+                                    />
+                                </nav>
+                            </div>
                         </div> 
                     </div>                                         
                 </div>
@@ -346,12 +416,13 @@ const ProductId = ({ produit_Props, nouveautes, filtersInitail }) => {
 
 export async function getServerSideProps (context) {
     
-    // import qs
+    // Import qs
     const qs = require('qs')
 
-    // variables 
+    // Variables 
     const produit_Props = {marques:[], prix:[], designers:[], styles:[], couleurs:[], motifs:[], materiaux:[]}
     let filters = {marque:[], prix:[], designer:[], style:[], couleur:[], motif:[], materiau:[]}
+    let filteredNouveautes = []
 
     const query = qs.stringify({
 
@@ -367,7 +438,8 @@ export async function getServerSideProps (context) {
             'fabrication'
         ],
         filters: {
-            NOUVEAUTE : { $eq: "1" } 
+            NOUVEAUTE : { $eq : "1" },
+            AUTORISATION : { $eq : "2"}
         }
 
     }, 
@@ -377,7 +449,7 @@ export async function getServerSideProps (context) {
     
     const NouveauteRes = await axios.get(`http://localhost:1337/api/produits/?${query}`)
 
-    // side filter begin 
+    // Création des filtres
     NouveauteRes.data.data.forEach(produit => {
         produit_Props.marques.push(produit)
         produit_Props.designers.push(produit)
@@ -388,7 +460,7 @@ export async function getServerSideProps (context) {
         produit.attributes['materiau']&&produit_Props.materiaux.push(produit.attributes['materiau'].data)
     })
 
-    // count number of products for each filter characteristic begin 
+    // Compter le nombre de produits pour chaque filtre
     produit_Props.marques=handleCountProductsOfEachFilter(produit_Props.marques,'MARQUE')
     produit_Props.designers=handleCountProductsOfEachFilter(produit_Props.designers,'DESIGNER')
     produit_Props.prix=handleCountProductsOfEachPrice(produit_Props.prix, 'TARIF_PUB', [0,150,350,500,750,1000,2000,1000000])
@@ -396,13 +468,9 @@ export async function getServerSideProps (context) {
     produit_Props.couleurs=handleCountProductsOfEachFilter(produit_Props.couleurs,'LIB_FR')              
     produit_Props.motifs=handleCountProductsOfEachFilter(produit_Props.motifs,'LIB_FR')
     produit_Props.materiaux=handleCountProductsOfEachFilter(produit_Props.materiaux,'LIB_FR')
-    // count number of products for each filter characteristic end 
-    // side filter end
+ 
 
-    // filter nouveautes    
-
-    // get filters
-
+    // Recupérer la liste des filtres a partir de l'url 
     if(context.query.marque){
         filters.marque = typeof context.query.marque == 'string' ? [parseInt(context.query.marque)] : context.query.marque.map(element=>parseInt(element))
     }
@@ -424,9 +492,16 @@ export async function getServerSideProps (context) {
     if(context.query.materiau){
         filters.materiau = typeof context.query.materiau == 'string' ? [parseInt(context.query.materiau)] : context.query.materiau.map(element=>parseInt(element))
     }
+
+    // Ordonner les produits selon leur Status (client ou pas client)
+    filteredNouveautes = handleSortByClientOrNotClient(NouveauteRes.data.data, 'exposant', 'CLIENT_ABONNEMENT_PAYANT')
+    
+    // Ordonner les produits selon l'ordre alphabétique
+    filteredNouveautes = handleSortByAlphabet(filteredNouveautes, 'typeprod', 'LIB_FR')
+    
     return {
         props: {
-            nouveautes : NouveauteRes.data.data,
+            nouveautes : filteredNouveautes,
             produit_Props : produit_Props,
             filtersInitail : filters
         }
@@ -434,4 +509,4 @@ export async function getServerSideProps (context) {
 }
 
 
-export default ProductId
+export default Nouveautes

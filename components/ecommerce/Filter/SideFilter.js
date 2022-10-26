@@ -6,8 +6,8 @@ const VendorFilter = ({elements, prop, handleFilter, filterKey}) => {
 
     const [sizes, setSizeCheckbox] = useState(elements)
 
-    const handleCheckBox = (e, id, filters, updatefilters) => {
-
+    const handleCheckBox = (event, id, filters, updatefilters) => {
+        event.preventDefault()
         const updateSizes = filters
 
         updateSizes.forEach((element) => {

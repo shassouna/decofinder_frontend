@@ -5,7 +5,9 @@ const CheckBox = ({ handleCheckBox, filters, prop, filterKey }) => {
         <>
             {filters.map((element,index) => (
                 <div key={element['item']['id']+filterKey}>
-                    <input
+                    <div className="checkbox-container">
+                        <div className="checkbox-label">
+                        <input
                         type="checkbox"
                         className="form-check-input"
                         name={element.item['id']}
@@ -14,8 +16,12 @@ const CheckBox = ({ handleCheckBox, filters, prop, filterKey }) => {
                         onChange={(e) => handleCheckBox(e, element.item['id'])}
                         id={element['item']['id']+filterKey}   
                     />
-                    <label className="form-check-label" htmlFor={element['item']['id']+filterKey} style={{textTransform:"capitalize"}}> {element.item['attributes'][prop]}</label>
-                    <br/>
+                        <label className="form-check-label" htmlFor={element['item']['id']+filterKey} style={{textTransform:"capitalize"}}> {element.item['attributes'][prop]}</label>                            
+                        </div>
+                        <div className="checkbox-count">
+                            <label>{element['count']}</label>
+                        </div>
+                    </div>
                 </div>
             ))}
         </>
