@@ -1,10 +1,10 @@
-import CategoryTab from "../components/ecommerce/categoryTab";
-import FetchTabSlider from "../components/ecommerce/fetchTabSlider";
-import QuickView from "./../components/ecommerce/QuickView";
-import CategorySlider from "./../components/sliders/Category";
-import Intro1 from "../components/sliders/intro4";
-import FourProducts from "./../components/elements/FourProducts";
-import Description from "../components/elements/Contact";
+import CategoryTab from "../components/ecommerce/categoryTab"
+import FetchTabSlider from "../components/ecommerce/fetchTabSlider"
+import QuickView from "./../components/ecommerce/QuickView"
+import CategorySlider from "./../components/sliders/Category"
+import Intro1 from "../components/sliders/intro4"
+import FourProducts from "./../components/elements/FourProducts"
+import Description from "../components/elements/DescriptionHome"
 
 // My imports 
 import axios from 'axios'
@@ -64,7 +64,7 @@ export default function Home({menuHeaderData, fourProducts, nouveautes, inspirat
 
             <QuickView />
         </>
-    );
+    )
 }
 
 export async function getStaticProps(context) {
@@ -151,7 +151,7 @@ export async function getStaticProps(context) {
           populate: ['typeprod', 'exposant']
       }, {
         encodeValuesOnly: true, // prettify URL
-      });
+      })
     const NouveautesCall = await axios.get(`http://localhost:1337/api/produits?${queryNouveautes}`) 
 
     // types produits 
@@ -163,7 +163,7 @@ export async function getStaticProps(context) {
           populate: ['category'],
       }, {
         encodeValuesOnly: true, // prettify URL
-      });
+      })
     const TypeprodsCall = await axios.get(`http://localhost:1337/api/typeprods?${queryTypeprods}`) 
 
     // --------------------------------------------Four Products End--------------------------------------------   

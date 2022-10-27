@@ -11,6 +11,10 @@ import SingleTypeProduct from "../../../components/ecommerce/SingleProductCopy"
 import SingleProduct from "../../../components/ecommerce/SingleProduct"
 import Pagination from "../../../components/ecommerce/Pagination"
 import ShowSelect from "../../../components/ecommerce/Filter/ShowSelect"
+
+// import from components/elementes
+import Description from "../../../components/elements/Description"
+
 // import from next
 import { useRouter } from "next/router"
 
@@ -192,6 +196,9 @@ const Categorie = ({ typeprods, produit_Props, typeprods_Props, categorie, unive
 
         // Mettre à jour le nombre des nouveautés maximum
         setLimit(produitsFiltered.length)    
+
+        // Mettre à jour la pagination
+        setCurrentPage(1)   
 
         // Gestion du routeur 
         if(produitsFiltered.length != produits_categorie.length){
@@ -433,7 +440,7 @@ const Categorie = ({ typeprods, produit_Props, typeprods_Props, categorie, unive
                         </div>
 
                         <div className="col-lg-4-5">
-                            <h2 style={{textAlign:'center'}}>Choisissez un type-produit dans la catégorie {categorie['attributes']['LIB_FR']}</h2>
+                            <h2>Choisissez un type-produit dans la catégorie {categorie['attributes']['LIB_FR']}</h2>
                             <br/>
                             <div className="row product-grid-3">
                             {typeprods.map((item) => (
@@ -445,19 +452,36 @@ const Categorie = ({ typeprods, produit_Props, typeprods_Props, categorie, unive
                                 </div>
                             ))}
                             </div>
-                            <div className="col-lg-4-5">
+                            <div className="col-lg-5-5">
                                 <br/><br/>
                                 {
-                                produitsState.length > 0 &&
-                                <h2 style={{textAlign:'center'}}>Découvrez tous les produits de la catégorie {categorie['attributes']['LIB_FR']}</h2>
-                                }
-                                {
-                                produitsState.length == 0 &&
-                                <h2 style={{textAlign:'center'}}>Aucun produit trouvé</h2>
+                                produitsState.length > 0 ?
+                                <h2>Découvrez tous les produits de la catégorie {categorie['attributes']['LIB_FR']}</h2>
+                                :<h2>Aucun produit trouvé</h2>  
                                 }
                                 <br/>
+                                <div className="shop-product-fillter">
+                                    <div className="totall-product">
+                                        <p>
+                                            <strong className="text-brand">
+                                                {produitsState.filter(x=> produitsState.indexOf(x) < limit).length}
+                                            </strong>
+                                            produits trouvés
+                                        </p>
+                                    </div>
+                                    <div className="sort-by-product-area">
+                                        <div className="sort-by-cover mr-10">
+                                            <ShowSelect
+                                                selectChange={selectChange}
+                                                showLimit={produitsState.length}
+                                                limitValue={limit}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
                                 <div className="row product-grid-3">
-                                    {produitsState.map((item) => (
+                                    {produitsState.slice(currentPage*limit-limit, currentPage*limit)
+                                    .filter(x=>produitsState.slice(currentPage*limit-limit, currentPage*limit).indexOf(x) < limit).map((item, i) => ( 
                                         <div
                                             key={item["id"]}
                                             className="col-lg-1-5 col-md-4 col-12 col-sm-6"
@@ -465,15 +489,6 @@ const Categorie = ({ typeprods, produit_Props, typeprods_Props, categorie, unive
                                             <SingleProduct key={item["id"]} item={item} baseUrl='produits'/>
                                         </div>
                                     ))}
-                                </div>
-                                <div className="sort-by-product-area">
-                                    <div className="sort-by-cover mr-10">
-                                        <ShowSelect
-                                            selectChange={selectChange}
-                                            showLimit={produitsState.length}
-                                            limitValue={limit}
-                                        />
-                                    </div>
                                 </div>
                                 <div className="pagination-area mt-15 mb-sm-5 mb-lg-0">
                                     <nav aria-label="Page navigation example">
@@ -488,6 +503,18 @@ const Categorie = ({ typeprods, produit_Props, typeprods_Props, categorie, unive
                                     </nav>
                                 </div>
                             </div> 
+                            {
+                            categorie['attributes']['TEXTE_FR']&&
+                            <>
+                                <div id="universdescription"></div>
+                                <div className="row product-grid-3">
+                                    <div id="universdescription"></div>
+                                        <div className="row product-grid-3">
+                                            <Description description={categorie['attributes']['TEXTE_FR']}/>
+                                        </div>
+                                </div>
+                            </>
+                            }
                         </div>                                                   
                     </div>
                 </div>

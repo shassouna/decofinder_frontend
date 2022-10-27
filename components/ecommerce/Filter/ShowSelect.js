@@ -18,7 +18,7 @@ function SelectOp({ selectChange, showLimit, limitValue }) {
                 <div className="sort-by">
                     <span>
                         <i className="fi-rs-apps"></i>
-                        Afficher:
+                        Affichage par :
                     </span>
                 </div>
                 <div className="sort-by-dropdown-wrap custom-select">

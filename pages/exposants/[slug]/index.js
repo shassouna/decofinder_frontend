@@ -2,28 +2,28 @@
 import SideFilterLinks from "../../../components/ecommerce/Filter/SideFilterLinks"
 import SideFilter from "../../../components/ecommerce/Filter/SideFilter"
 import SideFilterPrice from "../../../components/ecommerce/Filter/SideFilterPrice"
-import ShowSelect from "../../../components/ecommerce/Filter/ShowSelect"
 
 // import from components/layout
 import Breadcrumb2 from "../../../components/layout/Breadcrumb2"
 
 // import from components/ecommerce
-import QuickView from "../../../components/ecommerce/QuickView"
 import SingleTypeProduct from "../../../components/ecommerce/SingleProductCopy"
 import SingleProduct from "../../../components/ecommerce/SingleProduct"
 import Pagination from "../../../components/ecommerce/Pagination"
+import ShowSelect from "../../../components/ecommerce/Filter/ShowSelect"
+
+// import from components/elementes
+import Description from "../../../components/elements/Description"
 
 // import from next
 import { useRouter } from "next/router"
+import Link from "next/link"
 
 // import from react
 import { useState, useEffect } from "react"
 
-// import from components/elements
-import Description from "../../../components/elements/Description"
-
 // import libraries
-import axios from 'axios'
+import axios from "axios"
 
 // Compter le nombre de produits pour un filtre x 
 const handleCountProductsOfEachFilter = (arr, prop) => {
@@ -54,17 +54,30 @@ const handleCountProductsOfEachPrice = (arr, prop, prices) => {
     return(res) 
 }
 
+// Trier un tableau de produits par ordre alphabétique selon une propriété  
+const handleSortByAlphabet = (tab, lib1, lib2) => {
+    tab.sort(function(a, b){
+        if(a['attributes'][lib1]['data']['attributes'][lib2]< b['attributes'][lib1]['data']['attributes'][lib2]) { return -1 }
+        if(a['attributes'][lib1]['data']['attributes'][lib2]> b['attributes'][lib1]['data']['attributes'][lib2]) { return 1 }
+        return 0
+    })
+    return tab
+}
+
 // Trier un tableau de produis selon s'il est client ou pas client
 const handleSortByClientOrNotClient = (tab, lib1, lib2) => {
     return tab.sort((a,b) => (a['attributes'][lib1]['data']['attributes'][lib2] > b['attributes'][lib1]['data']['attributes'][lib2]) ? -1 : ((b['attributes'][lib1]['data']['attributes'][lib2] > a['attributes'][lib1]['data']['attributes'][lib2]) ? 1 : 0))
 }
 
-const Products = ({ univers, categories, univers_categories_Props, produit_Props, superunivers, categories_Props, produits_univers, filtersInitail }) => {
-
+const Categorie = ({ typeprods, produit_Props, typeprods_Props, categorie, univers, univers_categories_Props, produits_categorie, filtersInitail, exposant, pays }) => {
+console.log(pays)
+    // ----------------------------------------------------Routers Début----------------------------------------------------
     const router = useRouter()
-
+    // ----------------------------------------------------Routers Fin----------------------------------------------------  
+    
+    // ----------------------------------------------------States Begin----------------------------------------------------
     // Nombre Maximum des catégories à afficher
-    const [limit, setLimit] = useState(produits_univers.length)
+    const [limit, setLimit] = useState(produits_categorie.length)
 
     // Nombre de page de pagination 
     const [pages, setPages]  = useState([])
@@ -77,7 +90,7 @@ const Products = ({ univers, categories, univers_categories_Props, produit_Props
  
     // Controller l'affichage du filtre à gauche qui contient la liste des catégories   
     const [showCategories, setShowCategories] = useState(true)
-       
+
     // Liste des produits
     const [produitsState, setProduitsState] = useState([])
 
@@ -98,11 +111,9 @@ const Products = ({ univers, categories, univers_categories_Props, produit_Props
     const [filterMateriau, setFilterMateriau] = useState([])   
     const [filterDesigner, setFilterDesigner] = useState([])
     const [filterMarque, setFilterMarque] = useState([])
+    // ----------------------------------------------------States End----------------------------------------------------
 
-    const handleShowAllDescription = (value) => {
-        router.push('#universdescription')
-    }
-
+    // ----------------------------------------------------Effectes Début----------------------------------------------------
     useEffect(()=>{
 
         // Mettre à jour l'apparence des filtres à gauche 
@@ -144,7 +155,7 @@ const Products = ({ univers, categories, univers_categories_Props, produit_Props
         setFilterPrice(filtersInitail.prix)
 
     },[]) 
-
+    
     useEffect(()=>{   
         const tab = []
         for (let i=1; i<produitsState.length/limit+1;i++){
@@ -156,7 +167,7 @@ const Products = ({ univers, categories, univers_categories_Props, produit_Props
     useEffect(()=>{
 
         // Initialiser les nouveautées à filtrer
-        const produitsFiltered = [...produits_univers]
+        const produitsFiltered = [...produits_categorie]
 
         // Filtrage des nouveautés 
         if(filterPrice.length>0){
@@ -188,10 +199,10 @@ const Products = ({ univers, categories, univers_categories_Props, produit_Props
         setLimit(produitsFiltered.length)    
 
         // Mettre à jour la pagination
-        setCurrentPage(1)    
+        setCurrentPage(1)   
 
         // Gestion du routeur 
-        if(produitsFiltered.length != produits_univers.length){
+        if(produitsFiltered.length != produits_categorie.length){
 
             const obj ={...router.query}
             
@@ -211,6 +222,30 @@ const Products = ({ univers, categories, univers_categories_Props, produit_Props
         }
 
     },[filterCouleur, filterMotif, filterStyle, filterDesigner, filterMarque, filterMateriau, filterPrice])
+    // ----------------------------------------------------Effectes Fin----------------------------------------------------
+
+    // ----------------------------------------------------Functions Début----------------------------------------------------
+    // Afficher toute la description de la catégorie en bas de la page 
+    const handleShowAllDescription = (value) => {
+        router.push('#universdescription')
+    }
+
+    // Link to Categorie page ou typeprod page 
+    const handleLinkToAnotherPage= (filterKey, idCategorie) => {
+
+        if(filterKey=="categorie"){
+            router.push({
+                pathname: `/categories/${idCategorie}`,
+                query: null
+            })            
+        }
+        else if(filterKey=="typeprod"){
+            router.push({
+                pathname: `/typeprods/${idCategorie}`,
+                query: null
+            })  
+        } 
+    }
 
     // Mise à jour des filtres en prenant en compte ceux que l'utilisateur a choisi 
     const handleFilter = (filterKey, value) => {
@@ -258,47 +293,70 @@ const Products = ({ univers, categories, univers_categories_Props, produit_Props
         setLimit(Number(e.target.value))
         setCurrentPage(1)
     }
+    // ----------------------------------------------------Functions Fin----------------------------------------------------
 
     return (
-        univers&&
+        produit_Props &&
         <>
             <Breadcrumb2 
-                title='Univers' 
-                elements={[superunivers['attributes']['LIB'], univers['attributes']['LIB']]} 
-                description={univers['attributes']['DOSSIER_TEXTE'].split(`\n`)[0]+univers['attributes']['DOSSIER_TEXTE'].split(`\n`)[1]} 
-                handleShowAllDescription = {handleShowAllDescription}             
+                title={'Catégorie ' + categorie['attributes']['LIB_FR'] + '-' + univers['attributes']['LIB']}
+                elements={[univers['attributes']['LIB'], categorie['attributes']['LIB_FR']]} 
+                description = {categorie['attributes']['TEXTE_FR'].split(`\n`)[0]+categorie['attributes']['TEXTE_FR'].split(`\n`)[1]}   
             />
             <section className="mt-50 mb-50">
                 <div className="container">
                     <div className="row flex-row">
                         <div className="col-lg-1-5 primary-sidebar sticky-sidebar">
-                        {
-                            categories_Props.length>0&&   
-                            <div className="sidebar-widget widget-category-2 mb-15">
-                                <div style={{display:"flex", justifyContent:"space-between"}}>
-                                    <h5 className="style-1 mb-10">
-                                        Dans l'univers : {univers['attributes']['LIB']}
-                                    </h5>
-                                    {!showCategories&&<img style={{width:'25px', height:'25px'}} src="/assets/imgs/theme/icons/down-arrow-svgrepo-com.svg"
-                                    onClick={()=>setShowCategories(!showCategories)}/>}
-                                    {showCategories&&<img style={{width:'25px', height:'25px'}} src="/assets/imgs/theme/icons/up-arrow-svgrepo-com.svg"
-                                    onClick={()=>setShowCategories(!showCategories)}/>}
+                        <div className="mb-30 border-100">
+                            <div className="vendor-info">
+
+                                <h4 className="mb-5"><a className="text-heading">Coordonnées</a></h4>
+
+                                <div className="ollow-social mb-20">
+                                    <strong className="mb-15">{exposant['attributes']['ADRESSE']}</strong>
+                                    <br/>
+                                    <strong className="mb-15">{exposant['attributes']['CP']}</strong>
+                                    <br/>
+                                    <strong className="mb-15">{exposant['attributes']['VILLE']}</strong>
+                                    <ul className="social-network">
+                                        <li className="hover-up">
+                                            <a href="#">
+                                                <img src="/assets/imgs/theme/icons/social-tw.svg" alt="" />
+                                            </a>
+                                        </li>
+                                        <li className="hover-up">
+                                            <a href="#">
+                                                <img src="/assets/imgs/theme/icons/social-fb.svg" alt="" />
+                                            </a>
+                                        </li>
+                                        <li className="hover-up">
+                                            <a href="#">
+                                                <img src="/assets/imgs/theme/icons/social-insta.svg" alt="" />
+                                            </a>
+                                        </li>
+                                        <li className="hover-up">
+                                            <a href="#">
+                                                <img src="/assets/imgs/theme/icons/social-pin.svg" alt="" />
+                                            </a>
+                                        </li>
+                                    </ul>
                                 </div>
-                                {showCategories&&
-                                <SideFilterLinks 
-                                items={categories_Props} 
-                                prop='LIB_FR'
-                                filterKey='categorie'
-                                handleFilter = {handleFilter}
-                                />}
+
+                                <div className="vendor-info">
+                                    <ul className="ont-sm mb-20">
+                                        <li><img className="mr-5" src="assets/imgs/theme/icons/icon-location.svg" alt="" /><strong>Address: </strong> <span>5171 W Campbell Ave undefined, Utah 53127 United States</span></li>
+                                        <li><img className="mr-5" src="assets/imgs/theme/icons/icon-contact.svg" alt="" /><strong>Call Us:</strong><span>(+91) - 540-025-124553</span></li>
+                                    </ul>
+                                    <Link href="/vendor/1"><a className="btn btn-xs">Contact Seller <i className="i-rs-arrow-small-right"></i></a></Link>
+                                </div>
                             </div>
-                        }
+                        </div>
                         {
-                            univers_categories_Props.length>0&&
+                        univers_categories_Props.length>0&&
                             <div className="sidebar-widget widget-category-2 mb-15">
                                 <div style={{display:"flex", justifyContent:"space-between"}}>
                                     <h5 className="style-1 mb-10">
-                                        A voir aussi dans : {univers['attributes']['superuniversdetail']['data']['attributes']['LIB']}
+                                        A voir aussi dans : {univers['attributes']['LIB']}
                                     </h5>
                                     {!showUnivers&&<img style={{width:'25px', height:'25px'}} src="/assets/imgs/theme/icons/down-arrow-svgrepo-com.svg"
                                     onClick={()=>setShowUnivers(!showUnivers)}/>}
@@ -308,10 +366,29 @@ const Products = ({ univers, categories, univers_categories_Props, produit_Props
                                 {showUnivers&&
                                 <SideFilterLinks 
                                 items={univers_categories_Props} 
-                                prop='LIB'
-                                filterKey='univers'
-                                handleFilter = {handleFilter}
-                                />}
+                                prop='LIB_FR'
+                                filterKey='categorie'
+                                handleLinkToAnotherPage = {handleLinkToAnotherPage}/>}
+                                </div>
+                        }
+                        {
+                        typeprods_Props.length>0&&
+                            <div className="sidebar-widget widget-category-2 mb-15">
+                                <div style={{display:"flex", justifyContent:"space-between"}}>
+                                    <h5 className="style-1 mb-10">
+                                        Dans la catégorie : {categorie['attributes']['LIB_FR']}
+                                    </h5>
+                                    {!showCategories&&<img style={{width:'25px', height:'25px'}} src="/assets/imgs/theme/icons/down-arrow-svgrepo-com.svg"
+                                    onClick={()=>setShowCategories(!showCategories)}/>}
+                                    {showCategories&&<img style={{width:'25px', height:'25px'}} src="/assets/imgs/theme/icons/up-arrow-svgrepo-com.svg"
+                                    onClick={()=>setShowCategories(!showCategories)}/>}
+                                </div>
+                                {showCategories&&
+                                <SideFilterLinks 
+                                items={typeprods_Props} 
+                                prop='LIB_FR'
+                                filterKey='typeprod'
+                                handleLinkToAnotherPage = {handleLinkToAnotherPage}/>}
                             </div>
                         }
                         {
@@ -408,30 +485,24 @@ const Products = ({ univers, categories, univers_categories_Props, produit_Props
                         </div>
 
                         <div className="col-lg-4-5">
-                            <h2>Découvrez toutes les categories de l'univers {univers['attributes']['LIB']}</h2>
+                            <h2>Choisissez un type-produit dans la catégorie {categorie['attributes']['LIB_FR']}</h2>
                             <br/>
                             <div className="row product-grid-3">
-                                {categories.map((item) => (
+                            {typeprods.map((item) => (
                                 <div
-                                    className="col-lg-1-5 col-md-4 col-12 col-sm-6"
                                     key={item["id"]}
+                                    className="col-lg-1-5 col-md-4 col-12 col-sm-6"
                                 >
-                                    <SingleTypeProduct key={item["id"]} item={item} baseUrl='categories'/>
+                                    <SingleTypeProduct key={item["id"]} item={item} baseUrl='typeprods'/>
                                 </div>
-                                ))}
-                                <div className="row product-grid-3">
-                                    <Description description={univers['attributes']['DOSSIER_TEXTE']}/>
-                                </div>
+                            ))}
                             </div>
                             <div className="col-lg-5-5">
                                 <br/><br/>
                                 {
-                                produits_univers.length > 0 &&
-                                <h2>Découvrez tous les produits de l'univers {univers['attributes']['LIB']}</h2>
-                                }
-                                {
-                                produits_univers.length == 0 &&
-                                <h2 style={{textAlign:'center'}}>Aucun produit trouvé</h2>
+                                produitsState.length > 0 ?
+                                <h2>Découvrez tous les produits de la catégorie {categorie['attributes']['LIB_FR']}</h2>
+                                :<h2>Aucun produit trouvé</h2>  
                                 }
                                 <br/>
                                 <div className="shop-product-fillter">
@@ -454,18 +525,16 @@ const Products = ({ univers, categories, univers_categories_Props, produit_Props
                                     </div>
                                 </div>
                                 <div className="row product-grid-3">
-                                {produitsState
-                                .slice(currentPage*limit-limit, currentPage*limit)
-                                .filter(x=>produitsState.slice(currentPage*limit-limit, currentPage*limit).indexOf(x) < limit).map((item, i) => (
-                                    <div
-                                        key={item["id"]}
-                                        className="col-lg-1-5 col-md-4 col-12 col-sm-6"
-                                    >
-                                        <SingleProduct key={item["id"]} item={item} baseUrl='produits'/>
-                                    </div>
+                                    {produitsState.slice(currentPage*limit-limit, currentPage*limit)
+                                    .filter(x=>produitsState.slice(currentPage*limit-limit, currentPage*limit).indexOf(x) < limit).map((item, i) => ( 
+                                        <div
+                                            key={item["id"]}
+                                            className="col-lg-1-5 col-md-4 col-12 col-sm-6"
+                                        >
+                                            <SingleProduct key={item["id"]} item={item} baseUrl='produits'/>
+                                        </div>
                                     ))}
                                 </div>
-                                <br/><br/>
                                 <div className="pagination-area mt-15 mb-sm-5 mb-lg-0">
                                     <nav aria-label="Page navigation example">
                                         <Pagination
@@ -479,82 +548,85 @@ const Products = ({ univers, categories, univers_categories_Props, produit_Props
                                     </nav>
                                 </div>
                             </div> 
-                        </div>                          
+                            {
+                            categorie['attributes']['TEXTE_FR']&&
+                            <>
+                                <div id="universdescription"></div>
+                                <div className="row product-grid-3">
+                                    <div id="universdescription"></div>
+                                        <div className="row product-grid-3">
+                                            <Description description={categorie['attributes']['TEXTE_FR']}/>
+                                        </div>
+                                </div>
+                            </>
+                            }
+                        </div>                                                   
                     </div>
                 </div>
             </section>
-            <QuickView />
         </>
     )
 }
-
-export default Products
 
 export async function getServerSideProps (context) {
 
     // Import qs
     const qs = require('qs')
 
-
-    //  Variables
+    // Variables
     const produit_Props = {marques:[], prix:[], designers:[], styles:[], couleurs:[], motifs:[], materiaux:[]}
-    let filters = {marque:[], prix:[], designer:[], style:[], couleur:[], motif:[], materiau:[]} 
-    let univers_categories_Props = []
-    let categories_Props = []
-    let produits_univers = []
+    let filters = {marque:[], prix:[], designer:[], style:[], couleur:[], motif:[], materiau:[]}
     let filteredProduits = []
+    let typeprods_Props = []
+    let produits_categorie = []
+    let univers_categories_Props = []
 
-    // Query univers 
+    // Query categories 
     const query = qs.stringify({
+
         populate: [
-            'superuniversdetail.rayondetails.categories.typeprods.produits',
-            'categories.typeprods.produits.style',
-            'categories.typeprods.produits.ambiance',
-            'categories.typeprods.produits.couleur',
-            'categories.typeprods.produits.motif',
-            'categories.typeprods.produits.pay',
-            'categories.typeprods.produits.materiau',    
-            'categories.typeprods.produits.fabrication',
-            'categories.typeprods.produits.exposant'   
+            'rayondetail.categories.typeprods.produits',
+            'typeprods.produits.exposant',
+            'typeprods.produits.style',
+            'typeprods.produits.ambiance',
+            'typeprods.produits.couleur',
+            'typeprods.produits.motif',
+            'typeprods.produits.pay',
+            'typeprods.produits.materiau',    
+            'typeprods.produits.fabrication',
+            'typeprods.produits.typeprod',           
         ]
       }, {
         encodeValuesOnly: true, // prettify URL
       })
-    const universRes = await axios.get(`http://localhost:1337/api/rayondetails/${context.params.slug}?${query}`)
 
-    // Compter le nombre de produits pour chaque univers
-    universRes.data.data.attributes.superuniversdetail.data.attributes.rayondetails.data.forEach(univers => {
+    const categorieRes = await axios.get(`http://localhost:1337/api/categories/${context.params.slug}?${query}`)
+
+    // Compter le nombre de produits pour chaque catégorie
+    categorieRes['data']['data']['attributes']['rayondetail']['data']['attributes']['categories']['data'].forEach(categorie => {
         let count = 0
-        univers.attributes.categories.data.forEach(categorie => {
-           categorie.attributes.typeprods.data.forEach(typeprod => {
-                count+=typeprod.attributes.produits.data.length
-           })
+        categorie['attributes']['typeprods']['data'].forEach(typeprod => {
+            count += typeprod['attributes']['produits']['data'].length
         })
-        univers_categories_Props.push({item : univers , count : count})
+        univers_categories_Props.push({item : categorie , count : count})
     })
 
     // Création des filtres
-    universRes.data.data.attributes.categories.data.forEach(categorie => {
-        let count = 0
-        categorie.attributes.typeprods.data.forEach(typeprod => {
-            typeprod.attributes.produits.data.forEach(produit => {
-                produit_Props.marques.push(produit)
-                produit_Props.prix.push(produit)
-                produit_Props.designers.push(produit)
-                produit.attributes['style']&&produit_Props.styles.push(produit.attributes['style'].data)
-                produit.attributes['couleur']&&produit_Props.couleurs.push(produit.attributes['couleur'].data)
-                produit.attributes['motif']&&produit_Props.motifs.push(produit.attributes['motif'].data)
-                produit.attributes['materiau']&&produit_Props.materiaux.push(produit.attributes['materiau'].data)
+    categorieRes['data']['data']['attributes']['typeprods']['data'].forEach(typeprod => {
+        typeprod['attributes'].produits.data.forEach(produit => {
+            produit_Props.marques.push(produit)
+            produit_Props.prix.push(produit)
+            produit_Props.designers.push(produit)
+            produit['attributes']['style']&&produit_Props.styles.push(produit['attributes']['style'].data)
+            produit['attributes']['couleur']&&produit_Props.couleurs.push(produit['attributes']['couleur'].data)
+            produit['attributes']['motif']&&produit_Props.motifs.push(produit['attributes']['motif'].data)
+            produit['attributes']['materiau']&&produit_Props.materiaux.push(produit['attributes']['materiau'].data)  
 
-                // Recupérer tous les produits de l'univers
-                produits_univers.push(produit)
-            })
-
-            // Compter le nombre de produits pour chaque catégorie
-            count+=typeprod.attributes.produits.data.length
+            // Recupérer tous les produits de la catégorie
+            produits_categorie.push(produit)
         })
 
-        categories_Props.push({item : categorie , count : count})
+        typeprods_Props.push({item : typeprod , count : typeprod['attributes']['produits']['data'].length})    
     })
 
     // Compter le nombre de produits pour chaque filtre 
@@ -565,6 +637,7 @@ export async function getServerSideProps (context) {
     produit_Props.couleurs=handleCountProductsOfEachFilter(produit_Props.couleurs,'LIB_FR')              
     produit_Props.motifs=handleCountProductsOfEachFilter(produit_Props.motifs,'LIB_FR')
     produit_Props.materiaux=handleCountProductsOfEachFilter(produit_Props.materiaux,'LIB_FR')
+
 
     // Recupérer la liste des filtres a partir de l'url 
     if(context.query.marque){
@@ -590,19 +663,39 @@ export async function getServerSideProps (context) {
     }
 
     // Ordonner les produits selon leur Status (client ou pas client)
-    filteredProduits= handleSortByClientOrNotClient(produits_univers, 'exposant', 'CLIENT_ABONNEMENT_PAYANT')
+    filteredProduits= handleSortByClientOrNotClient(produits_categorie, 'exposant', 'CLIENT_ABONNEMENT_PAYANT')
     
+    // Ordonner les produits selon l'ordre alphabétique
+    filteredProduits = handleSortByAlphabet(filteredProduits, 'typeprod', 'LIB_FR')
+
+    // Query categories 
+    const query2 = qs.stringify({
+
+        populate: [
+            'pay',         
+        ]
+      }, {
+        encodeValuesOnly: true, // prettify URL
+    })
+
+    const exposantRes = await axios.get(`http://localhost:1337/api/exposants/168?${query2}`)
+
     return {
         props: {
-            univers : universRes.data.data,
-            categories : universRes.data.data.attributes.categories.data,
-            univers_categories : universRes.data.data.attributes.superuniversdetail.data.attributes.rayondetails.data,
             produit_Props : produit_Props,
+            typeprods : categorieRes.data.data.attributes.typeprods.data,  
+            typeprods_Props : typeprods_Props,
+            categorie : categorieRes.data.data,
+            univers : categorieRes.data.data['attributes']['rayondetail'].data,
             univers_categories_Props : univers_categories_Props,
-            superunivers : universRes.data.data.attributes.superuniversdetail.data,
-            categories_Props : categories_Props,
-            produits_univers : filteredProduits,
-            filtersInitail : filters
+            produits_categorie : filteredProduits,
+            filtersInitail : filters,
+
+            exposant : exposantRes.data.data,
+            pays : exposantRes.data.data.attributes.pay.data
         }
-      }
+    }
 }
+
+
+export default Categorie

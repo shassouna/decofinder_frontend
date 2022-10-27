@@ -8,6 +8,11 @@ import Breadcrumb2 from "../../../components/layout/Breadcrumb2"
 // import from components/ecommerce
 import SingleTypeProduct from "../../../components/ecommerce/SingleProductCopy"
 import SingleProduct from "../../../components/ecommerce/SingleProduct"
+import Pagination from "../../../components/ecommerce/Pagination"
+import ShowSelect from "../../../components/ecommerce/Filter/ShowSelect"
+
+// import from components/elementes
+import Description from "../../../components/elements/Description"
 
 // import from next
 import { useRouter } from "next/router"
@@ -92,6 +97,7 @@ const Typeproduit = ({ typeprod, categorie, produits, univers, categorie_typepro
     const [filterDesigner, setFilterDesigner] = useState([])
     const [filterMarque, setFilterMarque] = useState([])    
     // ----------------------------------------------------States End----------------------------------------------------
+
     // ----------------------------------------------------Effectes Début----------------------------------------------------
     useEffect(()=>{
 
@@ -135,6 +141,14 @@ const Typeproduit = ({ typeprod, categorie, produits, univers, categorie_typepro
 
     },[]) 
 
+    useEffect(()=>{   
+        const tab = []
+        for (let i=1; i<produitsState.length/limit+1;i++){
+            tab.push(i)
+        }
+        setPages(tab)
+    },[limit])
+
     useEffect(()=>{
 
         // Initialiser les nouveautées à filtrer
@@ -168,6 +182,9 @@ const Typeproduit = ({ typeprod, categorie, produits, univers, categorie_typepro
 
         // Mettre à jour le nombre des nouveautés maximum
         setLimit(produitsFiltered.length)    
+
+        // Mettre à jour la pagination
+        setCurrentPage(1)   
 
         // Gestion du routeur 
         if(produitsFiltered.length != produits.length){
@@ -232,6 +249,27 @@ const Typeproduit = ({ typeprod, categorie, produits, univers, categorie_typepro
         else if(filterKey=="prix"){
             setFilterPrice(value)
         }
+    }
+
+    // Affichage de la page suivante (Gestion pagination)
+    const next = () => {
+        setCurrentPage((currentPage )=>currentPage + 1)
+    }
+
+    // Affichage de la page précédente (Gestion pagination)
+    const prev = () => {
+        setCurrentPage((currentPage)=>currentPage - 1)
+    }
+
+    // Affichage de la page choisi (Gestion pagination)
+    const handleActive = (item) => {
+        setCurrentPage(item)
+    }
+
+    // Mise à jour du nombre des produits affichés par page
+    const selectChange = (e) => {
+        setLimit(Number(e.target.value))
+        setCurrentPage(1)
     }
 
     return (
@@ -363,24 +401,55 @@ const Typeproduit = ({ typeprod, categorie, produits, univers, categorie_typepro
                             </div>
 
                             <div className="col-lg-4-5">
-                            <h2 style={{textAlign:'center'}}>Choisissez un produit dans le type-produit {typeprod['attributes']['LIB_FR']}</h2>
+                                <h2>Choisissez un produit dans le type-produit {typeprod['attributes']['LIB_FR']}</h2>
                                 <br/>
-                                <div className="row product-grid-3">
-                                    {produitsState.map((item, i) => (
-                                        <div
-                                            className="col-lg-1-5 col-md-4 col-12 col-sm-6"
-                                            key={i}
-                                        >
-                                            <SingleProduct 
-                                            item={item} 
-                                            typeprod={typeprod} 
-                                            baseUrl="produits"
+                                <div className="shop-product-fillter">
+                                    <div className="totall-product">
+                                        <p>
+                                            <strong className="text-brand">
+                                                {produitsState.filter(x=> produitsState.indexOf(x) < limit).length}
+                                            </strong>
+                                            produits trouvés
+                                        </p>
+                                    </div>
+                                    <div className="sort-by-product-area">
+                                        <div className="sort-by-cover mr-10">
+                                            <ShowSelect
+                                                selectChange={selectChange}
+                                                showLimit={produitsState.length}
+                                                limitValue={limit}
                                             />
                                         </div>
-                                    ))}
+                                    </div>
+                                </div>
+                                <div className="row product-grid-3">
+                                {produitsState
+                                .slice(currentPage*limit-limit, currentPage*limit)
+                                .filter(x=>produitsState.slice(currentPage*limit-limit, currentPage*limit).indexOf(x) < limit).map((item, i) => (
+                                    <div
+                                        className="col-lg-1-5 col-md-4 col-12 col-sm-6"
+                                        key={i}
+                                    >
+                                        <SingleProduct item={item} typeprod={typeprod} baseUrl="produits"
+                                        />
+                                    </div>
+                                ))}
                                 </div>
                                 <br/><br/> 
-                                <div className="col-lg-2-3">
+                                <div className="pagination-area mt-15 mb-sm-5 mb-lg-0">
+                                    <nav aria-label="Page navigation example">
+                                        <Pagination
+                                            getPaginationGroup={pages}
+                                            currentPage={currentPage}
+                                            pages={pages}
+                                            next={next}
+                                            prev={prev}
+                                            handleActive={handleActive}
+                                        />
+                                    </nav>
+                                </div>
+                                <div className="col-lg-5-5">
+                                    <br/><br/>
                                     <h2 style={{textAlign:'center'}}>Produits associés</h2>
                                     <br/>
                                     <div className="row product-grid-3">
@@ -395,12 +464,18 @@ const Typeproduit = ({ typeprod, categorie, produits, univers, categorie_typepro
                                     </div>
                                 </div> 
                                 <div id="universdescription"></div>
+                                {
+                                typeprod['attributes']['TEXTE_FR']&&
                                 <div className="row product-grid-3">
-                                <div id="universdescription"></div>
-                                    <div className="container">
-                                        <p dangerouslySetInnerHTML={{__html: typeprod['attributes']['TEXTE_FR']}} className="mt-25"></p>  
+                                    <div id="universdescription"></div>
+                                    <div className="row product-grid-3">
+                                        <div id="universdescription"></div>
+                                            <div className="row product-grid-3">
+                                                <Description description={typeprod['attributes']['TEXTE_FR']}/>
+                                            </div>
                                     </div>
                                 </div>
+                                }
                             </div> 
                         </div>                                            
                     </div>
@@ -491,8 +566,6 @@ export async function getServerSideProps (context) {
 
     // Ordonner les produits selon leur Status (client ou pas client)
     filteredProduits= handleSortByClientOrNotClient(typeprodRes.data.data.attributes.produits.data, 'exposant', 'CLIENT_ABONNEMENT_PAYANT')
-    
-    console.log(typeprodRes.data.data.attributes.typeprods_has.data)
 
     return {
         props: {

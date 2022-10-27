@@ -2,7 +2,7 @@ import Link from "next/link"
 import React from "react"
 
 
-const Contact = () => {
+const DescriptionHome = () => {
     return (
             <div className="page-content pt-50">
                 <div className="container">
@@ -55,4 +55,4 @@ const Contact = () => {
     );
 };
 
-export default Contact
+export default DescriptionHome
