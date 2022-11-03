@@ -75,28 +75,28 @@ const Footer = () => {
                                 <h4 className="widget-title">A PROPOS</h4>
                                 <ul className="footer-list  mb-sm-5 mb-md-0">
                                     <li>
-                                        <a href="#">- A propos</a>
+                                    <Link href="/a-propos"><a>- A propos</a></Link>
                                     </li>
                                     <li>
-                                        <a href="#">- L'équipe</a>
+                                    <Link href="/qui-sommes-nous"><a>- L'équipe</a></Link>
                                     </li>
                                     <li>
-                                        <a href="#">- Audience et Visitorat</a>
+                                    <Link href="/#"><a>- Audience et Visitorat</a></Link>
                                     </li>
                                     <li>
-                                        <a href="#">- Revue de presse</a>
+                                    <Link href="/revuedepresse"><a>- Revue de presse</a></Link>
                                     </li>
                                     <li>
-                                        <a href="#">- Sondage Opinion Way</a>
+                                        <a>- Sondage Opinion Way</a>
                                     </li>
                                     <li>
-                                        <a href="#">- Contact</a>
+                                        <a>- Contact</a>
                                     </li>
                                     <li>
-                                        <a href="#">- Recrutement</a>
+                                        <a>- Recrutement</a>
                                     </li>
                                     <li>
-                                        <a href="#">- Mentions légales</a>
+                                        <a>- Mentions légales</a>
                                     </li>
                                 </ul>
                             </div>
@@ -107,16 +107,16 @@ const Footer = () => {
                                 <h4 className="widget-title ">EXPOSER</h4>
                                 <ul className="footer-list  mb-sm-5 mb-md-0">
                                     <li>
-                                        <a href="#">- Utile pour l'exposant</a>
+                                        <a>- Utile pour l'exposant</a>
                                     </li>
                                     <li>
-                                        <a href="#">- Témoignage exposant</a>
+                                    <Link href="/testimoniaux_exposants"><a>- Témoignage exposant</a></Link>
                                     </li>
                                     <li>
-                                        <a href="#">- FAQ Exposant</a>
+                                        <a>- FAQ Exposant</a>
                                     </li>
                                     <li>
-                                        <a href="#">- Conditions générales de vente</a>
+                                        <a>- Conditions générales de vente</a>
                                     </li>
                                 </ul>
                             </div>
@@ -127,7 +127,7 @@ const Footer = () => {
                                 <h4 className="widget-title ">VENDRE</h4>
                                 <ul className="footer-list  mb-sm-5 mb-md-0">
                                     <li>
-                                        <a href="#">- Vendre plus grâce à Decofinder</a>
+                                        <a>- Vendre plus grâce à Decofinder</a>
                                     </li>
                                 </ul>
                             </div>
@@ -138,13 +138,13 @@ const Footer = () => {
                                 <h4 className="widget-title ">ACHETER</h4>
                                 <ul className="footer-list  mb-sm-5 mb-md-0">
                                     <li>
-                                        <a href="#">- Utile pour l'acheteur</a>
+                                        <a>- Utile pour l'acheteur</a>
                                     </li>
                                     <li>
-                                        <a href="#">- Témoignages acheteurs</a>
+                                        <a>- Témoignages acheteurs</a>
                                     </li>
                                     <li>
-                                        <a href="#">- FAQ Acheteurs</a>
+                                        <a>- FAQ Acheteurs</a>
                                     </li>
                                 </ul>
                             </div>
@@ -183,31 +183,31 @@ const Footer = () => {
                         <div className="col-xl-4 col-lg-6 col-md-6 text-end d-none d-md-block">
                             <div className="mobile-social-icon">
                                 <h6>Suivez-nous</h6>
-                                <a href="#">
+                                <a>
                                     <img
                                         src="/assets/imgs/theme/icons/icon-facebook-white.svg"
                                         alt=""
                                     />
                                 </a>
-                                <a href="#">
+                                <a>
                                     <img
                                         src="/assets/imgs/theme/icons/icon-twitter-white.svg"
                                         alt=""
                                     />
                                 </a>
-                                <a href="#">
+                                <a>
                                     <img
                                         src="/assets/imgs/theme/icons/icon-instagram-white.svg"
                                         alt=""
                                     />
                                 </a>
-                                <a href="#">
+                                <a>
                                     <img
                                         src="/assets/imgs/theme/icons/icon-pinterest-white.svg"
                                         alt=""
                                     />
                                 </a>
-                                <a href="#">
+                                <a>
                                     <img
                                         src="/assets/imgs/theme/icons/icon-youtube-white.svg"
                                         alt=""

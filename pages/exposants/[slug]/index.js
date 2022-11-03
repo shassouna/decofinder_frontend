@@ -3,17 +3,17 @@ import SideFilterLinks from "../../../components/ecommerce/Filter/SideFilterLink
 import SideFilter from "../../../components/ecommerce/Filter/SideFilter"
 import SideFilterPrice from "../../../components/ecommerce/Filter/SideFilterPrice"
 
-// import from components/layout
-import Breadcrumb2 from "../../../components/layout/Breadcrumb2"
-
 // import from components/ecommerce
-import SingleTypeProduct from "../../../components/ecommerce/SingleProductCopy"
 import SingleProduct from "../../../components/ecommerce/SingleProduct"
 import Pagination from "../../../components/ecommerce/Pagination"
 import ShowSelect from "../../../components/ecommerce/Filter/ShowSelect"
 
 // import from components/elementes
-import Description from "../../../components/elements/Description"
+import DescriptionSimple from "../../../components/elements/DescriptionSimple"
+import MapPopupExposant from '../../../components/elements/MapPopupExposant'
+import MapPopupContact from '../../../components/elements/MapPopupContact'
+import MapPopupAlertesNouveautes from '../../../components/elements/MapPopupAlertesNouveautes'
+import MapAfficherPlan from '../../../components/elements/MapPopupAfficherPlan'
 
 // import from next
 import { useRouter } from "next/router"
@@ -64,32 +64,33 @@ const handleSortByAlphabet = (tab, lib1, lib2) => {
     return tab
 }
 
-// Trier un tableau de produis selon s'il est client ou pas client
-const handleSortByClientOrNotClient = (tab, lib1, lib2) => {
-    return tab.sort((a,b) => (a['attributes'][lib1]['data']['attributes'][lib2] > b['attributes'][lib1]['data']['attributes'][lib2]) ? -1 : ((b['attributes'][lib1]['data']['attributes'][lib2] > a['attributes'][lib1]['data']['attributes'][lib2]) ? 1 : 0))
-}
+const Exposant = ({ produit_Props, produits_exposant, filtersInitail, exposant, pays, activites, revendeurs }) => {
 
-const Categorie = ({ typeprods, produit_Props, typeprods_Props, categorie, univers, univers_categories_Props, produits_categorie, filtersInitail, exposant, pays }) => {
-console.log(pays)
     // ----------------------------------------------------Routers Début----------------------------------------------------
     const router = useRouter()
     // ----------------------------------------------------Routers Fin----------------------------------------------------  
     
     // ----------------------------------------------------States Begin----------------------------------------------------
+    // Controlleur du popup des points de vente 
+    const [openClass, setOpenClass] = useState(1)
+
+    // Controlleur du popup des points de vente 
+    const [openClassContact, setOpenClassContact] = useState(1)
+
+    // Controlleur du popup des alertes nouveautes 
+    const [openClassAlertesNouveautes, setOpenClassAlertesNouveautes] = useState(1)
+
+    // Controlleur du popup de l'adresse de l'exposant
+    const [openClassAfficherPlan, setOpenClassAfficherPlan] = useState(1)
+
     // Nombre Maximum des catégories à afficher
-    const [limit, setLimit] = useState(produits_categorie.length)
+    const [limit, setLimit] = useState(produits_exposant.length)
 
     // Nombre de page de pagination 
     const [pages, setPages]  = useState([])
 
     // La page actuelle sur laquelle on se trouve
     const [currentPage, setCurrentPage] = useState(1)
-
-    // Controller l'affichage du filtre à gauche qui contient la liste des univers
-    const [showUnivers, setShowUnivers] = useState(true)
- 
-    // Controller l'affichage du filtre à gauche qui contient la liste des catégories   
-    const [showCategories, setShowCategories] = useState(true)
 
     // Liste des produits
     const [produitsState, setProduitsState] = useState([])
@@ -167,7 +168,7 @@ console.log(pays)
     useEffect(()=>{
 
         // Initialiser les nouveautées à filtrer
-        const produitsFiltered = [...produits_categorie]
+        const produitsFiltered = [...produits_exposant]
 
         // Filtrage des nouveautés 
         if(filterPrice.length>0){
@@ -202,7 +203,7 @@ console.log(pays)
         setCurrentPage(1)   
 
         // Gestion du routeur 
-        if(produitsFiltered.length != produits_categorie.length){
+        if(produitsFiltered.length != produits_exposant.length){
 
             const obj ={...router.query}
             
@@ -225,10 +226,6 @@ console.log(pays)
     // ----------------------------------------------------Effectes Fin----------------------------------------------------
 
     // ----------------------------------------------------Functions Début----------------------------------------------------
-    // Afficher toute la description de la catégorie en bas de la page 
-    const handleShowAllDescription = (value) => {
-        router.push('#universdescription')
-    }
 
     // Link to Categorie page ou typeprod page 
     const handleLinkToAnotherPage= (filterKey, idCategorie) => {
@@ -293,104 +290,155 @@ console.log(pays)
         setLimit(Number(e.target.value))
         setCurrentPage(1)
     }
+
+    // Gestion d'affichage des points de ventes 
+    const handleShowPointsDeVentes = (event) => {
+        event.preventDefault()
+        setOpenClass(0)
+    }
+
+    // Gestion d'affichage des contacts
+    const handleShowContact = (event) => {
+        event.preventDefault()
+        setOpenClassContact(0)
+    }
+
+    // Gestion d'affichage des alertes nouvautés
+    const handleShowAlertesNouveautes = (event) => {
+        event.preventDefault()
+        setOpenClassAlertesNouveautes(0)       
+    }
+
+    const handleShowAfficherPlan = (event) => {
+        event.preventDefault()
+        setOpenClassAfficherPlan(0)        
+    }
     // ----------------------------------------------------Functions Fin----------------------------------------------------
 
     return (
         produit_Props &&
         <>
-            <Breadcrumb2 
-                title={'Catégorie ' + categorie['attributes']['LIB_FR'] + '-' + univers['attributes']['LIB']}
-                elements={[univers['attributes']['LIB'], categorie['attributes']['LIB_FR']]} 
-                description = {categorie['attributes']['TEXTE_FR'].split(`\n`)[0]+categorie['attributes']['TEXTE_FR'].split(`\n`)[1]}   
-            />
             <section className="mt-50 mb-50">
                 <div className="container">
                     <div className="row flex-row">
                         <div className="col-lg-1-5 primary-sidebar sticky-sidebar">
-                        <div className="mb-30 border-100">
-                            <div className="vendor-info">
-
-                                <h4 className="mb-5"><a className="text-heading">Coordonnées</a></h4>
-
-                                <div className="ollow-social mb-20">
-                                    <strong className="mb-15">{exposant['attributes']['ADRESSE']}</strong>
-                                    <br/>
-                                    <strong className="mb-15">{exposant['attributes']['CP']}</strong>
-                                    <br/>
-                                    <strong className="mb-15">{exposant['attributes']['VILLE']}</strong>
-                                    <ul className="social-network">
+                            <div className="border-10">
+                                <div className="list-group-item mb-15">
+                                    <ul className="social-network mt-15 mb-15 ml-10">
+                                        {
+                                        exposant['attributes']['FACEBOOK']&&
                                         <li className="hover-up">
-                                            <a href="#">
-                                                <img src="/assets/imgs/theme/icons/social-tw.svg" alt="" />
-                                            </a>
-                                        </li>
-                                        <li className="hover-up">
-                                            <a href="#">
+                                            <a href={exposant['attributes']['FACEBOOK']}>
                                                 <img src="/assets/imgs/theme/icons/social-fb.svg" alt="" />
                                             </a>
                                         </li>
+                                        }
+                                        {
+                                        exposant['attributes']['TWITTER']&&  
                                         <li className="hover-up">
-                                            <a href="#">
-                                                <img src="/assets/imgs/theme/icons/social-insta.svg" alt="" />
+                                            <a href={exposant['attributes']['TWITTER']}>
+                                                <img src="/assets/imgs/theme/icons/social-tw.svg" alt="" />
                                             </a>
-                                        </li>
+                                        </li>        
+                                        }
+                                        {
+                                        exposant['attributes']['PINTEREST']&&    
                                         <li className="hover-up">
-                                            <a href="#">
+                                            <a href={exposant['attributes']['PINTEREST']}>
                                                 <img src="/assets/imgs/theme/icons/social-pin.svg" alt="" />
                                             </a>
-                                        </li>
+                                        </li>                                      
+                                        }
+                                        {
+                                        exposant['attributes']['INSTAGRAM']&&
+                                        <li className="hover-up">
+                                            <a href={exposant['attributes']['INSTAGRAM']}>
+                                                <img src="/assets/imgs/theme/icons/social-insta.svg" alt="" />
+                                            </a>
+                                        </li>                                          
+                                        }
                                     </ul>
-                                </div>
 
-                                <div className="vendor-info">
-                                    <ul className="ont-sm mb-20">
-                                        <li><img className="mr-5" src="assets/imgs/theme/icons/icon-location.svg" alt="" /><strong>Address: </strong> <span>5171 W Campbell Ave undefined, Utah 53127 United States</span></li>
-                                        <li><img className="mr-5" src="assets/imgs/theme/icons/icon-contact.svg" alt="" /><strong>Call Us:</strong><span>(+91) - 540-025-124553</span></li>
-                                    </ul>
-                                    <Link href="/vendor/1"><a className="btn btn-xs">Contact Seller <i className="i-rs-arrow-small-right"></i></a></Link>
+                                    <h4><a className="text-heading ml-10">Coordonnées</a></h4>
+
+                                    <div className="follow-social mb-15 ml-10">
+                                        <strong className="mb-15">{exposant['attributes']['ADRESSE']}</strong>
+                                        <br/>
+                                        <strong className="mb-15">{exposant['attributes']['CP']}</strong>
+                                        <br/>
+                                        <strong className="mb-15">{exposant['attributes']['VILLE']}</strong>
+                                        <br/>
+                                        <strong className="mb-15">{pays['attributes']['LIB_FR']}</strong>
+                                        <br/>
+                                        <strong className="mb-15">Tel . {exposant['attributes']['TELEPHONE']}</strong>
+                                        <br/>
+                                        <strong className="mb-25">FAX . {exposant['attributes']['FAX']}</strong>
+                                        <br/><br/>
+                                        <strong className="mb-15" onClick={handleShowAfficherPlan}><a>Voir le plan ...</a></strong>
+                                    </div>
+
+                                    {
+                                    exposant['attributes']['SHOW_ROOM']&&
+                                    <>
+                                        <h4 className="mb-5"><a className="text-heading ml-10">Show Room</a></h4>
+
+                                        <div className="follow-social mb-15 ml-10">
+                                            {exposant['attributes']['SHOW_ROOM']}
+                                        </div>
+                                    </>
+                                    }
+
+                                    <div className="produitButtonsContainer">
+                                        <a href={"#"} target="_blank">
+                                            <button style={{width:'100%'}} className="produitButtonsContainerButton"
+                                            onClick={handleShowContact}>
+                                                Documentation
+                                            </button>
+                                        </a>
+                                        <a href={"#"}>
+                                            <button style={{width:'100%'}} className="produitButtonsContainerButton"
+                                            onClick={handleShowContact}>
+                                                Contacter l'entreprise 
+                                            </button>
+                                        </a>
+                                        <a>
+                                            <button style={{width:'100%'}} className="produitButtonsContainerButton"
+                                            onClick={handleShowPointsDeVentes}>
+                                                POINTS DE VENTE
+                                            </button>
+                                        </a>
+                                        <a href={exposant['attributes']['SRV_INTERNET']} target="_blank">
+                                            <button style={{width:'100%'}} className="produitButtonsContainerButton">
+                                                Visiter le site de {exposant['attributes']['NOM']}
+                                            </button>
+                                        </a>
+                                    </div>
+
                                 </div>
                             </div>
+
                         </div>
-                        {
-                        univers_categories_Props.length>0&&
-                            <div className="sidebar-widget widget-category-2 mb-15">
-                                <div style={{display:"flex", justifyContent:"space-between"}}>
-                                    <h5 className="style-1 mb-10">
-                                        A voir aussi dans : {univers['attributes']['LIB']}
-                                    </h5>
-                                    {!showUnivers&&<img style={{width:'25px', height:'25px'}} src="/assets/imgs/theme/icons/down-arrow-svgrepo-com.svg"
-                                    onClick={()=>setShowUnivers(!showUnivers)}/>}
-                                    {showUnivers&&<img style={{width:'25px', height:'25px'}} src="/assets/imgs/theme/icons/up-arrow-svgrepo-com.svg"
-                                    onClick={()=>setShowUnivers(!showUnivers)}/>}
-                                </div>
-                                {showUnivers&&
-                                <SideFilterLinks 
-                                items={univers_categories_Props} 
-                                prop='LIB_FR'
-                                filterKey='categorie'
-                                handleLinkToAnotherPage = {handleLinkToAnotherPage}/>}
-                                </div>
-                        }
-                        {
-                        typeprods_Props.length>0&&
-                            <div className="sidebar-widget widget-category-2 mb-15">
-                                <div style={{display:"flex", justifyContent:"space-between"}}>
-                                    <h5 className="style-1 mb-10">
-                                        Dans la catégorie : {categorie['attributes']['LIB_FR']}
-                                    </h5>
-                                    {!showCategories&&<img style={{width:'25px', height:'25px'}} src="/assets/imgs/theme/icons/down-arrow-svgrepo-com.svg"
-                                    onClick={()=>setShowCategories(!showCategories)}/>}
-                                    {showCategories&&<img style={{width:'25px', height:'25px'}} src="/assets/imgs/theme/icons/up-arrow-svgrepo-com.svg"
-                                    onClick={()=>setShowCategories(!showCategories)}/>}
-                                </div>
-                                {showCategories&&
-                                <SideFilterLinks 
-                                items={typeprods_Props} 
-                                prop='LIB_FR'
-                                filterKey='typeprod'
-                                handleLinkToAnotherPage = {handleLinkToAnotherPage}/>}
+
+                        <div className="col-lg-4-5">
+
+                            <div style={{display:'flex'}}>
+                                <h1>{exposant['attributes']['NOM']}</h1>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <button className="detail-info-header-button" onClick={handleShowAlertesNouveautes}>
+                                    Suivre
+                                </button>
                             </div>
-                        }
+                            <br/>
+
+                            <h3>Activités : {activites.map((activite,index)=>index != activites.length-1?activite['attributes']['LIB_FR']+', ' : activite['attributes']['LIB_FR']+'.')}</h3>
+                            
+                            <DescriptionSimple description={exposant['attributes']['DESC_FR']}/>
+                            <br/>
+                        </div>                                                   
+                    </div>
+
+                    <div className="row flex-row mt-50">
+                        <div className="col-lg-1-5 primary-sidebar sticky-sidebar">
                         {
                         marques.length>0&&
                             <div className="list-group">
@@ -485,23 +533,10 @@ console.log(pays)
                         </div>
 
                         <div className="col-lg-4-5">
-                            <h2>Choisissez un type-produit dans la catégorie {categorie['attributes']['LIB_FR']}</h2>
-                            <br/>
-                            <div className="row product-grid-3">
-                            {typeprods.map((item) => (
-                                <div
-                                    key={item["id"]}
-                                    className="col-lg-1-5 col-md-4 col-12 col-sm-6"
-                                >
-                                    <SingleTypeProduct key={item["id"]} item={item} baseUrl='typeprods'/>
-                                </div>
-                            ))}
-                            </div>
                             <div className="col-lg-5-5">
-                                <br/><br/>
                                 {
                                 produitsState.length > 0 ?
-                                <h2>Découvrez tous les produits de la catégorie {categorie['attributes']['LIB_FR']}</h2>
+                                <h2>Découvrez tous les produits de {exposant['attributes']['NOM']}</h2>
                                 :<h2>Aucun produit trouvé</h2>  
                                 }
                                 <br/>
@@ -548,22 +583,15 @@ console.log(pays)
                                     </nav>
                                 </div>
                             </div> 
-                            {
-                            categorie['attributes']['TEXTE_FR']&&
-                            <>
-                                <div id="universdescription"></div>
-                                <div className="row product-grid-3">
-                                    <div id="universdescription"></div>
-                                        <div className="row product-grid-3">
-                                            <Description description={categorie['attributes']['TEXTE_FR']}/>
-                                        </div>
-                                </div>
-                            </>
-                            }
                         </div>                                                   
                     </div>
+
                 </div>
             </section>
+            <MapPopupExposant openClass={openClass} setOpenClass={setOpenClass} exposant={exposant} revendeurs={revendeurs}/>
+            <MapPopupContact openClassContact={openClassContact} setOpenClassContact={setOpenClassContact}/>
+            <MapPopupAlertesNouveautes openClassAlertesNouveautes={openClassAlertesNouveautes} setOpenClassAlertesNouveautes={setOpenClassAlertesNouveautes}/>
+            <MapAfficherPlan openClassAfficherPlan={openClassAfficherPlan} setOpenClassAfficherPlan={setOpenClassAfficherPlan} exposant={exposant}></MapAfficherPlan>
         </>
     )
 }
@@ -577,56 +605,42 @@ export async function getServerSideProps (context) {
     const produit_Props = {marques:[], prix:[], designers:[], styles:[], couleurs:[], motifs:[], materiaux:[]}
     let filters = {marque:[], prix:[], designer:[], style:[], couleur:[], motif:[], materiau:[]}
     let filteredProduits = []
-    let typeprods_Props = []
-    let produits_categorie = []
-    let univers_categories_Props = []
 
     // Query categories 
     const query = qs.stringify({
 
         populate: [
-            'rayondetail.categories.typeprods.produits',
-            'typeprods.produits.exposant',
-            'typeprods.produits.style',
-            'typeprods.produits.ambiance',
-            'typeprods.produits.couleur',
-            'typeprods.produits.motif',
-            'typeprods.produits.pay',
-            'typeprods.produits.materiau',    
-            'typeprods.produits.fabrication',
-            'typeprods.produits.typeprod',           
+            'pay', 
+            'typeexps',
+            'lienrevendeurs.exposant_revendeur',
+            'produits.typeprod',
+            'produits.exposant',        
+            'produits.style',
+            'produits.ambiance',
+            'produits.couleur',
+            'produits.motif',
+            'produits.pay',
+            'produits.materiau',    
+            'produits.fabrication',    
         ]
       }, {
         encodeValuesOnly: true, // prettify URL
-      })
-
-    const categorieRes = await axios.get(`http://localhost:1337/api/categories/${context.params.slug}?${query}`)
-
-    // Compter le nombre de produits pour chaque catégorie
-    categorieRes['data']['data']['attributes']['rayondetail']['data']['attributes']['categories']['data'].forEach(categorie => {
-        let count = 0
-        categorie['attributes']['typeprods']['data'].forEach(typeprod => {
-            count += typeprod['attributes']['produits']['data'].length
-        })
-        univers_categories_Props.push({item : categorie , count : count})
     })
 
+    const exposantRes = await axios.get(`http://localhost:1337/api/exposants/168?${query}`)
+    
+    // Ordonner les produits selon l'ordre alphabétique
+    filteredProduits = handleSortByAlphabet(exposantRes.data.data.attributes.produits.data, 'typeprod', 'LIB_FR')
+
     // Création des filtres
-    categorieRes['data']['data']['attributes']['typeprods']['data'].forEach(typeprod => {
-        typeprod['attributes'].produits.data.forEach(produit => {
-            produit_Props.marques.push(produit)
-            produit_Props.prix.push(produit)
-            produit_Props.designers.push(produit)
-            produit['attributes']['style']&&produit_Props.styles.push(produit['attributes']['style'].data)
-            produit['attributes']['couleur']&&produit_Props.couleurs.push(produit['attributes']['couleur'].data)
-            produit['attributes']['motif']&&produit_Props.motifs.push(produit['attributes']['motif'].data)
-            produit['attributes']['materiau']&&produit_Props.materiaux.push(produit['attributes']['materiau'].data)  
-
-            // Recupérer tous les produits de la catégorie
-            produits_categorie.push(produit)
-        })
-
-        typeprods_Props.push({item : typeprod , count : typeprod['attributes']['produits']['data'].length})    
+    exposantRes.data.data.attributes.produits.data.forEach(produit => {
+        produit_Props.marques.push(produit)
+        produit_Props.prix.push(produit)
+        produit_Props.designers.push(produit)
+        produit['attributes']['style']&&produit_Props.styles.push(produit['attributes']['style'].data)
+        produit['attributes']['couleur']&&produit_Props.couleurs.push(produit['attributes']['couleur'].data)
+        produit['attributes']['motif']&&produit_Props.motifs.push(produit['attributes']['motif'].data)
+        produit['attributes']['materiau']&&produit_Props.materiaux.push(produit['attributes']['materiau'].data)   
     })
 
     // Compter le nombre de produits pour chaque filtre 
@@ -637,7 +651,6 @@ export async function getServerSideProps (context) {
     produit_Props.couleurs=handleCountProductsOfEachFilter(produit_Props.couleurs,'LIB_FR')              
     produit_Props.motifs=handleCountProductsOfEachFilter(produit_Props.motifs,'LIB_FR')
     produit_Props.materiaux=handleCountProductsOfEachFilter(produit_Props.materiaux,'LIB_FR')
-
 
     // Recupérer la liste des filtres a partir de l'url 
     if(context.query.marque){
@@ -662,40 +675,20 @@ export async function getServerSideProps (context) {
         filters.materiau = typeof context.query.materiau == 'string' ? [parseInt(context.query.materiau)] : context.query.materiau.map(element=>parseInt(element))
     }
 
-    // Ordonner les produits selon leur Status (client ou pas client)
-    filteredProduits= handleSortByClientOrNotClient(produits_categorie, 'exposant', 'CLIENT_ABONNEMENT_PAYANT')
-    
-    // Ordonner les produits selon l'ordre alphabétique
-    filteredProduits = handleSortByAlphabet(filteredProduits, 'typeprod', 'LIB_FR')
-
-    // Query categories 
-    const query2 = qs.stringify({
-
-        populate: [
-            'pay',         
-        ]
-      }, {
-        encodeValuesOnly: true, // prettify URL
-    })
-
-    const exposantRes = await axios.get(`http://localhost:1337/api/exposants/168?${query2}`)
+    console.log(exposantRes.data.data.attributes.lienrevendeurs.data.map(exposant=>exposant.attributes.exposant_revendeur.data))
 
     return {
         props: {
             produit_Props : produit_Props,
-            typeprods : categorieRes.data.data.attributes.typeprods.data,  
-            typeprods_Props : typeprods_Props,
-            categorie : categorieRes.data.data,
-            univers : categorieRes.data.data['attributes']['rayondetail'].data,
-            univers_categories_Props : univers_categories_Props,
-            produits_categorie : filteredProduits,
-            filtersInitail : filters,
-
             exposant : exposantRes.data.data,
-            pays : exposantRes.data.data.attributes.pay.data
+            pays : exposantRes.data.data.attributes.pay.data,
+            activites :exposantRes.data.data.attributes.typeexps.data,
+            produits_exposant : exposantRes.data.data.attributes.produits.data,
+            filtersInitail : filters,
+            revendeurs : exposantRes.data.data.attributes.lienrevendeurs.data.map(exposant=>exposant.attributes.exposant_revendeur.data)
         }
     }
 }
 
 
-export default Categorie
+export default Exposant

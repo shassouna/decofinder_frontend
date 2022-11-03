@@ -12,7 +12,7 @@ const Gmap = ({produit}) => {
             produit['attributes'].lienrevendeurproduits['data'].map(lienrevendeurproduit=>
                 console.log(lienrevendeurproduit['attributes'].exposant['data']['attributes']['LAT']),
                 <Marker position={[lienrevendeurproduit['attributes'].exposant['data']['attributes']['LAT'], lienrevendeurproduit['attributes'].exposant['data']['attributes']['LNG']]}>
-                    <Popup>You are here</Popup>
+                    <Popup>Ici</Popup>
                 </Marker>   
             )
             }

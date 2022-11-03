@@ -1,41 +1,34 @@
-import { useEffect, useState } from 'react';
-import dynamic from 'next/dynamic'
 
+import Map from '../elements/MapAlertesNouveautes'
 
-const IntroPopup = ({openClass, setOpenClass, produit}) => {
+const IntroPopup = ({openClassAlertesNouveautes, setOpenClassAlertesNouveautes}) => {
 
     const handleRemove = () => {
-        setOpenClass(!openClass);
+        setOpenClassAlertesNouveautes(!openClassAlertesNouveautes);
     }
-
-    const [Map, setMap] = useState()
-
-    useEffect(()=>{
-        if(openClass==0){
-            const MapLocal = dynamic(
-                () => import('../elements/MapProduit'),
-                { ssr: false }
-            )
-            setMap(MapLocal)
-        }
-    },[openClass])
 
     return (
         <>
             <div
                 className={
-                    openClass
+                    openClassAlertesNouveautes
                         ? "modal fade custom-modal d-none"
                         : "modal fade custom-modal  show d-block"
                 }
             >
                 <div className="modal-dialog">
-                    <div className="modal-content">
+                    <div className="modal-content" style= {{width:'80%', marginLeft:'10%'}}>
                         <button
                             type="button"
                             className="btn-close"
                             onClick={handleRemove}
                         ></button>
+                        <div className="deal-top">
+                            <h2 className="text-brand">
+                            ALERTE NOUVEAUTES
+                            </h2>
+                        </div>
+                        <br/>
                         <div className="modal-body">
                             <div
                                 className="deal"
@@ -44,14 +37,7 @@ const IntroPopup = ({openClass, setOpenClass, produit}) => {
                                         "url('assets/imgs/banner/popup-1.png')",
                                 }}
                             >
-                                <div className="deal-top">
-                                    <h2 className="text-brand">
-                                        LES POINTS DE VENTE DE L'exposant
-                                    </h2>
-                                </div>
-                                <div className="deal-content  detail-info">
-                                    {Map&&<Map produit={produit}/>}
-                                </div>
+                                <Map/>
                             </div>
                         </div>
                     </div>
@@ -60,7 +46,7 @@ const IntroPopup = ({openClass, setOpenClass, produit}) => {
 
             <div
                 className={
-                    openClass
+                    openClassAlertesNouveautes
                         ? "modal-backdrop fade d-none"
                         : "modal-backdrop fade show"
                 }
