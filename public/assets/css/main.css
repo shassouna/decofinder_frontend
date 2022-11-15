@@ -32,7 +32,7 @@ TABLE CONTENT
 @import url(vendors/bootstrap.min.css);
 @import url(vendors/uicons-regular-straight.css);
 /*import plugins*/
-/*RESET*/
+*RESET*/
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -11836,3 +11836,14 @@ footer .hotline img {
 .checkbox-input {
   width : 10%  
 }
+
+/* Style audience page*/
+.audience-white-background { background-color: rgb(244, 244, 244); }
+.audience-grid-container { display: grid; grid-template-columns: auto; gap: 0.4rem 2rem; align-items: center; }
+.audience-grid-double-item { display: grid; grid-template-columns: 1fr 7fr; background-color: rgb(244, 244, 244); padding: 0.5rem; align-items: center; column-gap: 1rem; }
+.audience-grid-item-percentage { border: 1.5px solid rgb(128, 163, 54); color: rgb(210, 49, 100); }
+.audience-grid-item-unit { color: rgb(128, 163, 54); font-size: 1.2rem; line-height: 2.95rem; font-weight: bold; width: 5rem; }
+.audience-grid-double-item { display: grid; grid-template-columns: 1fr 7fr; background-color: rgb(244, 244, 244); padding: 0.5rem; align-items: center; column-gap: 1rem; }
+.audience-grid-item-number { border: 1.5px solid rgb(210, 49, 100); border-radius: 50%; color: rgb(128, 163, 54); font-size: 1.2rem; width: 3rem; height: 3rem; text-align: center; line-height: 2.95rem; font-weight: bold; }
+.audience-grid-triple-item { display: grid; grid-template-columns: 1fr 1fr 6fr; background-color: rgb(244, 244, 244); padding: 0.5rem; align-items: center; column-gap: 1rem; }
+

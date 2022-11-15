@@ -17,40 +17,40 @@ function LeftSideBar({activeIndex, setActiveIndex}) {
             <Link href="/utile-exposant"><a className={activeIndex === 2 ? "nav-link active" : "nav-link"}  onClick={() => handleOnClick(2)}>Utile pour l'exposant</a></Link>
             </li>
             <li className="nav-item">
-            <Link href="#"><a className={activeIndex === 3 ? "nav-link active" : "nav-link"}  onClick={() => handleOnClick(3)}>Utile pour l'internaute</a></Link>
+            <Link href="utile-acheteur"><a className={activeIndex === 3 ? "nav-link active" : "nav-link"}  onClick={() => handleOnClick(3)}>Utile pour l'internaute</a></Link>
             </li>
             <li className="nav-item">
             <Link href="/revuedepresse"><a className={activeIndex === 4 ? "nav-link active" : "nav-link"}  onClick={() => handleOnClick(4)}>La presse et le web en parlent</a></Link>
             </li>
             <li className="nav-item">
-            <Link href="/testimoniaux_exposants"><a className={activeIndex === 5 ? "nav-link active" : "nav-link"}  onClick={() => handleOnClick(5)}>Témoignages Exposants</a></Link>
+            <Link href="/testimoniaux-exposants"><a className={activeIndex === 5 ? "nav-link active" : "nav-link"}  onClick={() => handleOnClick(5)}>Témoignages Exposants</a></Link>
             </li>
             <li className="nav-item">
-            <Link href="#"><a className={activeIndex === 6 ? "nav-link active" : "nav-link"}  onClick={() => handleOnClick(6)}>Témoignages Acheteurs</a></Link>
+            <Link href="testimoniaux-acheteurs"><a className={activeIndex === 6 ? "nav-link active" : "nav-link"}  onClick={() => handleOnClick(6)}>Témoignages Acheteurs</a></Link>
             </li>
             <li className="nav-item">
-            <Link href="#"><a className={activeIndex === 7 ? "nav-link active" : "nav-link"}  onClick={() => handleOnClick(7)}>Sondage OpinionWay</a></Link>
+            <a href='/assets/pdf/ow.pdf'className={activeIndex === 7 ? "nav-link active" : "nav-link"}  onClick={() => handleOnClick(7)}>Sondage OpinionWay</a>
             </li>
             <li className="nav-item">
-            <Link href="#"><a className={activeIndex === 8 ? "nav-link active" : "nav-link"}  onClick={() => handleOnClick(8)}>Audience et visitorat</a></Link>
+            <Link href="/audience"><a className={activeIndex === 8 ? "nav-link active" : "nav-link"}  onClick={() => handleOnClick(8)}>Audience et visitorat</a></Link>
             </li>
             <li className="nav-item">
-            <Link href="#"><a className={activeIndex === 9 ? "nav-link active" : "nav-link"}  onClick={() => handleOnClick(9)}>Recrutement</a></Link>
+            <Link href="/recrutement"><a className={activeIndex === 9 ? "nav-link active" : "nav-link"}  onClick={() => handleOnClick(9)}>Recrutement</a></Link>
             </li>
             <li className="nav-item">
-            <Link href="#"><a className={activeIndex === 10 ? "nav-link active" : "nav-link"}  onClick={() => handleOnClick(10)}>Exposer</a></Link>
+            <Link href="/enregistrement"><a className={activeIndex === 10 ? "nav-link active" : "nav-link"}  onClick={() => handleOnClick(10)}>Exposer</a></Link>
             </li>
             <li className="nav-item">
-            <Link href="#"><a className={activeIndex === 11 ? "nav-link active" : "nav-link"}  onClick={() => handleOnClick(11)}>Vendre</a></Link>
+            <Link href="/la_marketplace"><a className={activeIndex === 11 ? "nav-link active" : "nav-link"}  onClick={() => handleOnClick(11)}>Vendre</a></Link>
             </li>
             <li className="nav-item">
-            <Link href="#"><a className={activeIndex === 12 ? "nav-link active" : "nav-link"}  onClick={() => handleOnClick(12)}>Conditions générales de vente</a></Link>
+            <Link href="conditions_generales_de_vente"><a className={activeIndex === 12 ? "nav-link active" : "nav-link"}  onClick={() => handleOnClick(12)}>Conditions générales de vente</a></Link>
             </li>
             <li className="nav-item">
-            <Link href="#"><a className={activeIndex === 13 ? "nav-link active" : "nav-link"}  onClick={() => handleOnClick(13)}>FAQ Acheteur</a></Link>
+            <Link href="faq_acheteur"><a className={activeIndex === 13 ? "nav-link active" : "nav-link"}  onClick={() => handleOnClick(13)}>FAQ Acheteur</a></Link>
             </li>
             <li className="nav-item">
-            <Link href="#"><a className={activeIndex === 14 ? "nav-link active" : "nav-link"}  onClick={() => handleOnClick(14)}>FAQ Exposant</a></Link>
+            <Link href="faq_exposant"><a className={activeIndex === 14 ? "nav-link active" : "nav-link"}  onClick={() => handleOnClick(14)}>FAQ Exposant</a></Link>
             </li>
             <li className="nav-item">
             <Link href="#"><a className={activeIndex === 15 ? "nav-link active" : "nav-link"}  onClick={() => handleOnClick(15)}>L'équipe</a></Link>

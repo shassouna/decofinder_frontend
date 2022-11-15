@@ -9,7 +9,6 @@ function APropos() {
     const [activeIndex, setActiveIndex] = useState(1)
 
     return (
-        <>
             <div className="page-content pt-40 pb-40">
                 <div className="container">
                     <div className="row">
@@ -80,8 +79,7 @@ function APropos() {
                     </div>
                 </div>
             </div>
-        </>
-    )
-}
+           )
+        }
 
 export default APropos
