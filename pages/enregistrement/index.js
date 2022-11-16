@@ -21,7 +21,7 @@ function Enregistrement (){
                                     </div>
                                 </div>
                                 <div className="col-md-7">
-                                    <div className={activeIndex === 10 ? "tab-pane fade active show" : "tab-pane fade "} >
+                                    <div className="tab-pane fade active show" >
                                         <div className="card">
                                             <div className="card-header">
                                                 <h5>1.COORDONNÉES</h5>

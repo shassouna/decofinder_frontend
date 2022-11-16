@@ -21,7 +21,7 @@ function RevueDePresse() {
                             </div>
                             <div className="col-md-7">
                                 <div className="tab-content account dashboard-content">
-                                    <div className={activeIndex === 4 ? "tab-pane fade active show" : "tab-pane fade "} >
+                                    <div className="tab-pane fade active show">
                                         <div className="col-lg-12 col-md-12 col-12 col-sm-6">
                                             <div className="mb-20 ml-5">
                                                 <h1 className="mb-10">LE WEB ET LA PRESSE EN PARLENT</h1>

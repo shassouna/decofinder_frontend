@@ -4,9 +4,9 @@ import React, { useState } from "react"
 import LeftSideBar from "../../components/elements/LeftSiseBar"
 import RightSideBar from "../../components/elements/RightSideBar"
 
-function TestimoniauxExposants() {
+function TestimoniauxAcheteurs() {
 
-    const [activeIndex, setActiveIndex] = useState(5)
+    const [activeIndex, setActiveIndex] = useState(6)
 
     return (
         <>
@@ -22,20 +22,20 @@ function TestimoniauxExposants() {
                                 </div>
                                 <div className="col-md-7">
                                     <div className="tab-content account dashboard-content pl-50">
-                                        <div className={activeIndex === 5 ? "tab-pane fade active show" : "tab-pane fade "} >
+                                        <div className="tab-pane fade active show">
                                         <div className="comments-area">
-                                            <h1 className="mb-10">DECOFINDER : TÉMOIGNAGES EXPOSANTS</h1>
+                                            <h1 className="mb-10">DECOFINDER : TÉMOIGNAGES UTILISATEURS</h1>
                                                 <div className="comment-list">
                                                     <div className="single-comment justify-content-between d-flex mb-30">
                                                         <div className="user justify-content-between d-flex">
                                                             <div className="thumb text-center">
                                                                 <a className="font-heading text-brand">
-                                                                    Frédéric Almaviva, Atelier Almaviva
+                                                                    Mlle Michaud Elsa 80230 St Valery sur Somme, Boutique de décoration
                                                                 </a>
                                                             </div>
                                                             <div className="desc">
                                                                 <p className="mb-10">
-                                                                    Grâce à Decofinder nous observons un excellent référencement de notre site sur les principaux moteurs de recherche européens. Par ailleurs, France Astruc a une connaissance approfondie du marché de la décoration et de ses acteurs.
+                                                                Je tenais à remercier et surtout à féliciter l'équipe de Décofinder pour la création de ce site (le plus facile et le plus convivial d'utilisation pour effectuer des recherches parmi tous ceux que j'ai essayé d'utiliser).
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -44,12 +44,18 @@ function TestimoniauxExposants() {
                                                         <div className="user justify-content-between d-flex">
                                                             <div className="thumb text-center">
                                                                 <a className="font-heading text-brand">
-                                                                Marc Bonnet, Dirigeant, Sté Moissonnier
+                                                                Myrène Stroup Service Auteuil Promotion 75116 Paris
                                                                 </a>
                                                             </div>
                                                             <div className="desc">
                                                                 <p className="mb-10">
-                                                                    Ce que j'apprécie en premier lieu c'est que Décofinder est le site le mieux référencé non seulement dans la décoration, mais pour tout l'habitat en général. Ainsi, chaque fois que je recherche quoi que ce soit dans ce domaine, je retourne sur Decofinder où je suis certain de trouver soit le fabricant idéal, soit au moins des pistes de recherches. Merci et bravo pour le seul site complet et sérieux de la profession.
+                                                                Je tiens particulièrement à vous remercier pour votre accueil téléphonique, votre service, la clarté de votre site, l'aide que vous nous fournissez au travers de la conception de votre site, l'aspect attractif de vos pages.
+                                                                </p>
+                                                                <p className="mb-10">
+                                                                Vous nous aidez réellement et si cela ne tenait qu'à moi, je vous reconnaîtrais d'utilité publique.
+                                                                </p>
+                                                                <p className="mb-10">
+                                                                Je vous souhaite une bonne continuation et surtout une très longue vie.
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -58,18 +64,12 @@ function TestimoniauxExposants() {
                                                         <div className="user justify-content-between d-flex">
                                                             <div className="thumb text-center">
                                                                 <a className="font-heading text-brand">
-                                                                    Nathalie Beaussart, PDG,  Théo des Collines et Globe Trotter
+                                                                Barbara Prod’homme 4, villa Georges Sand 75016 Paris
                                                                 </a>
                                                             </div>
                                                             <div className="desc">
                                                                 <p className="mb-10">
-                                                                    D'abord hésitante, Decofinder a fini par me convaincre et je dois avouer aujourd'hui que j'adore prendre connaissance des demandes de renseignements qui m'arrivent de particuliers ou de professionnels en France mais aussi du Canada, de Suisse, etc... Demandes qui se sont concrétisées très vite.
-                                                                </p>
-                                                                <p className="mb-10">
-                                                                    J'ai mis plus de 250 visuels, ce qui me fait 500 liens vers mes propres sites et, grâce aux statistiques, je vois bien que Decofinder m'apporte l'essentiel de mon visitorat.
-                                                                </p>
-                                                                <p className="mb-10">
-                                                                    L'équipe de Decofinder est toujours à notre disposition de façon charmante et efficace.
+                                                                J’ai découvert votre site et je suis enthousiasmée, c'est le premier qui me soit vraiment utile.Il manque encore quelques prix, c'est dommage Je ne peux m'empêcher de vous faire part du bonheur que j'ai eu à parcourir votre site, que je trouve très intelligemment construit.
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -78,12 +78,12 @@ function TestimoniauxExposants() {
                                                         <div className="user justify-content-between d-flex">
                                                             <div className="thumb text-center">
                                                                 <a className="font-heading text-brand">
-                                                                    Etienne Wacheux SARL 62231 Coquelles
+                                                                M Vahanian Julien 16 rue COPERNIC 75116
                                                                 </a>
                                                             </div>
                                                             <div className="desc">
                                                                 <p className="mb-10">
-                                                                    Je suis designer et fabricant de mobilier urbain et de mobilier de décoration à Calais. Contacté en octobre 2003 par le Service commercial de Decofinder et convaincu de l'utilité de ce service, je suis devenu client en novembre de la même année. Quelques semaines après mon inscription, j'ai reçu un appel d'un paysagiste américain qui, en tapant les mots clefs «Bacs d'Orangerie» sur Google, est arrivé sur le site Decofinder puis sur ma page partenaire. Je lui ai expédié 6 Bacs d'Orangerie destinés à une de ses clientes de Caroline du Nord. Depuis, j'ai non seulement des demandes d'informations et contacts réguliers mais cela a surtout généré des ventes additionnelles que je n'aurais jamais réalisées autrement. Ce paysagiste américain est devenu mon agent au USA.
+                                                                Superbe site et très pratique! J'y ai trouvé, à vitesse grand V, la majeure partie de l'ameublement de mon premier appartement: canapé, douche, stores vénitiens, chaises, table, baignoire, lit...les systèmes d'orientation de decofinder.com sont très bien conçus et on tombe rapidement sur les marques des produits recherchés. Alors, grâce aux liens hypertextes vers ces marques, on peut effectuer un deuxième niveau de recherche plus fin, et trouver les points de distribution les plus proches. En bref, Decofinder fait très efficacement ce qu'on attend de lui. Bravo!
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -92,12 +92,12 @@ function TestimoniauxExposants() {
                                                         <div className="user justify-content-between d-flex">
                                                             <div className="thumb text-center">
                                                                 <a className="font-heading text-brand">
-                                                                    Jean Decombredet  L'Isle sur la Sorgue
+                                                                Anonyme
                                                                 </a>
                                                             </div>
                                                             <div className="desc">
                                                                 <p className="mb-10">
-                                                                    Remerciements pour la vente ferme d'une commode et l'attente d'en concrétiser une deuxième.
+                                                                Super beau site surtout pour nous les étudiants de décoration intérieure. Peut-être ajouter plus de lampes mais a part ça c'est génial!!!
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -106,12 +106,12 @@ function TestimoniauxExposants() {
                                                         <div className="user justify-content-between d-flex">
                                                             <div className="thumb text-center">
                                                                 <a className="font-heading text-brand">
-                                                                    Frédéric Cornali  Portes Reymond
+                                                                Anonyme
                                                                 </a>
                                                             </div>
                                                             <div className="desc">
                                                                 <p className="mb-10">
-                                                                    J'ai parcouru votre site et les informations me concernant : C'est très bien fait, clair, bien présenté, l'accès à ses données est simple. Je vous remercie au nom de notre entreprise et je souhaite longue vie à votre site.
+                                                                Bravo! Que du bon, les fiches conseils sont sérieuses et documentées. J'ai trouvé des conseils précieux sur l'installation de ma piscine hors sol. Continuez comme ça...
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -120,12 +120,12 @@ function TestimoniauxExposants() {
                                                         <div className="user justify-content-between d-flex">
                                                             <div className="thumb text-center">
                                                                 <a className="font-heading text-brand">
-                                                                    D.Goros, importateur
+                                                                M Veyre Pierre 74940 Annecy-le-Vieux
                                                                 </a>
                                                             </div>
                                                             <div className="desc">
                                                                 <p className="mb-10">
-                                                                    Les visiteurs du Decofinder qui visitent mon site sont des visiteurs très ciblés et intéressés.
+                                                                Votre site est un très bon outil de recherche, très complet. C'est excellent.
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -134,12 +134,12 @@ function TestimoniauxExposants() {
                                                         <div className="user justify-content-between d-flex">
                                                             <div className="thumb text-center">
                                                                 <a className="font-heading text-brand">
-                                                                    Yannick Herriot, artisan d'art
+                                                                M Marcaire Franck 75010 Paris
                                                                 </a>
                                                             </div>
                                                             <div className="desc">
                                                                 <p className="mb-10">
-                                                                    Ce client m'a dit qu'il ne m'aurait jamais trouvé sans Decofinder.
+                                                                Je profite de cet espace pour vous féliciter pour le choix et la qualité des produits présentés, ainsi que l'ergonomie du site.
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -148,12 +148,12 @@ function TestimoniauxExposants() {
                                                         <div className="user justify-content-between d-flex">
                                                             <div className="thumb text-center">
                                                                 <a className="font-heading text-brand">
-                                                                    Pierre Lefers, gérant
+                                                                M Colin Directeur Commercial 38920
                                                                 </a>
                                                             </div>
                                                             <div className="desc">
                                                                 <p className="mb-10">
-                                                                    J'ai commencé avec 10 produits. Mon premier client m'a payé 3 ans d'abonnement. J'en présente aujourd'hui 100 avec 200 liens vers mon site; Une part substantielle de mon trafic vient désormais de Decofinder c'est un must.
+                                                                Excellent site qui a de très nombreux articles. Les points forts sont le classement très pertinent, la possibilité de passer d'un article à une gamme ou d'un article à une collection d'un designer donné.Un bémol : l'absence des prix sur de nombreux articles.
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -162,12 +162,12 @@ function TestimoniauxExposants() {
                                                         <div className="user justify-content-between d-flex">
                                                             <div className="thumb text-center">
                                                                 <a className="font-heading text-brand">
-                                                                    M Dubois, fabricant
+                                                                Mme Noiret Isabelle styliste-création de vêtements 75015
                                                                 </a>
                                                             </div>
                                                             <div className="desc">
                                                                 <p className="mb-10">
-                                                                    J'ai réservé la tête de gondole cache-radiateur : je suis en premier sur Google.
+                                                                Allez-vous faire l'équivalent de Decofinder dans le secteur de la mode féminine?Une styliste intéressée par l'efficacité commerciale de Decofinder.
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -176,12 +176,12 @@ function TestimoniauxExposants() {
                                                         <div className="user justify-content-between d-flex">
                                                             <div className="thumb text-center">
                                                                 <a className="font-heading text-brand">
-                                                                    Melle Rinaldi, webmaster
+                                                                Mlle Grattepain Isabelle Directrice Commerciale 14113 Cricqueboeuf
                                                                 </a>
                                                             </div>
                                                             <div className="desc">
                                                                 <p className="mb-10">
-                                                                    Bravo pour votre outil de mise à jour en ligne : c'est simple et efficace.
+                                                                j'ai reçu des mails du fournisseur Mathy-by-bols qui se trouve en Belgique et que je n'aurais jamais trouvé sans vous.
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -190,12 +190,12 @@ function TestimoniauxExposants() {
                                                         <div className="user justify-content-between d-flex">
                                                             <div className="thumb text-center">
                                                                 <a className="font-heading text-brand">
-                                                                    Angèle Hermann, responsable commercial
+                                                                M Roy Michel photographe Colombes
                                                                 </a>
                                                             </div>
                                                             <div className="desc">
                                                                 <p className="mb-10">
-                                                                    Je n'y croyais pas trop : je dois avouer aujourd'hui que j'adore prendre connaissance des demandes de renseignements qui m'arrivent comme par enchantement.
+                                                                Votre site est riche en informations, merci d'exister.
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -204,12 +204,12 @@ function TestimoniauxExposants() {
                                                         <div className="user justify-content-between d-flex">
                                                             <div className="thumb text-center">
                                                                 <a className="font-heading text-brand">
-                                                                    Jean Pierre Menu
+                                                                Responsable d'une boutique
                                                                 </a>
                                                             </div>
                                                             <div className="desc">
                                                                 <p className="mb-10">
-                                                                    Un journaliste de Ouest France m'a fait un article après avoir reçu le mailing Special Jardin du Decofinder.
+                                                                Votre site est formidable !!! Etant responsable d'un magasin de luminaires, ma collègue et moi-même sommes sans cesse à la recherche de nouveaux fournisseurs et vraiment nous tenons à vous féliciter... Merci encore et bonne journée.
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -218,26 +218,12 @@ function TestimoniauxExposants() {
                                                         <div className="user justify-content-between d-flex">
                                                             <div className="thumb text-center">
                                                                 <a className="font-heading text-brand">
-                                                                    Christophe Richard, chef de projets multimedias (Mobalpa)
+                                                                Mlle Veronique Skrotzky attachée de presse
                                                                 </a>
                                                             </div>
                                                             <div className="desc">
                                                                 <p className="mb-10">
-                                                                    Je pense que Decofinder est un portail aujourd'hui bien installé dans le paysage internet Français, et qu'en tant que marque leader sur son secteur Mobalpa se devait de présenter ses produits sur ce portail. Decofinder nous permet d'obtenir une ligitimité sur l'architecture intérieure, la décoration, apsects qui font partie de notre métier mais qui ne sont pas forcément bien perçus dans l'image que l'on a d'un cuisiniste. C'est aussi l'opportunité d'améliorer notre notoriété sur les secteurs de la salle de bains et du rangement sur mesure, doma ines dans lesquels les conso mateurs ne pensent pas forcément a Mobalpa tout de suite.
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="single-comment justify-content-between d-flex mb-30">
-                                                        <div className="user justify-content-between d-flex">
-                                                            <div className="thumb text-center">
-                                                                <a className="font-heading text-brand">
-                                                                    Sylvie Viguie, Directrice du magasin St Louis
-                                                                </a>
-                                                            </div>
-                                                            <div className="desc">
-                                                                <p className="mb-10">
-                                                                    Le premier contact avec Decofinder a été agréable, professionnel. La mise en place de notre maison et des ses produits sur le site a été aisée. Assistance assurée. Le suivi et la mise à jour des fiches produits sont trés faciles. Nous avons depuis 8 mois, eu de nombreux contacts, demandes de renseignements et ventes à des particuliers éloignés.
+                                                                Touchez à rien c'est parfait ! Pour ce Que je recherchais, c'était excellent.
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -259,4 +245,4 @@ function TestimoniauxExposants() {
     )
 }
 
-export default TestimoniauxExposants
+export default TestimoniauxAcheteurs

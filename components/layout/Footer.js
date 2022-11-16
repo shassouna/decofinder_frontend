@@ -1,7 +1,8 @@
-import React from "react";
+import React from "react"
 import Link from "next/link"
 
 const Footer = () => {
+    
     return (
         <>
             <footer className="main">
@@ -75,28 +76,28 @@ const Footer = () => {
                                 <h4 className="widget-title">A PROPOS</h4>
                                 <ul className="footer-list  mb-sm-5 mb-md-0">
                                     <li>
-                                    <Link href="/a-propos"><a>- A propos</a></Link>
+                                    <Link href="/presentation"><a>- A propos</a></Link>
                                     </li>
                                     <li>
-                                    <Link href="/qui-sommes-nous"><a>- L'équipe</a></Link>
+                                    <Link href="/qui_sommes_nous"><a>- L'équipe</a></Link>
                                     </li>
                                     <li>
-                                    <Link href="/#"><a>- Audience et Visitorat</a></Link>
+                                    <Link href="/audience"><a>- Audience et Visitorat</a></Link>
                                     </li>
                                     <li>
                                     <Link href="/revuedepresse"><a>- Revue de presse</a></Link>
                                     </li>
                                     <li>
-                                        <a>- Sondage Opinion Way</a>
+                                    <a href="/assets/pdf/ow.pdf">- Sondage Opinion Way</a>
                                     </li>
                                     <li>
-                                        <a>- Contact</a>
+                                    <Link href="/contacts"><a>- Contact</a></Link>
                                     </li>
                                     <li>
-                                        <a>- Recrutement</a>
+                                    <Link href="/recrutement"><a>- Recrutement</a></Link>
                                     </li>
                                     <li>
-                                        <a>- Mentions légales</a>
+                                    <Link href="/mentions_legales"><a>- Mentions légales</a></Link>
                                     </li>
                                 </ul>
                             </div>
@@ -107,16 +108,16 @@ const Footer = () => {
                                 <h4 className="widget-title ">EXPOSER</h4>
                                 <ul className="footer-list  mb-sm-5 mb-md-0">
                                     <li>
-                                        <a>- Utile pour l'exposant</a>
+                                    <Link href="/utile_exposant"><a>- Utile pour l'exposant</a></Link>
                                     </li>
                                     <li>
                                     <Link href="/testimoniaux_exposants"><a>- Témoignage exposant</a></Link>
                                     </li>
                                     <li>
-                                        <a>- FAQ Exposant</a>
+                                        <Link href="/faq_exposant"><a>- FAQ Exposant</a></Link>
                                     </li>
                                     <li>
-                                        <a>- Conditions générales de vente</a>
+                                        <Link href="/conditions_generales_de_vente"><a>- Conditions générales de vente</a></Link>
                                     </li>
                                 </ul>
                             </div>
@@ -127,7 +128,7 @@ const Footer = () => {
                                 <h4 className="widget-title ">VENDRE</h4>
                                 <ul className="footer-list  mb-sm-5 mb-md-0">
                                     <li>
-                                        <a>- Vendre plus grâce à Decofinder</a>
+                                    <Link href="la_marketplace"><a>- Vendre plus grâce à Decofinder</a></Link>
                                     </li>
                                 </ul>
                             </div>
@@ -138,13 +139,13 @@ const Footer = () => {
                                 <h4 className="widget-title ">ACHETER</h4>
                                 <ul className="footer-list  mb-sm-5 mb-md-0">
                                     <li>
-                                        <a>- Utile pour l'acheteur</a>
+                                    <Link href="/utile_acheteur"><a>- Utile pour l'acheteur</a></Link>
                                     </li>
                                     <li>
-                                        <a>- Témoignages acheteurs</a>
+                                    <Link href="/testimoniaux_acheteurs"><a>- Témoignages acheteurs</a></Link>
                                     </li>
                                     <li>
-                                        <a>- FAQ Acheteurs</a>
+                                    <Link href="/faq_acheteur"><a>- FAQ Acheteurs</a></Link>
                                     </li>
                                 </ul>
                             </div>
@@ -161,7 +162,7 @@ const Footer = () => {
                         </div>
                         <div className="col-xl-4 col-lg-6 col-md-6">
                             <p className="font-sm mb-0">
-                                &copy; 2000-2022 Distrimart SAS - Déclaration CNIL n1064213
+                                &copy 2000-2022 Distrimart SAS - Déclaration CNIL n1064213
                             </p>
                         </div>
                         <div className="col-xl-4 col-lg-6 text-center d-none d-xl-block">
@@ -182,34 +183,28 @@ const Footer = () => {
                         </div>
                         <div className="col-xl-4 col-lg-6 col-md-6 text-end d-none d-md-block">
                             <div className="mobile-social-icon">
-                                <h6>Suivez-nous</h6>
-                                <a>
+                                <h6 className="mt-10">Suivez-nous</h6>
+                                <a target="_blank" href="https://www.facebook.com/decofinder">
                                     <img
                                         src="/assets/imgs/theme/icons/icon-facebook-white.svg"
                                         alt=""
                                     />
                                 </a>
-                                <a>
+                                <a target="_blank" href="https://twitter.com/decofinder">
                                     <img
                                         src="/assets/imgs/theme/icons/icon-twitter-white.svg"
                                         alt=""
                                     />
                                 </a>
-                                <a>
+                                <a target="_blank" href="https://www.instagram.com/decofinder/">
                                     <img
                                         src="/assets/imgs/theme/icons/icon-instagram-white.svg"
                                         alt=""
                                     />
                                 </a>
-                                <a>
+                                <a target="_blank" href="https://www.pinterest.fr/decofinder/">
                                     <img
                                         src="/assets/imgs/theme/icons/icon-pinterest-white.svg"
-                                        alt=""
-                                    />
-                                </a>
-                                <a>
-                                    <img
-                                        src="/assets/imgs/theme/icons/icon-youtube-white.svg"
                                         alt=""
                                     />
                                 </a>
@@ -219,7 +214,7 @@ const Footer = () => {
                 </div>
             </footer>
         </>
-    );
-};
+    )
+}
 
-export default Footer;
+export default Footer

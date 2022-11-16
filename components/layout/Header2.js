@@ -69,7 +69,7 @@ const Header = ({
                                             </Link>
                                         </div>
                                         <div className="header-action-icon-2">
-                                            <Link href="/nouveautes">
+                                            <Link href="/new">
                                                 <a>
                                                     <span className="lable">
                                                     Nouveautés

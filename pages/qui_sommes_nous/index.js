@@ -21,9 +21,9 @@ function QuiSommesNous() {
                                 </div>
                                 <div className="col-md-7">
                                     <div className="tab-content account dashboard-content pl-50">
-                                        <div className={activeIndex === 15 ? "tab-pane fade active show" : "tab-pane fade "} >
+                                        <div className="tab-pane fade active show">
                                             <div className="card">
-                                                <div className="card-header mb-20">
+                                                <div className="card-header mb-10">
                                                     <h1 className="mb-10">L'ÉQUIPE</h1>
                                                 </div>
                                                 <div className="card-body">
@@ -43,10 +43,6 @@ function QuiSommesNous() {
                                                         <h2 className="mb-2 text-brand">&#x25cf; Support Technique :</h2>
                                                         <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Salim HASSOUNA, Anis BENNAMANE, Samira Seddar</p>
                                                     </div>
-                                                    <div className="col-lg-12 mb-lg-0 mb-25">
-                                                        <h2 className="mb-2 text-brand">&#x25cf; Développeur :</h2>
-                                                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Olivier EUCHER-LAHON</p>
-                                                    </div>   
                                                     <div className="col-lg-12 mb-lg-0 mb-25">
                                                         <h2 className="mb-2 text-brand">&#x25cf; Coordonnées :</h2>
                                                         <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17 rue Chartran 92200 Neuilly sur Seine FRANCE</p>

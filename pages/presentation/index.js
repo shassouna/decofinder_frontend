@@ -21,7 +21,7 @@ function APropos() {
                                 </div>
                                 <div className="col-md-7">
                                     <div className="tab-content account dashboard-content pl-50">
-                                        <div className={activeIndex === 1 ? "tab-pane fade active show" : "tab-pane fade "} >
+                                        <div className="tab-pane fade active show">
                                             <div className="card">
                                                 <div className="card-header mb-20">
                                                     <h1 className="mb-10">À PROPOS DE DECOFINDER</h1>
