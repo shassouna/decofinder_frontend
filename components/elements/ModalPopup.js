@@ -2,21 +2,21 @@ import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic'
 
 
-const IntroPopup = ({openClass, setOpenClass, exposant, revendeurs}) => {
+const IntroPopup = ({openClass, setOpenClass, produit}) => {
 
     const handleRemove = () => {
         setOpenClass(!openClass);
     }
 
-    const [Map, setMap] = useState()
+    const [Modal, setModal] = useState()
 
     useEffect(()=>{
         if(openClass==0){
-            const MapLocal = dynamic(
-                () => import('../elements/MapExposant'),
+            const ModalLocal = dynamic(
+                () => import('../elements/ModalProduit'),
                 { ssr: false }
             )
-            setMap(MapLocal)
+            setModal(ModalLocal)
         }
     },[openClass])
 
@@ -46,18 +46,13 @@ const IntroPopup = ({openClass, setOpenClass, exposant, revendeurs}) => {
                             >
                                 <div className="deal-top">
                                     <h2 className="text-brand">
-                                        LES POINTS DE VENTE DE {exposant['attributes']['NOM']}
+                                        LES POINTS DE VENTE DE L'exposant
                                     </h2>
                                 </div>
                                 <div className="deal-content  detail-info">
-                                    {Map&&<Map items={revendeurs}/>}
+                                    {Modal&&<Modal produit={produit}/>}
                                 </div>
                             </div>
-
-
-
-
-
                         </div>
                     </div>
                 </div>

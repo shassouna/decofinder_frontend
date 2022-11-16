@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Head from "next/head";
 import Breadcrumb from "./Breadcrumb";
 import Footer from "./Footer";
-import Header from "./Header2";
+import Header from "./Header";
 import MobileMenu from "./MobileMenu";
 
 const Layout = ({

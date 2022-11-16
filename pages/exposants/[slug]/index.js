@@ -1,5 +1,4 @@
 // import from components/Filter
-import SideFilterLinks from "../../../components/ecommerce/Filter/SideFilterLinks"
 import SideFilter from "../../../components/ecommerce/Filter/SideFilter"
 import SideFilterPrice from "../../../components/ecommerce/Filter/SideFilterPrice"
 
@@ -10,10 +9,10 @@ import ShowSelect from "../../../components/ecommerce/Filter/ShowSelect"
 
 // import from components/elementes
 import DescriptionSimple from "../../../components/elements/DescriptionSimple"
-import MapPopupExposant from '../../../components/elements/MapPopupExposant'
-import MapPopupContact from '../../../components/elements/MapPopupContact'
-import MapPopupAlertesNouveautes from '../../../components/elements/MapPopupAlertesNouveautes'
-import MapAfficherPlan from '../../../components/elements/MapPopupAfficherPlan'
+import ModalPopupExposant from '../../../components/elements/ModalPopupExposant'
+import ModalPopupContact from '../../../components/elements/ModalPopupContact'
+import ModalPopupAlertesNouveautes from '../../../components/elements/ModalPopupAlertesNouveautes'
+import ModalAfficherPlan from '../../../components/elements/ModalPopupAfficherPlan'
 
 // import from next
 import { useRouter } from "next/router"
@@ -588,10 +587,10 @@ const Exposant = ({ produit_Props, produits_exposant, filtersInitail, exposant, 
 
                 </div>
             </section>
-            <MapPopupExposant openClass={openClass} setOpenClass={setOpenClass} exposant={exposant} revendeurs={revendeurs}/>
-            <MapPopupContact openClassContact={openClassContact} setOpenClassContact={setOpenClassContact}/>
-            <MapPopupAlertesNouveautes openClassAlertesNouveautes={openClassAlertesNouveautes} setOpenClassAlertesNouveautes={setOpenClassAlertesNouveautes}/>
-            <MapAfficherPlan openClassAfficherPlan={openClassAfficherPlan} setOpenClassAfficherPlan={setOpenClassAfficherPlan} exposant={exposant}></MapAfficherPlan>
+            <ModalPopupExposant openClass={openClass} setOpenClass={setOpenClass} exposant={exposant} revendeurs={revendeurs}/>
+            <ModalPopupContact openClassContact={openClassContact} setOpenClassContact={setOpenClassContact}/>
+            <ModalPopupAlertesNouveautes openClassAlertesNouveautes={openClassAlertesNouveautes} setOpenClassAlertesNouveautes={setOpenClassAlertesNouveautes}/>
+            <ModalAfficherPlan openClassAfficherPlan={openClassAfficherPlan} setOpenClassAfficherPlan={setOpenClassAfficherPlan} exposant={exposant}/>
         </>
     )
 }

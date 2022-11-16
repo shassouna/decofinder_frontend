@@ -1,5 +1,5 @@
 
-import ThumbSlider from "../sliders/Thumb";
+import ImagesProduct from "../sliders/ImagesProduct";
 import ProductTab from "../elements/ProductTab";
 // My imports 
 import Image from "next/image"
@@ -28,7 +28,7 @@ const ProductDetails = ({product, produit, setOpenClass}) => {
                                             </span>
 
                                             <div className="product-image-slider">
-                                                <ThumbSlider product={product} produit={produit} />
+                                                <ImagesProduct product={product} produit={produit} />
                                             </div>
                                         </div>
                                     </div>

@@ -7,18 +7,18 @@ const Header = ({
     menuHeaderData
 }) => {
 
-    const [isToggled, setToggled] = useState(false);
-    const [scroll, setScroll] = useState(0);
+    const [scroll, setScroll] = useState(0)
 
     useEffect(() => {
         document.addEventListener("scroll", () => {
-            const scrollCheck = window.scrollY >= 100;
+            const scrollCheck = window.scrollY >= 100
             if (scrollCheck !== scroll) {
                 setScroll(scrollCheck)
             }
         })
     })
 
+    //    console.log(res.data.data[2]['attributes']['rayondetails']["data"][0]['attributes']['categories']['data'])
 
     return (
         menuHeaderData&&menuHeaderData.length>0&&
@@ -128,9 +128,9 @@ const Header = ({
                                                 <ul className="mega-menu">
                                                 {
                                                 superunivers_univers_categorie["attributes"]["rayondetails"]["data"].map(categorie_univers=>(
-                                                    <li key={categorie_univers["id"]} className="sub-mega-menu sub-mega-menu-width-22" >
+                                                    <li key={categorie_univers["id"]} className="sub-mega-menu sub-mega-menu-width-22">
                                                         <Link href={`/univers/${categorie_univers["attributes"]["slug"]}`}>
-                                                            <a key = {categorie_univers["id"]}
+                                                            <a key={categorie_univers["id"]}
                                                                 className="menu-title"
                                                             >
                                                                 {categorie_univers["attributes"]["LIB"]}
@@ -138,7 +138,7 @@ const Header = ({
                                                         </Link>
                                                         <ul>
                                                         {
-                                                        categorie_univers["attributes"]["typeprods"]["data"].map(categorie=>(
+                                                        categorie_univers["attributes"]["categories"]["data"].map(categorie=>(
                                                             categorie["attributes"]['CLE_TYPE_PROD']==categorie["attributes"]['CLE_TYPE_PROD_CATEGORIE']&&
                                                             <li key ={categorie["id"]}>
                                                                 <Link href={`/univers/${categorie}`}>

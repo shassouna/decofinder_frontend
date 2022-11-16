@@ -8,15 +8,15 @@ const IntroPopup = ({openClassAfficherPlan, setOpenClassAfficherPlan, exposant})
         setOpenClassAfficherPlan(!openClassAfficherPlan);
     }
 
-    const [Map, setMap] = useState()
+    const [Modal, setModal] = useState()
 
     useEffect(()=>{
         if(openClassAfficherPlan==0){
-            const MapLocal = dynamic(
-                () => import('../elements/MapAfficherPlan'),
+            const ModalLocal = dynamic(
+                () => import('../elements/ModalAfficherPlan'),
                 { ssr: false }
             )
-            setMap(MapLocal)
+            setModal(ModalLocal)
         }
     },[openClassAfficherPlan])
 
@@ -36,7 +36,7 @@ const IntroPopup = ({openClassAfficherPlan, setOpenClassAfficherPlan, exposant})
                             className="btn-close"
                             onClick={handleRemove}
                         ></button>
-                        {Map&&<Map item={exposant}/>}
+                        {Modal&&<Modal item={exposant}/>}
                     </div>
                 </div>
             </div>

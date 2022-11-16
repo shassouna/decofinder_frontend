@@ -1,17 +1,17 @@
 
-import Map from '../elements/MapAlertesNouveautes'
+import Modal from './ModalContact'
 
-const IntroPopup = ({openClassAlertesNouveautes, setOpenClassAlertesNouveautes}) => {
+const IntroPopup = ({openClassContact, setOpenClassContact}) => {
 
     const handleRemove = () => {
-        setOpenClassAlertesNouveautes(!openClassAlertesNouveautes);
+        setOpenClassContact(!openClassContact);
     }
 
     return (
         <>
             <div
                 className={
-                    openClassAlertesNouveautes
+                    openClassContact
                         ? "modal fade custom-modal d-none"
                         : "modal fade custom-modal  show d-block"
                 }
@@ -25,7 +25,7 @@ const IntroPopup = ({openClassAlertesNouveautes, setOpenClassAlertesNouveautes})
                         ></button>
                         <div className="deal-top">
                             <h2 className="text-brand">
-                            ALERTE NOUVEAUTES
+                                DEMANDE D'INFORMATIONS
                             </h2>
                         </div>
                         <br/>
@@ -37,7 +37,7 @@ const IntroPopup = ({openClassAlertesNouveautes, setOpenClassAlertesNouveautes})
                                         "url('assets/imgs/banner/popup-1.png')",
                                 }}
                             >
-                                <Map/>
+                                <Modal/>
                             </div>
                         </div>
                     </div>
@@ -46,7 +46,7 @@ const IntroPopup = ({openClassAlertesNouveautes, setOpenClassAlertesNouveautes})
 
             <div
                 className={
-                    openClassAlertesNouveautes
+                    openClassContact
                         ? "modal-backdrop fade d-none"
                         : "modal-backdrop fade show"
                 }

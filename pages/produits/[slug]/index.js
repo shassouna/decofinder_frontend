@@ -4,7 +4,7 @@ import { useState } from "react";
 import axios from "axios"
 import ProductDetails from "../../../components/ecommerce/ProductDetails";
 
-import MapPopup from '../../../components/elements/MapPopup'
+import ModalPopup from '../../../components/elements/ModalPopup'
 
 const ProductId = ({produit}) => {
 
@@ -14,7 +14,7 @@ const ProductId = ({produit}) => {
         <>
             <div className="container">
                 <ProductDetails  produit={produit} setOpenClass={setOpenClass}/>
-                <MapPopup openClass={openClass} setOpenClass={setOpenClass} produit={produit}/>
+                <ModalPopup openClass={openClass} setOpenClass={setOpenClass} produit={produit}/>
             </div>
         </>
     )

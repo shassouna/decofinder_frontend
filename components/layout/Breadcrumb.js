@@ -1,4 +1,3 @@
-
 import Link from "next/link";
 
 const Breadcrumb = ({parent, sub, subChild, noBreadcrumb}) => {

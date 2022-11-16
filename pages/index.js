@@ -1,10 +1,11 @@
 import CategoryTab from "../components/ecommerce/categoryTab"
 import FetchTabSlider from "../components/ecommerce/fetchTabSlider"
 import QuickView from "./../components/ecommerce/QuickView"
-import CategorySlider from "./../components/sliders/Category"
-import Intro1 from "../components/sliders/intro4"
+import UniversSlider from "./../components/sliders/UniversSlider"
+import BigPicture from "../components/sliders/BigPicture"
 import FourProducts from "./../components/elements/FourProducts"
 import Description from "../components/elements/DescriptionHome"
+import Loader from "../components/elements/Preloader"
 
 // My imports 
 import axios from 'axios'
@@ -12,11 +13,12 @@ import axios from 'axios'
 export default function Home({menuHeaderData, fourProducts, nouveautes, inspirations}) {
 
     return (
+        nouveautes.length>0 ?
         <>
             <section className="home-slider position-relative mb-30">
                 <div className="container">
                     <div className="home-slide-cover mt-30">
-                        <Intro1 />
+                        <BigPicture />
                     </div>
                 </div>
             </section>
@@ -38,7 +40,7 @@ export default function Home({menuHeaderData, fourProducts, nouveautes, inspirat
                     </div>
                     <div className="carausel-10-columns-cover position-relative">
                         <div className="carausel-10-columns" id="carausel-10-columns">
-                            <CategorySlider superunivers={menuHeaderData}/>
+                            <UniversSlider superunivers={menuHeaderData}/>
                         </div>
                     </div>
                 </div>
@@ -61,9 +63,10 @@ export default function Home({menuHeaderData, fourProducts, nouveautes, inspirat
                     <FetchTabSlider typeprods={inspirations}/>
                 </div>
             </section>
-
             <QuickView />
         </>
+        :
+        <Loader/>
     )
 }
 

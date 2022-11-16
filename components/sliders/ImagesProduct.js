@@ -1,12 +1,9 @@
-import { useState } from "react";
-import SwiperCore, { Navigation, Thumbs } from "swiper";
-import "swiper/css/thumbs";
-import { Swiper, SwiperSlide } from "swiper/react";
+import { useState } from "react"
+import "swiper/css/thumbs"
+import { Swiper, SwiperSlide } from "swiper/react"
 
-SwiperCore.use([Navigation, Thumbs]);
-
-const ThumbSlider = ({ product }) => {
-    const [thumbsSwiper, setThumbsSwiper] = useState(null);
+const ThumbSlider = () => {
+    const [thumbsSwiper, setThumbsSwiper] = useState(null)
 
     return (
         <div>
@@ -24,19 +21,11 @@ const ThumbSlider = ({ product }) => {
                 {[1,2,3].map((item) => (
                     <SwiperSlide>
                         <img src={"/assets/imgs/shop/product-1-1.jpg"} />
-                        {/* <Zoom
-                            img={item.thumb}
-                            zoomScale={5}
-                            width={500}
-                            height={500}
-                            ransitionTime={0.5}
-                        /> */}
                     </SwiperSlide>
                 ))}
             </Swiper>
             <Swiper
-                onSwiper={setThumbsSwiper}
-                
+                onSwiper={setThumbsSwiper}          
                 spaceBetween={10}
                 slidesPerView={4}
                 freeMode={true}
@@ -50,7 +39,7 @@ const ThumbSlider = ({ product }) => {
                 ))}
             </Swiper>
         </div>
-    );
-};
+    )
+}
 
-export default ThumbSlider;
+export default ThumbSlider
