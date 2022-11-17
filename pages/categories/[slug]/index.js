@@ -14,6 +14,7 @@ import ShowSelect from "../../../components/ecommerce/Filter/ShowSelect"
 
 // import from components/elementes
 import Description from "../../../components/elements/Description"
+import Mag from "../../../components/elements/Mag"
 
 // import from next
 import { useRouter } from "next/router"
@@ -68,7 +69,7 @@ const handleSortByClientOrNotClient = (tab, lib1, lib2) => {
     return tab.sort((a,b) => (a['attributes'][lib1]['data']['attributes'][lib2] > b['attributes'][lib1]['data']['attributes'][lib2]) ? -1 : ((b['attributes'][lib1]['data']['attributes'][lib2] > a['attributes'][lib1]['data']['attributes'][lib2]) ? 1 : 0))
 }
 
-const Categorie = ({ typeprods, produit_Props, typeprods_Props, categorie, univers, univers_categories_Props, produits_categorie, filtersInitail }) => {
+const Categorie = ({ typeprods, produit_Props, typeprods_Props, categorie, univers, univers_categories_Props, produits_categorie, filtersInitail, magElements }) => {
 
     // ----------------------------------------------------Routers Début----------------------------------------------------
     const router = useRouter()
@@ -519,6 +520,21 @@ const Categorie = ({ typeprods, produit_Props, typeprods_Props, categorie, unive
                     </div>
                 </div>
             </section>
+            <section className="mt-50 mb-50">
+                <h2 style={{textAlign:'center'}}>Le Mag : Luminaires Intérieur</h2>
+                <br/>
+                <div className="container custom">
+                    <div className="row">
+                        <div className="col-lg-12">
+                            <div className="loop-grid pr-30">
+                                <div className="row">
+                                    <Mag magElements={magElements}/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </>
     )
 }
@@ -623,6 +639,46 @@ export async function getServerSideProps (context) {
     // Ordonner les produits selon l'ordre alphabétique
     filteredProduits = handleSortByAlphabet(filteredProduits, 'typeprod', 'LIB_FR')
 
+    // le Mag 
+    var data = [
+        {
+            id: 1,
+            title: "The litigants on the screen are not actors",
+            category: "Politic",
+            views: 126,
+            date: "25 April 2021",
+            img: "blog-1.png",
+            desc: "These people envy me for having a lifestyle they don’t have, but the truth is, sometimes I envy their lifestyle instead. Struggling to sell one multi.",
+        },
+        {
+            id: 2,
+            title: "Essential Qualities of Highly Successful Music",
+            img: "blog-2.png",
+            category: "Global",
+            views: 126,
+            date: "25 April 2021",
+            desc: "These people envy me for having a lifestyle they don’t have, but the truth is, sometimes I envy their lifestyle instead. Struggling to sell one multi.",
+        },
+        {
+            id: 2,
+            title: "Essential Qualities of Highly Successful Music",
+            img: "blog-3.png",
+            category: "Global",
+            views: 126,
+            date: "25 April 2021",
+            desc: "These people envy me for having a lifestyle they don’t have, but the truth is, sometimes I envy their lifestyle instead. Struggling to sell one multi.",
+        },
+        {
+            id: 2,
+            title: "Essential Qualities of Highly Successful Music",
+            img: "blog-4.png",
+            category: "Global",
+            views: 126,
+            date: "25 April 2021",
+            desc: "These people envy me for having a lifestyle they don’t have, but the truth is, sometimes I envy their lifestyle instead. Struggling to sell one multi.",
+        }
+    ]
+
     return {
         props: {
             produit_Props : produit_Props,
@@ -632,7 +688,8 @@ export async function getServerSideProps (context) {
             univers : categorieRes.data.data['attributes']['rayondetail'].data,
             univers_categories_Props : univers_categories_Props,
             produits_categorie : filteredProduits,
-            filtersInitail : filters
+            filtersInitail : filters,
+            magElements :data
         }
     }
 }

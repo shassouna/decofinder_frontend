@@ -13,6 +13,7 @@ import ShowSelect from "../../../components/ecommerce/Filter/ShowSelect"
 
 // import from components/elementes
 import Description from "../../../components/elements/Description"
+import Mag from "../../../components/elements/Mag"
 
 // import from next
 import { useRouter } from "next/router"
@@ -57,7 +58,7 @@ const handleSortByClientOrNotClient = (tab, lib1, lib2) => {
     return tab.sort((a,b) => (a['attributes'][lib1]['data']['attributes'][lib2] > b['attributes'][lib1]['data']['attributes'][lib2]) ? -1 : ((b['attributes'][lib1]['data']['attributes'][lib2] > a['attributes'][lib1]['data']['attributes'][lib2]) ? 1 : 0))
 }
 
-const Typeproduit = ({ typeprod, categorie, produits, univers, categorie_typeprods_Props, produit_Props, categorie_typeprods, filtersInitail }) => {
+const Typeproduit = ({ typeprod, categorie, produits, univers, categorie_typeprods_Props, produit_Props, categorie_typeprods, filtersInitail, magElements }) => {
 
     // ----------------------------------------------------Routers Début----------------------------------------------------
     const router = useRouter()
@@ -479,7 +480,22 @@ const Typeproduit = ({ typeprod, categorie, produits, univers, categorie_typepro
                             </div> 
                         </div>                                            
                     </div>
-                </section>
+            </section>
+            <section className="mt-50 mb-50">
+                <h2 style={{textAlign:'center'}}>Le Mag : Luminaires Intérieur</h2>
+                <br/>
+                <div className="container custom">
+                    <div className="row">
+                        <div className="col-lg-12">
+                            <div className="loop-grid pr-30">
+                                <div className="row">
+                                    <Mag magElements={magElements}/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </>
     )
 }
@@ -567,6 +583,46 @@ export async function getServerSideProps (context) {
     // Ordonner les produits selon leur Status (client ou pas client)
     filteredProduits= handleSortByClientOrNotClient(typeprodRes.data.data.attributes.produits.data, 'exposant', 'CLIENT_ABONNEMENT_PAYANT')
 
+    // le Mag 
+    var data = [
+        {
+            id: 1,
+            title: "The litigants on the screen are not actors",
+            category: "Politic",
+            views: 126,
+            date: "25 April 2021",
+            img: "blog-1.png",
+            desc: "These people envy me for having a lifestyle they don’t have, but the truth is, sometimes I envy their lifestyle instead. Struggling to sell one multi.",
+        },
+        {
+            id: 2,
+            title: "Essential Qualities of Highly Successful Music",
+            img: "blog-2.png",
+            category: "Global",
+            views: 126,
+            date: "25 April 2021",
+            desc: "These people envy me for having a lifestyle they don’t have, but the truth is, sometimes I envy their lifestyle instead. Struggling to sell one multi.",
+        },
+        {
+            id: 2,
+            title: "Essential Qualities of Highly Successful Music",
+            img: "blog-3.png",
+            category: "Global",
+            views: 126,
+            date: "25 April 2021",
+            desc: "These people envy me for having a lifestyle they don’t have, but the truth is, sometimes I envy their lifestyle instead. Struggling to sell one multi.",
+        },
+        {
+            id: 2,
+            title: "Essential Qualities of Highly Successful Music",
+            img: "blog-4.png",
+            category: "Global",
+            views: 126,
+            date: "25 April 2021",
+            desc: "These people envy me for having a lifestyle they don’t have, but the truth is, sometimes I envy their lifestyle instead. Struggling to sell one multi.",
+        }
+    ]
+        
     return {
         props: {
             produit_Props : produit_Props,
@@ -576,7 +632,8 @@ export async function getServerSideProps (context) {
             univers : typeprodRes.data.data.attributes.category.data.attributes.rayondetail.data,
             categorie_typeprods_Props : categorie_typeprods_Props,
             categorie_typeprods : typeprodRes.data.data.attributes.typeprods_has.data,
-            filtersInitail : filters
+            filtersInitail : filters,
+            magElements : data
         }
     }
 }

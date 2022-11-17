@@ -13,6 +13,10 @@ import SingleTypeProduct from "../../../components/ecommerce/SingleProductCopy"
 import SingleProduct from "../../../components/ecommerce/SingleProduct"
 import Pagination from "../../../components/ecommerce/Pagination"
 
+// import from components/elements
+import Mag from "../../../components/elements/Mag"
+import Selectionneurs from "../../../components/elements/Selectionneurs"
+
 // import from next
 import { useRouter } from "next/router"
 
@@ -59,7 +63,7 @@ const handleSortByClientOrNotClient = (tab, lib1, lib2) => {
     return tab.sort((a,b) => (a['attributes'][lib1]['data']['attributes'][lib2] > b['attributes'][lib1]['data']['attributes'][lib2]) ? -1 : ((b['attributes'][lib1]['data']['attributes'][lib2] > a['attributes'][lib1]['data']['attributes'][lib2]) ? 1 : 0))
 }
 
-const Products = ({ univers, categories, univers_categories_Props, produit_Props, superunivers, categories_Props, produits_univers, filtersInitail }) => {
+const Products = ({ univers, categories, univers_categories_Props, produit_Props, superunivers, categories_Props, produits_univers, filtersInitail, magElements, selectionneurs }) => {
 
     const router = useRouter()
 
@@ -408,6 +412,21 @@ const Products = ({ univers, categories, univers_categories_Props, produit_Props
                         </div>
 
                         <div className="col-lg-4-5">
+                            <section className="mt-50 mb-50">
+                                <h2 style={{textAlign:'center'}}>Découvrez la sélection de...</h2>
+                                <br/>
+                                <div className="container custom">
+                                    <div className="row">
+                                        <div className="col-lg-12">
+                                            <div className="loop-grid pr-30">
+                                                <div className="row">
+                                                    <Selectionneurs selectionneurs={selectionneurs}/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
                             <h2>Découvrez toutes les categories de l'univers {univers['attributes']['LIB']}</h2>
                             <br/>
                             <div className="row product-grid-3">
@@ -480,6 +499,21 @@ const Products = ({ univers, categories, univers_categories_Props, produit_Props
                                 </div>
                             </div> 
                         </div>                          
+                    </div>
+                </div>
+            </section>
+            <section className="mt-50 mb-50">
+                <h2 style={{textAlign:'center'}}>Le Mag : Luminaires Intérieur</h2>
+                <br/>
+                <div className="container custom">
+                    <div className="row">
+                        <div className="col-lg-12">
+                            <div className="loop-grid pr-30">
+                                <div className="row">
+                                    <Mag magElements={magElements}/>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -591,6 +625,46 @@ export async function getServerSideProps (context) {
 
     // Ordonner les produits selon leur Status (client ou pas client)
     filteredProduits= handleSortByClientOrNotClient(produits_univers, 'exposant', 'CLIENT_ABONNEMENT_PAYANT')
+
+    // le Mag 
+    var data = [
+        {
+            id: 1,
+            title: "The litigants on the screen are not actors",
+            category: "Politic",
+            views: 126,
+            date: "25 April 2021",
+            img: "blog-1.png",
+            desc: "These people envy me for having a lifestyle they don’t have, but the truth is, sometimes I envy their lifestyle instead. Struggling to sell one multi.",
+        },
+        {
+            id: 2,
+            title: "Essential Qualities of Highly Successful Music",
+            img: "blog-2.png",
+            category: "Global",
+            views: 126,
+            date: "25 April 2021",
+            desc: "These people envy me for having a lifestyle they don’t have, but the truth is, sometimes I envy their lifestyle instead. Struggling to sell one multi.",
+        },
+        {
+            id: 2,
+            title: "Essential Qualities of Highly Successful Music",
+            img: "blog-3.png",
+            category: "Global",
+            views: 126,
+            date: "25 April 2021",
+            desc: "These people envy me for having a lifestyle they don’t have, but the truth is, sometimes I envy their lifestyle instead. Struggling to sell one multi.",
+        },
+        {
+            id: 2,
+            title: "Essential Qualities of Highly Successful Music",
+            img: "blog-4.png",
+            category: "Global",
+            views: 126,
+            date: "25 April 2021",
+            desc: "These people envy me for having a lifestyle they don’t have, but the truth is, sometimes I envy their lifestyle instead. Struggling to sell one multi.",
+        }
+    ]
     
     return {
         props: {
@@ -602,7 +676,9 @@ export async function getServerSideProps (context) {
             superunivers : universRes.data.data.attributes.superuniversdetail.data,
             categories_Props : categories_Props,
             produits_univers : filteredProduits,
-            filtersInitail : filters
+            filtersInitail : filters,
+            magElements : data,
+            selectionneurs : data
         }
       }
 }
